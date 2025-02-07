@@ -79,4 +79,33 @@ export class EventService {
             include: { participants: { select: { id: true, name: true, profile: true } } },
         });
     }
+
+    async setPhoto(eventId: string, filename: string): Promise<EventDto> {
+        const event = await this.findOne(eventId);
+        if (!event) throw new NotFoundException("Event not found");
+
+        event.banner = `/uploads/banner/${filename}`;
+        return await this.update(eventId, event);
+    }
+
+    @Cron(CronExpression.EVERY_12_HOURS)
+    async cleanTmpFolder() {
+        const tmpPath = join(process.cwd(), "static", "uploads", "tmp");
+
+        try {
+            const files = await fs.readdir(tmpPath);
+            for (const file of files) {
+                const filePath = join(tmpPath, file);
+                const stat = await fs.lstat(filePath);
+
+                if (stat.isDirectory()) {
+                    await fs.rm(filePath, { recursive: true, force: true });
+                } else {
+                    await fs.unlink(filePath);
+                }
+            }
+        } catch (err) {
+            Logger.error(err);
+        }
+    }
 }
