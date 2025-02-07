@@ -176,4 +176,17 @@ export class EventController {
         await this.eventService.remove(id);
         return;
     }
+
+    @Post("photo")
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
+    @ImageUpload("photo", "banners")
+    async uploadEventPhoto(
+        @UploadedFile() file: Express.Multer.File,
+    ): Promise<UploadBannerResponse> {
+        if (!file) {
+            throw new BadRequestException("File upload failed");
+        }
+        return { fileUrl: file.path.replace(/\\/g, "/") };
+    }
 }
