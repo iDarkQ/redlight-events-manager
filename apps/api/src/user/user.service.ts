@@ -12,6 +12,7 @@ import { LoginUserDto } from "src/user/dto/login-user.dto";
 import { AuthorizeUserDto } from "src/user/dto/authorization-user.dto";
 import { JwtTokenResponse } from "src/user/dto/jwt-token-response.dto";
 import { UserDto } from "src/user/dto/user.dto";
+import { UpdateProfileDto } from "src/user/dto/update-profile.dto";
 
 @Injectable()
 export class UserService {
@@ -103,5 +104,16 @@ export class UserService {
         }
 
         return user;
+    }
+
+    async fetchAll() {
+        return await this.prisma.user.findMany();
+    }
+
+    async update(id: string, updateProfileDto: UpdateProfileDto) {
+        return await this.prisma.user.update({
+            where: { id },
+            data: updateProfileDto,
+        });
     }
 }
