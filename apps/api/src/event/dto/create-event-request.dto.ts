@@ -6,4 +6,6 @@ export class CreateEventRequestDto extends OmitType(EventDto, [
     "creatorId",
     "createdAt",
     "participants",
+    "deleted",
+    "deletedAt",
 ] as const) {}

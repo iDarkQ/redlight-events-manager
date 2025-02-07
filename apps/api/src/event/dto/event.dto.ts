@@ -1,4 +1,13 @@
-import { IsString, IsDate, IsNumber, IsArray, IsEnum, ValidateNested } from "class-validator";
+import {
+    IsString,
+    IsDate,
+    IsNumber,
+    IsArray,
+    IsEnum,
+    ValidateNested,
+    IsBoolean,
+    IsOptional,
+} from "class-validator";
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 import { ParticipantDto } from "src/user/dto/participant.dto";
@@ -108,4 +117,28 @@ export class EventDto {
      */
     @IsString()
     location: string;
+
+    /**
+     * Is event soft deleted
+     * @example false
+     */
+    @IsBoolean()
+    deleted: boolean;
+
+    /**
+     * Deletion date
+     * @example "2024-07-01T18:00:00.000Z"
+     */
+    @IsDate()
+    @Type(() => Date)
+    @IsOptional()
+    deletedAt: Date | null;
+
+    /**
+     * Link to the event banner
+     * @example /uploads/banners/ckv9p34s50000svef8bl7w2gb.png
+     */
+    @IsString()
+    @IsOptional()
+    banner: string | null;
 }
