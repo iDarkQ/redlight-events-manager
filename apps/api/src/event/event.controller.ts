@@ -15,6 +15,7 @@ import {
     Query,
     ForbiddenException,
     Put,
+    UploadedFile,
 } from "@nestjs/common";
 import { EventService } from "./event.service";
 import { AuthGuard } from "src/auth/auth.guard";
@@ -23,16 +24,38 @@ import { LeaveEventDto } from "src/event/dto/leave-event.dto";
 import { UpdateEventDto } from "src/event/dto/update-event.dto";
 import { EventDto } from "src/event/dto/event.dto";
 import { CreateEventRequestDto } from "src/event/dto/create-event-request.dto";
+import { UploadBannerResponse } from "src/event/dto/upload-banner-response.dto";
+import { FileService } from "src/file/file.service";
+import { UserService } from "src/user/user.service";
+import { MailService } from "src/mail/mail.service";
+import { ImageUpload } from "src/common/decorators/image-upload.decorator";
 
 @Controller("event")
 export class EventController {
-    constructor(private readonly eventService: EventService) {}
+    constructor(
+        private readonly eventService: EventService,
+        private readonly userService: UserService,
+        private readonly fileService: FileService,
+        private readonly mailService: MailService,
+    ) { }
 
     @Post()
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
     async create(@Body() createEventDto: CreateEventRequestDto, @Request() req): Promise<EventDto> {
-        return await this.eventService.create({ ...createEventDto, creatorId: req.user.id });
+        if (createEventDto.banner) {
+            const permanentPath = await this.fileService.moveTempToPermanent(
+                "banners",
+                createEventDto.banner,
+            );
+            createEventDto.banner = permanentPath;
+        }
+
+        const event = await this.eventService.create({ ...createEventDto, creatorId: req.user.id });
+        const users = await this.userService.fetchAll();
+
+        await this.mailService.createEventEmail(users, event);
+        return event;
     }
 
     @Get()
@@ -63,6 +86,18 @@ export class EventController {
 
         if (user.role !== "ADMIN" && event.creatorId !== user.id) {
             throw new ForbiddenException("Only admins can edit events from other users");
+        }
+
+        if (event.banner && event.banner !== updateEventDto.banner) {
+            await this.fileService.deletePermanentFile("banners", event.banner);
+        }
+
+        if (updateEventDto.banner) {
+            const permanentPath = await this.fileService.moveTempToPermanent(
+                "banners",
+                updateEventDto.banner,
+            );
+            updateEventDto.banner = permanentPath;
         }
 
         return await this.eventService.update(id, updateEventDto);
