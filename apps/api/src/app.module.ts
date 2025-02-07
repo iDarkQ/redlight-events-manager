@@ -4,6 +4,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { UserModule } from "./user/user.module";
 import { ConfigModule } from "@nestjs/config";
 import { EventModule } from "./event/event.module";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { EventModule } from "./event/event.module";
                 },
             ],
         }),
+        ScheduleModule.forRoot(),
         UserModule,
         ConfigModule.forRoot(),
         EventModule,
