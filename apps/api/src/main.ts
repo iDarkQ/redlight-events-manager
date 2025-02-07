@@ -5,11 +5,16 @@ import { ValidationPipe } from "@nestjs/common";
 import metadata from "./metadata";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { AllExceptionsFilter } from "src/utils/all-exceptions-filter";
+import { join } from "path";
 
 const bootstrap = async () => {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
         rawBody: true,
     });
+
+    const uploadDir = join(__dirname, "..", "static");
+
+    app.useStaticAssets(uploadDir, { prefix: "/static" });
 
     const config = new DocumentBuilder()
         .setTitle("Redlight Events Manager")
