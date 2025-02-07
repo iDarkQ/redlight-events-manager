@@ -1,22 +1,20 @@
-# ParticipantDto
+# UpdateProfileDto
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** | Unique identifier of the user | [default to undefined]
-**name** | **string** | Name of the user | [default to undefined]
+**birthday** | **string** | Birthday of the user | [default to undefined]
 **profile** | **string** | Profile description or URL of the user | [default to undefined]
 
 ## Example
 
 ```typescript
-import { ParticipantDto } from './api';
+import { UpdateProfileDto } from './api';
 
-const instance: ParticipantDto = {
-    id,
-    name,
+const instance: UpdateProfileDto = {
+    birthday,
     profile,
 };
 ```

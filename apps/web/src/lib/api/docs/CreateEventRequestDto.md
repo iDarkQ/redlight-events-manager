@@ -5,14 +5,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**title** | **string** |  | [default to undefined]
-**description** | **string** |  | [default to undefined]
-**date** | **string** |  | [default to undefined]
-**type** | **string** |  | [default to undefined]
-**maxParticipants** | **number** |  | [default to undefined]
-**latitude** | **number** |  | [default to undefined]
-**longitude** | **number** |  | [default to undefined]
-**location** | **string** |  | [default to undefined]
+**status** | [**EventStatus**](EventStatus.md) | Status of the event | [default to undefined]
+**title** | **string** | Title of the event | [default to undefined]
+**description** | **string** | Description of the event | [default to undefined]
+**date** | **string** | Date of the event | [default to undefined]
+**type** | **string** | Type of the event | [default to undefined]
+**maxParticipants** | **number** | Maximum number of participants | [default to undefined]
+**longitude** | **number** | Longitude of the event location | [default to undefined]
+**latitude** | **number** | Latitude of the event location | [default to undefined]
+**location** | **string** | Name of the event location | [default to undefined]
+**banner** | **string** | Link to the event banner | [default to undefined]
 
 ## Example
 
@@ -20,14 +22,16 @@ Name | Type | Description | Notes
 import { CreateEventRequestDto } from './api';
 
 const instance: CreateEventRequestDto = {
+    status,
     title,
     description,
     date,
     type,
     maxParticipants,
-    latitude,
     longitude,
+    latitude,
     location,
+    banner,
 };
 ```
 
