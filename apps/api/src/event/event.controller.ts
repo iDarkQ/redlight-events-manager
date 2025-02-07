@@ -137,7 +137,7 @@ export class EventController {
             throw new NotFoundException("Event does not exist");
         }
 
-        if (event.status !== "COMPLETED") {
+        if (event.status !== "PLANNED") {
             throw new ConflictException("Event is already completed");
         }
 
