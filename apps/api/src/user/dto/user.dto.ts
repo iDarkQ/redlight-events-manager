@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsDate } from "class-validator";
+import { IsString, IsEmail, IsDate, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
 
 export class UserDto {
@@ -35,7 +35,8 @@ export class UserDto {
      * @example "https://example.com/profile/johndoe"
      */
     @IsString()
-    profile: string;
+    @IsOptional()
+    profile: string | null;
 
     /**
      * Birthday of the user
