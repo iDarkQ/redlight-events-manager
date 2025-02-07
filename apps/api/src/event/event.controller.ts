@@ -65,7 +65,6 @@ export class EventController {
     }
 
     @Get(":id")
-    @ApiBearerAuth()
     findOne(@Param("id") id: string) {
         return this.eventService.findOne(id);
     }
