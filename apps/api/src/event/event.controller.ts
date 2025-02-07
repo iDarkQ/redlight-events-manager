@@ -160,6 +160,7 @@ export class EventController {
 
     @Delete(":id")
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     @ApiOkResponse({ description: "Successfully deleted record" })
     async remove(@Param("id") id: string, @Request() req) {
         const user = req.user;
