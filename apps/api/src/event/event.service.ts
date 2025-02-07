@@ -1,8 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { UpdateEventDto } from "./dto/update-event.dto";
 import { PrismaService } from "src/prisma.service";
 import { EventDto } from "src/event/dto/event.dto";
 import { CreateEventDto } from "src/event/dto/create-event.dto";
+import { Cron, CronExpression } from "@nestjs/schedule";
+import { join } from "path";
+import { promises as fs } from "fs";
 
 @Injectable()
 export class EventService {
@@ -12,26 +15,28 @@ export class EventService {
         return await this.prisma.event.create({
             data: {
                 ...createEventDto,
+                deleted: false,
                 participants: {
                     connect: {
                         id: createEventDto.creatorId,
                     },
                 },
             },
-            include: { participants: { select: { id: true, name: true } } },
+            include: { participants: { select: { id: true, name: true, profile: true } } },
         });
     }
 
     async findAll() {
         return await this.prisma.event.findMany({
-            include: { participants: { select: { id: true, name: true } } },
+            where: { deleted: false },
+            include: { participants: { select: { id: true, name: true, profile: true } } },
         });
     }
 
     async findOne(id: string) {
         return await this.prisma.event.findUnique({
             where: { id },
-            include: { participants: { select: { id: true, name: true } } },
+            include: { participants: { select: { id: true, name: true, profile: true } } },
         });
     }
 
@@ -39,12 +44,16 @@ export class EventService {
         return await this.prisma.event.update({
             where: { id },
             data: updateEventDto,
-            include: { participants: { select: { id: true, name: true } } },
+            include: { participants: { select: { id: true, name: true, profile: true } } },
         });
     }
 
     async remove(id: string) {
-        return await this.prisma.event.delete({ where: { id } });
+        return await this.prisma.event.update({
+            where: { id },
+            data: { deleted: true, deletedAt: new Date() },
+            include: { participants: { select: { id: true, name: true, profile: true } } },
+        });
     }
 
     async joinEvent(eventId: string, userId: string) {
@@ -55,7 +64,7 @@ export class EventService {
                     connect: { id: userId },
                 },
             },
-            include: { participants: { select: { id: true, name: true } } },
+            include: { participants: { select: { id: true, name: true, profile: true } } },
         });
     }
 
@@ -67,7 +76,7 @@ export class EventService {
                     disconnect: { id: userId },
                 },
             },
-            include: { participants: { select: { id: true, name: true } } },
+            include: { participants: { select: { id: true, name: true, profile: true } } },
         });
     }
 }
