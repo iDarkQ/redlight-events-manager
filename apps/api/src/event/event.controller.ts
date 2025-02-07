@@ -130,7 +130,7 @@ export class EventController {
     async remove(@Param("id") id: string, @Request() req) {
         const user = req.user;
         const event = await this.eventService.findOne(id);
-        if (!event) {
+        if (!event || event.deleted) {
             throw new NotFoundException("Event does not exist");
         }
 
