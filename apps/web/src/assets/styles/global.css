@@ -1,0 +1,72 @@
+@font-face {
+    font-family: "Roobert";
+    src: url("~/assets/fonts/roobert/Roobert-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+root {
+    --color-primary: #ff133e;
+    --color-background-primary: #e21339;
+    --color-background-secondary: #fef5f5;
+
+    --color-text-primary: #ff133e;
+    --color-text-secondary: #888f9a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-family: "Roobert";
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 1em;
+    letter-spacing: -0.01em;
+    font-feature-settings: "tnum" on, "lnum" on;
+}
+
+h2 {
+    font-family: "Roobert";
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 1.1em;
+    font-feature-settings: "tnum" on, "lnum" on;
+}
+
+h3 {
+    font-family: "Roobert";
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #000000;
+    line-height: 1.1em;
+    font-feature-settings: "tnum" on, "lnum" on;
+}
+
+h4 {
+    font-family: "Space Mono", monospace;
+    font-weight: normal;
+    font-size: 1.4rem;
+    font-weight: 200;
+    color: #000000;
+    line-height: 1.1em;
+    font-feature-settings: "tnum" on, "lnum" on;
+}
+
+p {
+    font-family: "Roobert";
+    font-weight: normal;
+    font-size: 1rem;
+    font-weight: normal;
+    color: #000000;
+    line-height: 1.2em;
+    letter-spacing: 0.01em;
+}

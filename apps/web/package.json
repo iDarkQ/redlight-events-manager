@@ -1,0 +1,45 @@
+{
+  "name": "@redlight-events-manager/web",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@redlight-events-manager/constants": "*",
+    "clsx": "^2.1.1",
+    "openapi-fetch": "^0.14.0",
+    "react": "latest",
+    "react-cookie": "^8.0.1",
+    "react-dom": "latest",
+    "react-router": "^7.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.1",
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
+    "@vitejs/plugin-react": "^4.5.2",
+    "openapi-typescript": "^7.8.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.0",
+    "vite": "^6.3.2",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-react": "^4.0.1",
+    "vite-plugin-svgr": "^4.3.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
