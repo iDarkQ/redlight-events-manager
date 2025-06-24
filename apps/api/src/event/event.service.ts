@@ -26,4 +26,28 @@ export class EventService {
     async remove(id: string) {
         return await this.prisma.event.delete({ where: { id } });
     }
+
+    async joinEvent(eventId: string, userId: string) {
+        return await this.prisma.event.update({
+            where: { id: eventId },
+            data: {
+                participants: {
+                    connect: { id: userId },
+                },
+            },
+            include: { participants: { select: { id: true, name: true } } },
+        });
+    }
+
+    async leaveEvent(eventId: string, userId: string) {
+        return await this.prisma.event.update({
+            where: { id: eventId },
+            data: {
+                participants: {
+                    disconnect: { id: userId },
+                },
+            },
+            include: { participants: { select: { id: true, name: true } } },
+        });
+    }
 }
