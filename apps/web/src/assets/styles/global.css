@@ -9,9 +9,9 @@ html {
     scroll-behavior: smooth;
 }
 
-root {
+:root {
     --color-primary: #ff133e;
-    --color-background-primary: #e21339;
+    --color-background-primary: #ff133e;
     --color-background-secondary: #fef5f5;
 
     --color-text-primary: #ff133e;
