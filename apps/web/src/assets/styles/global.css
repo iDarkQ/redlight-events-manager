@@ -29,6 +29,7 @@ h1 {
     font-weight: 400;
     color: #ffffff;
     line-height: 1em;
+    font-size: 4.125rem;
     letter-spacing: -0.01em;
     font-feature-settings: "tnum" on, "lnum" on;
 }
