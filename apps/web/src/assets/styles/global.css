@@ -75,3 +75,7 @@ p {
 a {
     text-decoration: none;
 }
+
+body {
+    background-color: var(--color-background-primary);
+}
