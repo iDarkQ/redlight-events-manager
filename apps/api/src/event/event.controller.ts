@@ -107,10 +107,15 @@ export class EventController {
     @Delete(":id")
     @UseGuards(AuthGuard)
     @ApiOkResponse({ description: "Successfully deleted record" })
-    async remove(@Param("id") id: string) {
+    async remove(@Param("id") id: string, @Request() req) {
+        const user = req.user;
         const event = await this.eventService.findOne(id);
         if (!event) {
             throw new NotFoundException("Event does not exist");
+        }
+
+        if (user.role !== "ADMIN" && user.id !== event.creatorId) {
+            throw new UnauthorizedException("You don't own this event");
         }
 
         await this.eventService.remove(id);
