@@ -1,0 +1,26 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 4rem;
+}
+
+.events {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    overflow:auto;
+}
+
+.card {
+    flex: 1 1 calc(33.3333% - 16px);
+    /* Max 4 per row */
+}
+
+.description {
+    color:white;
+}
+
+.texts {
+    width:70%;
+}
