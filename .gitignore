@@ -39,3 +39,4 @@ apps/api/src/assets/downloads/*
 # Misc
 .DS_Store
 *.pem
+.yarn/install-state.gz

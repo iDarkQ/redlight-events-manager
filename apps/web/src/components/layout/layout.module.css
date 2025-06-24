@@ -1,0 +1,93 @@
+.header {
+    padding-bottom: 99px;
+}
+
+.navbar {
+    position: fixed;
+    background-color: rgba(69, 69, 69, 0.35);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    transition: background-color 0.75s ease-out, transform 0.4s ease-in-out, -webkit-backdrop-filter 0.75s ease-out;
+    transition: background-color 0.75s ease-out, backdrop-filter 0.75s ease-out, transform 0.4s ease-in-out;
+    transition: background-color 0.75s ease-out, backdrop-filter 0.75s ease-out, transform 0.4s ease-in-out, -webkit-backdrop-filter 0.75s ease-out;
+    width: 100%;
+
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.buttons {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icon {
+    width: 64px;
+    height: 64px;
+    color: white;
+}
+
+.code {
+    font-family: "Space Mono", monospace;
+    font-weight: 400;
+    font-style: normal;
+    color: white;
+    font-size: calc(17.14286px + 0.16807vw);
+}
+
+.logo {
+    display: flex;
+    gap: 0.5rem;
+    height: fit-content;
+    color: black;
+    font-family: "Space Mono", monospace;
+    font-weight: normal;
+    font-size: calc(17.14286px + 0.16807vw);
+    line-height: 1em;
+    letter-spacing: -0.03em;
+}
+
+.link {
+    padding: 1rem;
+    color: white;
+
+    transition: 0.2s ease-in-out;
+    background: linear-gradient(#000000, #000000) left no-repeat, #ffffff;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 0% 100%;
+    font-size: 1.5rem;
+
+    line-height: 1em;
+    letter-spacing: 0em;
+    text-decoration: none;
+}
+
+.link:hover {
+    background-size: 100% 100%;
+}
+
+.cursor {
+    display: inline-block;
+    width: 0.1em;
+    height: 20px;
+    background-color: #fff;
+    margin-left: -0.1em;
+    animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

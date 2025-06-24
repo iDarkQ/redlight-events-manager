@@ -9,9 +9,9 @@ html {
     scroll-behavior: smooth;
 }
 
-root {
+:root {
     --color-primary: #ff133e;
-    --color-background-primary: #e21339;
+    --color-background-primary: #ff133e;
     --color-background-secondary: #fef5f5;
 
     --color-text-primary: #ff133e;
@@ -29,6 +29,7 @@ h1 {
     font-weight: 400;
     color: #ffffff;
     line-height: 1em;
+    font-size: 4.125rem;
     letter-spacing: -0.01em;
     font-feature-settings: "tnum" on, "lnum" on;
 }
@@ -69,4 +70,12 @@ p {
     color: #000000;
     line-height: 1.2em;
     letter-spacing: 0.01em;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    background-color: var(--color-background-primary);
 }

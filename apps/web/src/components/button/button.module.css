@@ -1,0 +1,19 @@
+.button {
+    font-family: "Roobert";
+    font-weight: normal;
+    font-size: 1.125em;
+    font-weight: 300;
+    color: #ffffff;
+    line-height: 1.35em;
+    letter-spacing: -0.01em;
+    width: 100%;
+    padding: 0.375rem 0.25rem;
+    border: none;
+    background-color: #ff133e;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #000000;
+}
