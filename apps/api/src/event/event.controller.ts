@@ -30,7 +30,6 @@ export class EventController {
     @Post()
     @UseGuards(AuthGuard)
     async create(@Body() createEventDto: CreateEventRequestDto, @Request() req) {
-        Logger.debug(req.user);
         return await this.eventService.create({ ...createEventDto, creatorId: req.user.id });
     }
 
