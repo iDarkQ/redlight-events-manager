@@ -1,0 +1,11 @@
+.button {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.button:hover {
+    cursor:pointer;
+    transform: scale(1.1);
+}
