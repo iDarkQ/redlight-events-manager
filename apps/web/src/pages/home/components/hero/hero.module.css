@@ -9,7 +9,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    overflow:auto;
+    overflow: auto;
 }
 
 .card {
@@ -18,9 +18,14 @@
 }
 
 .description {
-    color:white;
+    color: white;
 }
 
 .texts {
-    width:70%;
+    width: 70%;
+}
+
+.wave {
+    background-color: #fef5f5;
+    width: 100%;
 }
