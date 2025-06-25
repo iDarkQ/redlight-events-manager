@@ -1,11 +1,15 @@
 .button {
+    cursor: pointer;
     background-color: transparent;
     outline: none;
     border: none;
+}
+
+.animation {
     transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
-.button:hover {
-    cursor:pointer;
+.animation:hover {
+
     transform: scale(1.1);
 }

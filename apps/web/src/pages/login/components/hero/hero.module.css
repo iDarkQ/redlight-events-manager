@@ -1,0 +1,55 @@
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+    padding: 4rem;
+
+
+    height: calc(100vh - var(--footer-height) - var(--navbar-height));
+}
+
+.form {
+    padding: 1rem;
+    background-color: white;
+    width: var(--breakpoint-mobileL);
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.events {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    overflow: auto;
+}
+
+.title {
+    color: black;
+    padding-bottom: 1rem;
+}
+
+.underline {
+    color: var(--color-primary);
+}
+
+.card {
+    flex: 1 1 calc(33.3333% - 16px);
+    /* Max 4 per row */
+}
+
+.wave {
+    background-color: #fef5f5;
+    width: 100%;
+}
+
+.required:after {
+    content: "*";
+    color: #000000;
+    margin-left: 0.25rem;
+}

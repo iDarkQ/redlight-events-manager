@@ -7,12 +7,14 @@ declare module "*.svg?react" {
     export default ReactComponent;
 }
 
-// /// <reference types="vite/client" />
+/// <reference types="vite/client" />
 
-// interface ImportMetaEnv {
+interface ImportMetaEnv {
+    VITE_DEBUG: string;
+    VITE_LOCAL_BACKEND_URL: string;
+    VITE_BACKEND_URL: string;
+}
 
-// }
-
-// interface ImportMeta {
-//     readonly env: ImportMetaEnv;
-// }
+interface ImportMeta {
+    readonly env: ImportMetaEnv;
+}

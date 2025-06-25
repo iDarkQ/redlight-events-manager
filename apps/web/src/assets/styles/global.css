@@ -5,6 +5,34 @@
     font-style: normal;
 }
 
+section {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: auto;
+    flex: none;
+    width: 80%;
+    max-width: 1440px;
+}
+
+@media (max-width: var(--breakpoint-laptopL)) {
+    section {
+        width: 80%;
+    }
+}
+
+@media (max-width: var(--breakpoint-laptop)) {
+    section {
+        width: 85%;
+    }
+}
+
+@media (max-width: var(--breakpoint-tablet)) {
+    section {
+        width: 90%;
+    }
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -16,6 +44,16 @@ html {
 
     --color-text-primary: #ff133e;
     --color-text-secondary: #888f9a;
+
+    --breakpoint-mobileS: 320px;
+    --breakpoint-mobileM: 375px;
+    --breakpoint-mobileL: 425px;
+    --breakpoint-tablet: 768px;
+    --breakpoint-laptop: 1024px;
+    --breakpoint-laptopL: 1440px;
+
+    --footer-height: 112px;
+    --navbar-height: 100px;
 }
 
 * {
@@ -62,7 +100,9 @@ h4 {
     font-feature-settings: "tnum" on, "lnum" on;
 }
 
-p {
+p,
+span,
+label {
     font-family: "Roobert";
     font-weight: normal;
     font-size: 1rem;

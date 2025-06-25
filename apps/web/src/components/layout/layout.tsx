@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
-import { LayoutNavbar } from ".";
+import { LayoutFooter, LayoutNavbar } from ".";
+import { LayoutNotification } from "~/components/layout/layout-notification";
 
 interface LayoutProps {
   children: ReactNode;
@@ -7,7 +8,9 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => (
   <>
+    <LayoutNotification />
     <LayoutNavbar />
     {children}
+    <LayoutFooter />
   </>
 );
