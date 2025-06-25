@@ -52,6 +52,8 @@ html {
     --breakpoint-laptop: 1024px;
     --breakpoint-laptopL: 1440px;
 
+    --footer-height: 112px;
+    --navbar-height: 100px;
 }
 
 * {
