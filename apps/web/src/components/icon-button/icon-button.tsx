@@ -5,8 +5,9 @@ import clsx from "clsx";
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   children: ReactNode;
+  animation?: boolean;
 }
 
-export const IconButton = ({ children, className }: IconButtonProps) => (
-  <button className={clsx(styles.button, className && className)}>{children}</button>
+export const IconButton = ({ children, className, animation = true, ...props }: IconButtonProps) => (
+  <button className={clsx(styles.button, animation && styles.animation, className && className)} {...props}>{children}</button>
 );
