@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { LayoutNavbar } from ".";
+import { LayoutNotification } from "~/components/layout/layout-notification";
 
 interface LayoutProps {
   children: ReactNode;
