@@ -7,6 +7,7 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => (
   <>
+    <LayoutNotification />
     <LayoutNavbar />
     {children}
   </>
