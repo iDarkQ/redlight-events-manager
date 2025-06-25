@@ -4,6 +4,7 @@ import { RxAvatar } from "react-icons/rx";
 import { Link } from "~/components/link";
 import { useTypewriter } from "~/components/typewriter";
 import Logo from "~/assets/images/logo.svg?react";
+import { Routes } from "~/utils/routes";
 
 export const LayoutNavbar = () => {
   const typewriter = useTypewriter(
@@ -17,15 +18,15 @@ export const LayoutNavbar = () => {
       <nav className={styles.navbar}>
         <a className={styles.logo}>
           <Logo />
-          <span className={styles.code}>
-            <span>{`<${typewriter}`}</span>
+          <span>
+            <span className={styles.code}>{`<${typewriter}`}</span>
             <span className={styles.cursor} />
-            <span>{">"}</span>
+            <span className={styles.code}>{">"}</span>
           </span>
         </a>
         <div className={styles.buttons}>
           <nav>
-            <Link link="/">
+            <Link link={Routes.HOME}>
               <p className={styles.link}>Events</p>
             </Link>
           </nav>
@@ -37,7 +38,7 @@ export const LayoutNavbar = () => {
           </nav>
 
           <nav>
-            <Link link="/">
+            <Link link={Routes.LOGIN}>
               <p className={styles.link}>Login</p>
             </Link>
           </nav>
