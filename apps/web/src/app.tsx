@@ -6,14 +6,9 @@ import { Login } from "~/pages/login";
 import { NotificationProvider } from "~/providers/notification";
 
 export const App = () => (
-  <NotificationProvider>
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
-  </NotificationProvider>
+                  <Route index element={<Home />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="event" element={<Event />} />
+                </Routes>
+              </Layout>
 );
