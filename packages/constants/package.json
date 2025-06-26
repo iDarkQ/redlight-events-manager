@@ -7,10 +7,12 @@
   },
   "exports": {
     "./user.dto": {
+      "types": "./src/dto/user.dto.ts",
+      "default": "./dist/user.dto.js"
     },
     "./event.dto": {
-      "types": "./src/dto/voucher.dto.ts",
-      "default": "./dist/voucher.dto.js"
+      "types": "./src/dto/event.dto.ts",
+      "default": "./dist/event.dto.js"
     }
   },
   "devDependencies": {
