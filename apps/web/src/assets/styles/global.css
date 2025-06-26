@@ -54,6 +54,9 @@ html {
 
     --footer-height: 112px;
     --navbar-height: 100px;
+
+    --icon-medium: 32px;
+    --icon-large: 64px;
 }
 
 * {
