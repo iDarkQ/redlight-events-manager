@@ -65,6 +65,21 @@ html {
     box-sizing: border-box;
 }
 
+p,
+span,
+label,
+input,
+textarea,
+li {
+    font-family: "Roobert";
+    font-weight: normal;
+    font-size: 1rem;
+    font-weight: normal;
+    color: #000000;
+    line-height: 1.2em;
+    letter-spacing: 0.01em;
+}
+
 h1 {
     font-family: "Roobert";
     font-weight: 400;
@@ -103,16 +118,18 @@ h4 {
     font-feature-settings: "tnum" on, "lnum" on;
 }
 
-p,
-span,
-label {
-    font-family: "Roobert";
+h5 {
+    font-family: "Space Mono", monospace;
     font-weight: normal;
-    font-size: 1rem;
-    font-weight: normal;
+    font-size: 1.2rem;
+    font-weight: 200;
     color: #000000;
-    line-height: 1.2em;
-    letter-spacing: 0.01em;
+    line-height: 1.1em;
+    font-feature-settings: "tnum" on, "lnum" on;
+}
+
+ul {
+    margin-left: 28px;
 }
 
 a {
