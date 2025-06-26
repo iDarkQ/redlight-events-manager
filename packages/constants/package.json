@@ -6,15 +6,9 @@
     "build": "tsc"
   },
   "exports": {
-    "./downloads.dto": {
-      "types": "./src/dto/downloads.dto.ts",
-      "default": "./dist/downloads.dto.js"
+    "./user.dto": {
     },
-    "./checkout.dto": {
-      "types": "./src/dto/checkout.dto.ts",
-      "default": "./dist/checkout.dto.js"
-    },
-    "./voucher.dto": {
+    "./event.dto": {
       "types": "./src/dto/voucher.dto.ts",
       "default": "./dist/voucher.dto.js"
     }
