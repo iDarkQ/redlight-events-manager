@@ -22,14 +22,15 @@ import { AuthGuard } from "src/auth/auth.guard";
 import { ApiOkResponse } from "@nestjs/swagger";
 import { LeaveEventDto } from "src/event/dto/leave-event.dto";
 import { UpdateEventDto } from "src/event/dto/update-event.dto";
+import { EventDto } from "@redlight-events-manager/constants/event.dto";
 
 @Controller("event")
 export class EventController {
-    constructor(private readonly eventService: EventService) { }
+    constructor(private readonly eventService: EventService) {}
 
     @Post()
     @UseGuards(AuthGuard)
-    async create(@Body() createEventDto: CreateEventRequestDto, @Request() req) {
+    async create(@Body() createEventDto: CreateEventRequestDto, @Request() req): Promise<EventDto> {
         return await this.eventService.create({ ...createEventDto, creatorId: req.user.id });
     }
 
