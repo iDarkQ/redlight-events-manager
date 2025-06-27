@@ -5,6 +5,9 @@ import { Link } from "~/components/link";
 import { useTypewriter } from "~/components/typewriter";
 import Logo from "~/assets/images/logo.svg?react";
 import { Routes } from "~/utils/routes";
+import { useUser } from "~/providers/user";
+import { useLocation } from "react-router";
+import clsx from "clsx";
 
 export const LayoutNavbar = () => {
   const typewriter = useTypewriter(
@@ -13,6 +16,9 @@ export const LayoutNavbar = () => {
     100,
     1000,
   );
+  const { user } = useUser();
+  const location = useLocation();
+
   return (
     <header className={styles.header}>
       <nav className={styles.navbar}>
@@ -27,25 +33,45 @@ export const LayoutNavbar = () => {
         <div className={styles.buttons}>
           <nav>
             <Link link={Routes.HOME}>
-              <p className={styles.link}>Events</p>
+              <p
+                className={clsx(styles.link, {
+                  [styles.selected]: location.pathname === Routes.HOME,
+                })}
+              >
+                Events
+              </p>
             </Link>
           </nav>
 
           <nav>
-            <Link link="/">
-              <p className={styles.link}>About</p>
+            <Link link="/about">
+              <p
+                className={clsx(styles.link, {
+                  [styles.selected]: location.pathname === "/about",
+                })}
+              >
+                About
+              </p>
             </Link>
           </nav>
 
-          <nav>
-            <Link link={Routes.LOGIN}>
-              <p className={styles.link}>Login</p>
-            </Link>
-          </nav>
-
-          <IconButton className={styles.avatar}>
-            <RxAvatar className={styles.icon} />
-          </IconButton>
+          {!user ? (
+            <nav>
+              <Link link={Routes.LOGIN}>
+                <p
+                  className={clsx(styles.link, {
+                    [styles.selected]: location.pathname === Routes.LOGIN,
+                  })}
+                >
+                  Login
+                </p>
+              </Link>
+            </nav>
+          ) : (
+            <IconButton className={styles.avatar}>
+              <RxAvatar className={styles.icon} />
+            </IconButton>
+          )}
         </div>
       </nav>
     </header>
