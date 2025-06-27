@@ -1,10 +1,11 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { PrismaService } from "src/prisma.service";
 import * as argon2 from "argon2";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { LoginUserDto } from "src/user/dto/login-user.dto";
+import { LoginUserDto, LoginUserResponseDto } from "src/user/dto/login-user.dto";
 import { AuthorizeUserDto } from "src/user/dto/authorization-user.dto";
+import { UserDto } from "@redlight-events-manager/constants/user.dto";
 
 @Injectable()
 export class UserService {
@@ -28,9 +29,11 @@ export class UserService {
         });
     }
 
-    async login(loginUserDto: LoginUserDto) {
+    async login(loginUserDto: LoginUserDto): Promise<LoginUserResponseDto> {
         const user = await this.prisma.user.findUnique({ where: { email: loginUserDto.email } });
-        if (!user) return null;
+        if (!user) {
+            throw new NotFoundException("User with this email does not exist");
+        }
 
         const isValid = await argon2.verify(user.password, loginUserDto.password);
 
@@ -46,10 +49,10 @@ export class UserService {
             { expiresIn: "7d" },
         );
 
-        return token;
+        return { token };
     }
 
-    async authorize(authorizeUserDto: AuthorizeUserDto) {
+    async authorize(authorizeUserDto: AuthorizeUserDto): Promise<UserDto> {
         try {
             const decoded = jwt.verify(
                 authorizeUserDto.token,
@@ -58,9 +61,16 @@ export class UserService {
 
             const user = await this.prisma.user.findUnique({
                 where: { id: decoded.uId },
+                omit: {
+                    password: true,
+                },
             });
 
-            return user ?? null;
+            if (!user) {
+                throw new NotFoundException("User does not exists");
+            }
+
+            return user;
         } catch (_) {
             throw new UnauthorizedException("Could not authorize your session");
         }
