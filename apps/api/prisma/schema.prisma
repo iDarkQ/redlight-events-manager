@@ -48,4 +48,5 @@ model Event {
   status          EventStatus @default(PLANNED)
   latitude        Float
   longitude       Float
+  location        String
 }
