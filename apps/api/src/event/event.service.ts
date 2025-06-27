@@ -2,12 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { CreateEventDto } from "./dto/create-event.dto";
 import { UpdateEventDto } from "./dto/update-event.dto";
 import { PrismaService } from "src/prisma.service";
+import { EventDto } from "@redlight-events-manager/constants/event.dto";
 
 @Injectable()
 export class EventService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async create(createEventDto: CreateEventDto) {
+    async create(createEventDto: CreateEventDto): Promise<EventDto> {
         return await this.prisma.event.create({
             data: createEventDto,
             include: { participants: { select: { id: true, name: true } } },
