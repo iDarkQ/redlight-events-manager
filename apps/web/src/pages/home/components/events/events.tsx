@@ -10,7 +10,6 @@ export const Events = () => {
 
   return (
     <div className={styles.wrapper}>
-      {/* <EventsCreateForm /> */}
       <section className={styles.section}>
         <div className={styles.planned}>
           <h3>Planned Events</h3>
