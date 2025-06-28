@@ -4,16 +4,32 @@
  */
 
 export interface paths {
-    "/user": {
+    "/user/signUp": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["UserController_login"];
+        get?: never;
         put?: never;
         post: operations["UserController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/signIn": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UserController_login"];
         delete?: never;
         options?: never;
         head?: never;
@@ -27,9 +43,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["UserController_authorize"];
+        get?: never;
         put?: never;
-        post?: never;
+        post: operations["UserController_authorize"];
         delete?: never;
         options?: never;
         head?: never;
@@ -117,8 +133,45 @@ export interface components {
             email: string;
             password: string;
         };
+        LoginUserResponseDto: {
+            token: string;
+        };
         AuthorizeUserDto: {
             token: string;
+        };
+        UserDto: {
+            /**
+             * @description Unique identifier of the user
+             * @example ckv9p34s50000svef8bl7w2gb
+             */
+            id: string;
+            /**
+             * @description Name of the user
+             * @example John Doe
+             */
+            name: string;
+            /**
+             * Format: email
+             * @description Email address of the user
+             * @example john.doe@example.com
+             */
+            email: string;
+            /**
+             * @description Role of the user
+             * @example admin
+             */
+            role: string;
+            /**
+             * @description Profile description or URL of the user
+             * @example https://example.com/profile/johndoe
+             */
+            profile: string;
+            /**
+             * Format: date-time
+             * @description Birthday of the user
+             * @example 1990-01-01T00:00:00.000Z
+             */
+            birthday: string;
         };
         CreateEventRequestDto: Record<string, never>;
         UpdateEventDto: {
@@ -140,29 +193,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    UserController_login: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoginUserDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-        };
-    };
     UserController_create: {
         parameters: {
             query?: never;
@@ -184,6 +214,44 @@ export interface operations {
             };
         };
     };
+    UserController_login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginUserDto"];
+            };
+        };
+        responses: {
+            /** @description JWT Token */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginUserResponseDto"];
+                };
+            };
+            /** @description Wrong Password */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description User with this email does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     UserController_authorize: {
         parameters: {
             query?: never;
@@ -197,13 +265,28 @@ export interface operations {
             };
         };
         responses: {
+            /** @description Returns user object */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["UserDto"];
                 };
+            };
+            /** @description Could not authorize your session */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description User does not exists */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

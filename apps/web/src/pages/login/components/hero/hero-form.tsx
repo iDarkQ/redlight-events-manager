@@ -11,8 +11,8 @@ interface FieldConfig {
 }
 
 export const HeroForm = () => {
-  const { signingUp, handleSubmit, onSubmit, errors, toggleMode, register } =
-    useLoginForm()
+  const { signingUp, isSubmitting, handleSubmit, onSubmit, errors, toggleMode, register } =
+    useLoginForm();
 
   const baseFields: FieldConfig[] = [
     { name: "email", label: "Your email", type: "email" },
@@ -57,7 +57,7 @@ export const HeroForm = () => {
       >
         {fieldsToRender.map(renderField)}
 
-        <Button type="submit">
+        <Button loading={isSubmitting} type="submit">
           {signingUp ? "Sign Up" : "Sign In"}
         </Button>
 

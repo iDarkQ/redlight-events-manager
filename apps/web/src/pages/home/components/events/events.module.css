@@ -21,3 +21,9 @@
     flex: 1 1 calc(33.3333% - 16px);
     /* Max 4 per row */
 }
+
+.planned {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
