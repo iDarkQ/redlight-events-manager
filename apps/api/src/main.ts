@@ -23,6 +23,9 @@ const bootstrap = async () => {
     await SwaggerModule.loadPluginMetadata(metadata);
     SwaggerModule.setup("documentation", app, documentFactory, {
         jsonDocumentUrl: "documentation/json",
+        swaggerOptions: {
+            useInlineDefinitionsForEnums: true,
+        },
     });
 
     app.useGlobalPipes(
