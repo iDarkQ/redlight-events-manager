@@ -16,6 +16,7 @@ const bootstrap = async () => {
         .setDescription("The API used for handling sport events at redlight")
         .setVersion("1.0")
         .addTag("download")
+        .addBearerAuth()
         .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);
 
