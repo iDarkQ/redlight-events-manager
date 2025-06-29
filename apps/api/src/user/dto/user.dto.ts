@@ -1,5 +1,5 @@
-import { IsString, IsEmail, IsDate, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsEmail, IsDate } from "class-validator";
+import { Type } from "class-transformer";
 
 export class UserDto {
     /**
