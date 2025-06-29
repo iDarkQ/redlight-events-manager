@@ -60,8 +60,10 @@ export class UserService {
         return { token };
     }
 
-    async login(loginUserDto: LoginUserDto): Promise<LoginUserResponseDto> {
-        const user = await this.prisma.user.findUnique({ where: { email: loginUserDto.email } });
+    async signIn(loginUserDto: LoginUserDto): Promise<JwtTokenResponse> {
+        const user = await this.prisma.user.findUnique({
+            where: { email: loginUserDto.email },
+        });
         if (!user) {
             throw new NotFoundException("User with this email does not exist");
         }
@@ -84,26 +86,22 @@ export class UserService {
     }
 
     async authorize(authorizeUserDto: AuthorizeUserDto): Promise<UserDto> {
-        try {
-            const decoded = jwt.verify(
-                authorizeUserDto.token,
-                process.env.JWT_SECRET as string,
-            ) as JwtPayload;
+        const decoded = jwt.verify(
+            authorizeUserDto.token,
+            process.env.JWT_SECRET as string,
+        ) as JwtPayload;
 
-            const user = await this.prisma.user.findUnique({
-                where: { id: decoded.uId },
-                omit: {
-                    password: true,
-                },
-            });
+        const user = await this.prisma.user.findUnique({
+            where: { id: decoded.uId },
+            omit: {
+                password: true,
+            },
+        });
 
-            if (!user) {
-                throw new NotFoundException("User does not exists");
-            }
-
-            return user;
-        } catch (_) {
-            throw new UnauthorizedException("Could not authorize your session");
+        if (!user) {
+            throw new NotFoundException("User does not exists");
         }
+
+        return user;
     }
 }
