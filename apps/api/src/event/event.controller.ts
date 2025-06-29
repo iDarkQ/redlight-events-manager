@@ -36,6 +36,7 @@ export class EventController {
     }
 
     @Get()
+    @ApiOkResponse({ description: "Returns all events", type: EventDto, isArray: true })
     async findAll() {
         return await this.eventService.findAll();
     }
