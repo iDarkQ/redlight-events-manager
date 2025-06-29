@@ -27,7 +27,6 @@ const bootstrap = async () => {
     app.useGlobalPipes(
         new ValidationPipe({
             whitelist: true,
-            forbidNonWhitelisted: true,
             transform: true,
         }),
     );
