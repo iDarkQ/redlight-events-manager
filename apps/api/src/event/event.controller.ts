@@ -49,6 +49,11 @@ export class EventController {
     @Put(":id")
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
+    async update(
+        @Param("id") id: string,
+        @Request() req,
+        @Body() updateEventDto: UpdateEventDto,
+    ): Promise<EventDto> {
         const user = req.user;
         const event = await this.eventService.findOne(id);
         if (!event) {
@@ -59,12 +64,13 @@ export class EventController {
             throw new ForbiddenException("Only admins can edit events from other users");
         }
 
-        await this.eventService.update(id, updateEventDto);
+        return await this.eventService.update(id, updateEventDto);
     }
 
     @Patch("join/:id")
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
+    async join(@Param("id") id: string, @Request() req): Promise<EventDto> {
         const user = req.user;
         const event = await this.eventService.findOne(id);
         if (!event) {
@@ -79,12 +85,17 @@ export class EventController {
             throw new BadRequestException("Already joined");
         }
 
-        await this.eventService.joinEvent(id, user.id);
+        return await this.eventService.joinEvent(id, user.id);
     }
 
     @Patch("leave/:id")
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
+    async leave(
+        @Param("id") id: string,
+        @Query() query: LeaveEventDto,
+        @Request() req,
+    ): Promise<EventDto> {
         const user = req.user;
         const event = await this.eventService.findOne(id);
         if (!event) {
@@ -105,7 +116,7 @@ export class EventController {
             throw new BadRequestException("Not part of event");
         }
 
-        await this.eventService.leaveEvent(id, userId);
+        return await this.eventService.leaveEvent(id, userId);
     }
 
     @Delete(":id")
