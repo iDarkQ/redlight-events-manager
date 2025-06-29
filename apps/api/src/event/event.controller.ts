@@ -102,6 +102,10 @@ export class EventController {
             throw new NotFoundException("Event does not exist");
         }
 
+        if (event.status !== "COMPLETED") {
+            throw new ConflictException("Event is already completed");
+        }
+
         if (query.userId && user.role !== "ADMIN") {
             throw new ForbiddenException("Only admins can remove other users from an event");
         }
