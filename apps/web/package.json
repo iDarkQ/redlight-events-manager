@@ -11,7 +11,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
     "@mapbox/mapbox-sdk": "^0.16.1",
-    "@redlight-events-manager/constants": "*",
+    "@openapitools/openapi-generator-cli": "^2.21.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "mapbox-gl": "^3.13.0",
