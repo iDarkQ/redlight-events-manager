@@ -13,7 +13,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["UserController_create"];
+        post: operations["UserController_signUp"];
         delete?: never;
         options?: never;
         head?: never;
@@ -29,7 +29,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["UserController_login"];
+        post: operations["UserController_signIn"];
         delete?: never;
         options?: never;
         head?: never;
@@ -128,13 +128,13 @@ export interface components {
             /** Format: date-time */
             birthday: string;
         };
+        JwtTokenResponse: {
+            token: string;
+        };
         LoginUserDto: {
             /** Format: email */
             email: string;
             password: string;
-        };
-        LoginUserResponseDto: {
-            token: string;
         };
         AuthorizeUserDto: {
             token: string;
@@ -173,7 +173,101 @@ export interface components {
              */
             birthday: string;
         };
-        CreateEventRequestDto: Record<string, never>;
+        CreateEventRequestDto: {
+            title: string;
+            description: string;
+            /** Format: date-time */
+            date: string;
+            type: string;
+            maxParticipants: number;
+            latitude: number;
+            longitude: number;
+            location: string;
+        };
+        ParticipantDto: {
+            /**
+             * @description Unique identifier of the participant
+             * @example user1
+             */
+            id: string;
+            /**
+             * @description Name of the participant
+             * @example Alice
+             */
+            name: string;
+        };
+        EventDto: {
+            /** @example [
+             *       {
+             *         "id": "user1",
+             *         "name": "Alice"
+             *       },
+             *       {
+             *         "id": "user2",
+             *         "name": "Bob"
+             *       }
+             *     ] */
+            participants: components["schemas"]["ParticipantDto"][];
+            /**
+             * @description Unique identifier of the event
+             * @example ckv9p34s50000svef8bl7w2gb
+             */
+            id: string;
+            /**
+             * @description Title of the event
+             * @example Annual Meetup
+             */
+            title: string;
+            /**
+             * @description Description of the event
+             * @example A gathering for all members.
+             */
+            description: string;
+            /**
+             * Format: date-time
+             * @description Date when the event was created
+             * @example 2024-06-25T12:00:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description Date of the event
+             * @example 2024-07-01T18:00:00.000Z
+             */
+            date: string;
+            /**
+             * @description Type of the event
+             * @example MEETING
+             */
+            type: string;
+            /**
+             * @description Maximum number of participants
+             * @example 100
+             */
+            maxParticipants: number;
+            /**
+             * @description ID of the event creator
+             * @example user1
+             */
+            creatorId: string;
+            /**
+             * @description Status of the event
+             * @example PLANNED
+             */
+            status: Record<string, never>;
+            /**
+             * @description Longitude of the event location
+             * @example 19.9449799
+             */
+            longitude: number;
+            /**
+             * @description Latitude of the event location
+             * @example 50.0646501
+             */
+            latitude: number;
+            /** @description Name of the event location */
+            location: string;
+        };
         UpdateEventDto: {
             title?: string;
             description?: string;
@@ -183,6 +277,7 @@ export interface components {
             maxParticipants?: number;
             latitude?: number;
             longitude?: number;
+            location?: string;
         };
     };
     responses: never;
@@ -193,7 +288,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    UserController_create: {
+    UserController_signUp: {
         parameters: {
             query?: never;
             header?: never;
@@ -206,15 +301,18 @@ export interface operations {
             };
         };
         responses: {
-            201: {
+            /** @description JWT Token */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["JwtTokenResponse"];
+                };
             };
         };
     };
-    UserController_login: {
+    UserController_signIn: {
         parameters: {
             query?: never;
             header?: never;
@@ -233,7 +331,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LoginUserResponseDto"];
+                    "application/json": components["schemas"]["JwtTokenResponse"];
                 };
             };
             /** @description Wrong Password */
@@ -299,12 +397,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Returns all events */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["EventDto"][];
                 };
             };
         };
@@ -327,7 +426,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["EventDto"];
                 };
             };
         };
@@ -372,7 +471,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["EventDto"];
+                };
             };
         };
     };
@@ -411,7 +512,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["EventDto"];
+                };
             };
         };
     };
@@ -432,7 +535,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["EventDto"];
+                };
             };
         };
     };
