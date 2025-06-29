@@ -1,26 +1,34 @@
 import { Controller, Post, Body } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { LoginUserDto, LoginUserResponseDto } from "src/user/dto/login-user.dto";
+import { LoginUserDto } from "src/user/dto/login-user.dto";
 import { AuthorizeUserDto } from "src/user/dto/authorization-user.dto";
-import { ApiNotFoundResponse, ApiOkResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
-import { UserDto } from "@redlight-events-manager/constants/user.dto";
+import {
+    ApiConflictResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
+import { JwtTokenResponse } from "src/user/dto/jwt-token-response.dto";
+import { UserDto } from "src/user/dto/user.dto";
 
 @Controller("user")
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Post("signUp")
-    async create(@Body() createUserDto: CreateUserDto) {
-        return await this.userService.create(createUserDto);
+    @ApiOkResponse({ type: JwtTokenResponse, description: "JWT Token" })
+    @ApiConflictResponse({ description: "User already exists" })
+    async signUp(@Body() createUserDto: CreateUserDto): Promise<JwtTokenResponse | null> {
+        return await this.userService.signUp(createUserDto);
     }
 
     @Post("signIn")
-    @ApiOkResponse({ type: LoginUserResponseDto, description: "JWT Token" })
+    @ApiOkResponse({ type: JwtTokenResponse, description: "JWT Token" })
     @ApiUnauthorizedResponse({ description: "Wrong Password" })
     @ApiNotFoundResponse({ description: "User with this email does not exist" })
-    async login(@Body() loginUserDto: LoginUserDto): Promise<LoginUserResponseDto | null> {
-        return await this.userService.login(loginUserDto);
+    async signIn(@Body() loginUserDto: LoginUserDto): Promise<JwtTokenResponse | null> {
+        return await this.userService.signIn(loginUserDto);
     }
 
     @Post("auth")
