@@ -77,7 +77,7 @@ export class EventController {
             throw new NotFoundException("Event does not exist");
         }
 
-        if (event.maxParticipants >= event.participants.length) {
+        if (event.participants.length >= event.maxParticipants) {
             throw new ConflictException("Participant limit reached");
         }
 
