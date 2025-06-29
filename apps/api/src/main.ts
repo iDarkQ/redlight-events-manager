@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 import metadata from "./metadata";
 import { NestExpressApplication } from "@nestjs/platform-express";
+import { AllExceptionsFilter } from "src/utils/all-exceptions-filter";
 
 const bootstrap = async () => {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -31,6 +32,7 @@ const bootstrap = async () => {
         }),
     );
 
+    app.useGlobalFilters(new AllExceptionsFilter());
     app.enableCors();
 
     await app.listen(process.env.PORT ?? 8084);
