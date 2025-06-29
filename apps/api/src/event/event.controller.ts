@@ -17,12 +17,12 @@ import {
     Put,
 } from "@nestjs/common";
 import { EventService } from "./event.service";
-import { CreateEventRequestDto } from "./dto/create-event.dto";
 import { AuthGuard } from "src/auth/auth.guard";
-import { ApiOkResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOkResponse } from "@nestjs/swagger";
 import { LeaveEventDto } from "src/event/dto/leave-event.dto";
 import { UpdateEventDto } from "src/event/dto/update-event.dto";
-import { EventDto } from "@redlight-events-manager/constants/event.dto";
+import { EventDto } from "src/event/dto/event.dto";
+import { CreateEventRequestDto } from "src/event/dto/create-event-request.dto";
 
 @Controller("event")
 export class EventController {
@@ -30,6 +30,7 @@ export class EventController {
 
     @Post()
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     async create(@Body() createEventDto: CreateEventRequestDto, @Request() req): Promise<EventDto> {
         return await this.eventService.create({ ...createEventDto, creatorId: req.user.id });
     }
@@ -40,12 +41,14 @@ export class EventController {
     }
 
     @Get(":id")
+    @ApiBearerAuth()
     findOne(@Param("id") id: string) {
         return this.eventService.findOne(id);
     }
 
     @Put(":id")
-    async update(@Param("id") id: string, @Request() req, @Body() updateEventDto: UpdateEventDto) {
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
         const user = req.user;
         const event = await this.eventService.findOne(id);
         if (!event) {
@@ -61,7 +64,7 @@ export class EventController {
 
     @Patch("join/:id")
     @UseGuards(AuthGuard)
-    async join(@Param("id") id: string, @Request() req) {
+    @ApiBearerAuth()
         const user = req.user;
         const event = await this.eventService.findOne(id);
         if (!event) {
@@ -81,7 +84,7 @@ export class EventController {
 
     @Patch("leave/:id")
     @UseGuards(AuthGuard)
-    async leave(@Param("id") id: string, @Query() query: LeaveEventDto, @Request() req) {
+    @ApiBearerAuth()
         const user = req.user;
         const event = await this.eventService.findOne(id);
         if (!event) {
