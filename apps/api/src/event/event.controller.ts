@@ -60,7 +60,7 @@ export class EventController {
             throw new NotFoundException("Event does not exist");
         }
 
-        if (user.role !== "ADMIN") {
+        if (user.role !== "ADMIN" && event.creatorId !== user.id) {
             throw new ForbiddenException("Only admins can edit events from other users");
         }
 
