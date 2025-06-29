@@ -7,8 +7,3 @@ export class LoginUserDto {
     @IsString()
     password: string;
 }
-
-export class LoginUserResponseDto {
-    @IsString()
-    token: string;
-}
