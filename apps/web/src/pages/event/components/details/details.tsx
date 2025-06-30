@@ -1,16 +1,66 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { styles } from ".";
 import ReactMarkdown from "react-markdown";
 import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
 import { EventProps } from "~/pages/event";
 import clsx from "clsx";
+import { useEvent } from "~/providers/event";
+import { Tooltip } from "~/components/tooltip";
+import { Icon } from "~/components/icon";
 
 export const Details = ({ state }: EventProps) => {
-  const [value, setValue] = useState(markdown);
+  const { selectedEvent, setSelectedEvent } = useEvent();
+
+  const [value, setValue] = useState(selectedEvent!.description);
+
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const save = (desc: string) => {
+    setSelectedEvent((prev) => (prev ? { ...prev, description: desc } : prev));
+  };
+
+  useEffect(() => {
+    if(!selectedEvent) return;
+    if (state === "view") return;
+    if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    saveTimeout.current = setTimeout(() => {
+      save(value);
+    }, 500);
+    return () => {
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    };
+  }, [value, state]);
+
+    if (!selectedEvent) return;
 
   return (
     <div className={styles.wrapper}>
       <section className={styles.section}>
+        {selectedEvent?.participants && selectedEvent.participants.length > 0 && (
+          <div className={styles.participantsSection}>
+            <h2>Participants</h2>
+            <div className={styles.participantsList}>
+              {selectedEvent.participants.map((participant, idx) => (
+                <Tooltip key={idx} title={participant.name}>
+                  <Icon>
+                    <div
+                      key={participant.id}
+                      className={styles.participant}
+                      title={participant.name}
+                    >
+                      <img
+                        src={`https://i.pravatar.cc/48?img=${(idx % 70) + 1}`}
+                        alt={participant.name}
+                        className={styles.avatar}
+                      />
+                    </div>
+                  </Icon>
+                </Tooltip>
+              ))}
+            </div>
+          </div>
+        )}
+
         <h2>Description</h2>
         {state !== "view" && (
           <div className={styles.header}>
@@ -42,29 +92,3 @@ export const Details = ({ state }: EventProps) => {
     </div>
   );
 };
-
-const markdown = `
-        
-## ⚽ Redlight Dev Football Day @ Alma Coimbra 🏟️
-
-Hey team! 👋
-
-We're organizing a **fun and friendly football match** just for **Redlight Dev employees**! 💻➡️⚽  
-Come join us for a great time filled with **sports, laughter, and team spirit**! 🎉
-
-📍 **Location:** Alma Coimbra  
-📅 **Date:** [Insert Date Here]  
-🕒 **Time:** [Insert Time Here]  
-
-Whether you're a seasoned player or just want to hang out and cheer, there's a spot for you! 🙌  
-We'll bring the ball — you bring the energy! 🔥
-
-👟 Casual gear  
-🍻 Post-match drinks nearby  
-📸 Group photo at the end
-
-Let’s kick it together! 🚀
-
-*Teamwork doesn’t end at the office — see you on the field!*
-
-`;
