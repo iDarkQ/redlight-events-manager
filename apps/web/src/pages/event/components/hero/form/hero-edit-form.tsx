@@ -1,57 +1,23 @@
 import React from "react";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
-import { EventFormData, useHeroEditForm, styles } from "..";
-import { EventDto } from "@redlight-events-manager/constants/event.dto";
+import { EventFormData, useHeroEditForm, styles, eventStatuses } from "..";
 import { MapLocationPicker } from "../map";
 import mbx from "@mapbox/mapbox-sdk";
 import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding";
+import { useEvent } from "~/providers/event";
+import { EventDto } from "~/lib/api";
+import { Dropdown } from "~/components/dropdown";
 
 interface FieldConfig {
   name: keyof EventFormData;
   label: string;
   placeholder: string;
   type: string;
-  renderAs?: "input" | "textarea";
+  field: "input" | "dropdown";
+  suggestions?: string[];
+  options?: string[];
 }
-
-const eventFields: FieldConfig[] = [
-  {
-    name: "title",
-    label: "Event Title",
-    placeholder: "e.g., Morning Football Match",
-    type: "text",
-    renderAs: "input",
-  },
-  {
-    name: "date",
-    label: "Date and Time",
-    placeholder: "",
-    type: "datetime-local",
-    renderAs: "input",
-  },
-  {
-    name: "type",
-    label: "Type of Sport",
-    placeholder: "e.g., Football",
-    type: "text",
-    renderAs: "input",
-  },
-  {
-    name: "maxParticipants",
-    label: "Max Participants",
-    placeholder: "e.g., 22",
-    type: "number",
-    renderAs: "input",
-  },
-  {
-    name: "location",
-    label: "Location Name",
-    placeholder: "e.g., Alma Coimbra Entrace A",
-    type: "string",
-    renderAs: "input",
-  },
-];
 
 export interface HeroEditFormProps {
   defaultValues?: Partial<EventDto>;
@@ -64,25 +30,104 @@ export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => 
     onFinish,
   );
 
-  // Watch current lat/lng for default value in picker
+  const { events } = useEvent();
+  const typeSuggestions = Array.from(new Set(events.map((e) => e.type).filter(Boolean)));
+
+  const eventFields: FieldConfig[] = [
+    {
+      name: "title",
+      label: "Event Title",
+      placeholder: "e.g., Morning Football Match",
+      type: "text",
+      field: "input",
+    },
+    {
+      name: "status",
+      label: "Event Status",
+      placeholder: "e.g., PLANNED",
+      type: "text",
+      field: "dropdown",
+      options: eventStatuses,
+    },
+    {
+      name: "date",
+      label: "Date and Time",
+      placeholder: "",
+      type: "datetime-local",
+      field: "input",
+    },
+    {
+      name: "type",
+      label: "Type of Sport",
+      placeholder: "e.g., Football",
+      type: "text",
+      suggestions: typeSuggestions,
+      field: "input",
+    },
+    {
+      name: "maxParticipants",
+      label: "Max Participants",
+      placeholder: "e.g., 22",
+      type: "number",
+      field: "input",
+    },
+    {
+      name: "location",
+      label: "Location Name",
+      placeholder: "e.g., Alma Coimbra Entrace A",
+      type: "string",
+      field: "input",
+    },
+  ];
+
   const latitude = watch("latitude");
   const longitude = watch("longitude");
 
-  const renderField = ({ name, label, placeholder, type }: FieldConfig) => {
-    const Component = Input;
-    return (
-      <div key={name}>
-        <label htmlFor={name}>{label}</label>
-        <Component
-          id={name}
-          placeholder={placeholder}
-          type={type}
-          step={type === "number" ? "any" : undefined}
-          {...register(name)}
-        />
-        {errors[name] && <span>{(errors[name] as { message?: string })?.message}</span>}
-      </div>
-    );
+  const renderField = ({
+    name,
+    label,
+    placeholder,
+    type,
+    suggestions,
+    options,
+    field,
+  }: FieldConfig) => {
+    const fieldValue = watch(name);
+
+    if (field === "dropdown") {
+      const fieldValueString = String(fieldValue);
+
+      return (
+        <div key={name}>
+          <label htmlFor={name}>{label}</label>
+          <Dropdown
+            options={options!}
+            value={fieldValueString}
+            onChange={(value: string) => setValue(name, value, { shouldValidate: true })}
+            defaultOption={fieldValueString}
+          />
+          {errors[name] && <span>{(errors[name] as { message?: string })?.message}</span>}
+        </div>
+      );
+    }
+
+    if (field === "input") {
+      return (
+        <div key={name}>
+          <label htmlFor={name}>{label}</label>
+          <Input
+            id={name}
+            placeholder={placeholder}
+            type={type}
+            step={type === "number" ? "any" : undefined}
+            suggestions={suggestions}
+            {...register(name)}
+            value={fieldValue ?? ""}
+          />
+          {errors[name] && <span>{(errors[name] as { message?: string })?.message}</span>}
+        </div>
+      );
+    }
   };
 
   const fetchLocationName = async (longitude: number, latitude: number): Promise<string> => {
@@ -94,7 +139,6 @@ export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => 
       })
       .send();
 
-      console.log({feature: geoCode.body.features[0]})
     return geoCode.body.features[0].place_name;
   };
 
@@ -111,7 +155,7 @@ export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => 
                 ? [longitude, latitude]
                 : defaultValues?.latitude && defaultValues?.longitude
                   ? [defaultValues.longitude, defaultValues.latitude]
-                  : [0, 0] // fallback to world center
+                  : [0, 0]
             }
             initialZoom={latitude && longitude ? 14 : 2}
             onLocationSelect={async ({ lng, lat }) => {
