@@ -1,11 +1,17 @@
 import { useEvent } from "~/providers/event";
+import {styles} from ".";
 
 export const HeroTitle = () => {
-  const { event } = useEvent();
+  const { selectedEvent } = useEvent();
 
   return (
-    <h1>
-      <strong>{event?.title}</strong>
-    </h1>
+    <div>
+      <h1>
+        <strong>{selectedEvent?.title}</strong>
+      </h1>
+      <h4 className={styles.lName}>
+        {selectedEvent?.location}
+      </h4>
+    </div>
   );
 };
