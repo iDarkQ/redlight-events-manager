@@ -26,6 +26,8 @@
 }
 
 .wave {
+    display:block;
     background-color: #fef5f5;
+    height:auto;
     width: 100%;
 }
