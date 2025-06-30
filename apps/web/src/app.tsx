@@ -5,26 +5,33 @@ import "~/assets/styles/global.css";
 import { Layout } from "~/components/layout";
 import { Login } from "~/pages/login";
 import { Event } from "~/pages/event";
-import { NotificationProvider } from "~/providers/notification";
+import { MessageProvider } from "~/providers/message";
 import { UserProvider } from "~/providers/user";
 import { EventProvider } from "~/providers/event";
+import ScrollToTop from "~/hooks/scroll-to-top";
 
 export const App = () => (
   <CookiesProvider>
-    <UserProvider>
-      <EventProvider>
-        <NotificationProvider>
+    <MessageProvider>
+      <UserProvider>
+        <EventProvider>
           <BrowserRouter>
-              <Layout>
+            <Layout>
+              <ScrollToTop>
                 <Routes>
                   <Route index element={<Home />} />
                   <Route path="login" element={<Login />} />
-                  <Route path="event" element={<Event />} />
+                  <Route path="event">
+                    <Route path="create" element={<Event state="create" />} />
+                    <Route path="view/:id" element={<Event state="view" />} />
+                    <Route path="edit/:id" element={<Event state="edit" />} />
+                  </Route>
                 </Routes>
-              </Layout>
-            </BrowserRouter>
-        </NotificationProvider>
-      </EventProvider>
-    </UserProvider>
+              </ScrollToTop>
+            </Layout>
+          </BrowserRouter>
+        </EventProvider>
+      </UserProvider>
+    </MessageProvider>
   </CookiesProvider>
 );
