@@ -4,12 +4,13 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 
 import { styles } from ".";
+import React from "react";
 
 interface MapModelProps {
   center: [number, number];
 }
 
-export const MapModel = ({ center }: MapModelProps) => {
+export const MapModel = React.memo(({ center }: MapModelProps) => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const animationFrameRef = useRef<number | null>(null);
@@ -90,4 +91,4 @@ export const MapModel = ({ center }: MapModelProps) => {
   }, [center]);
 
   return <div id="map" ref={mapContainerRef} className={styles.model} />;
-};
+});
