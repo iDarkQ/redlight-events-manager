@@ -45,6 +45,8 @@ html {
     --color-text-primary: #ff133e;
     --color-text-secondary: #888f9a;
 
+    --popup-background: rgba(69, 69, 69, 0.75);
+
     --breakpoint-mobileS: 320px;
     --breakpoint-mobileM: 375px;
     --breakpoint-mobileL: 425px;
