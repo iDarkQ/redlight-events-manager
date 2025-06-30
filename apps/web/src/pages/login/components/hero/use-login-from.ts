@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useUser } from "~/providers/user";
 import { useNavigate } from "react-router";
 import { Routes } from "~/utils/routes";
+import { useMessage } from "~/providers/message";
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
@@ -16,23 +17,25 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export const useLoginForm = () => {
-    const { signIn } = useUser();
+    const { signIn, signUp } = useUser();
     const [isSubmitting, setSubmitting] = useState(false);
     const [signingUp, setSigningUp] = useState(false);
+    const { showMessage } = useMessage();
     const navigate = useNavigate();
 
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         setSubmitting(true);
-        console.log("Form data is valid:", data);
         if (signingUp) {
-            // alert(`Registering: ${JSON.stringify(data, null, 2)}`);
+            if(!data.nickname || !data.birthday) return;
+            const user = await signUp(data.email, data.password, data.nickname, data.birthday);
+            if (user) {
+                showMessage(`Welcome ${user.name}!`, "success")
+                navigate(Routes.HOME);
+            }
         } else {
-            // alert(
-            //     `Logging in: ${JSON.stringify({ email: data.email, password: data.password }, null, 2)}`,
-            // );
-
             const user = await signIn(data.email, data.password);
             if (user) {
+                showMessage(`Welcome back ${user.name}!`, "success")
                 navigate(Routes.HOME);
             }
         }
