@@ -1,9 +1,15 @@
-import { UserDto } from "@redlight-events-manager/constants/user.dto";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { useCookies } from "react-cookie";
-import { $api } from "~/services/api-client";
+import { Configuration, UserApi, UserDto } from "~/lib/api";
+import { useMessage } from "~/providers/message";
 
 interface UserContextProps {
+  signUp: (
+    email: string,
+    password: string,
+    name: string,
+    birthday: string,
+  ) => Promise<UserDto | undefined>;
   signIn: (email: string, password: string) => Promise<UserDto | undefined>;
   authorize: (token: string) => Promise<UserDto | undefined>;
   user: UserDto | null;
@@ -17,55 +23,68 @@ const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [_, setCookie, removeCookie] = useCookies(["sessionId"]);
+  const { throwMessage } = useMessage();
+
   const [user, setUser] = useState<UserDto | null>(null);
 
+  const config = new Configuration({
+    basePath: import.meta.env.VITE_LOCAL_BACKEND_URL,
+  });
+
+  const userApi = new UserApi(config);
+
   const signIn = async (email: string, password: string): Promise<UserDto | undefined> => {
-    removeCookie("sessionId");
+    try {
+      removeCookie("sessionId");
 
-    const { data, error } = await $api.POST("/user/signIn", {
-      body: {
-        email,
-        password,
-      },
-    });
+      const { data } = await userApi.userControllerSignIn({ email, password });
 
-    if (error) {
-      console.error(error);
-      return;
+      if (data) {
+        setCookie("sessionId", data.token);
+        return await authorize(data.token);
+      }
+    } catch (err) {
+      throwMessage(err, "Failed to sign in");
     }
+  };
 
-    if (data) {
-      setCookie("sessionId", data.token);
-      return await authorize(data.token);
+  const signUp = async (
+    email: string,
+    password: string,
+    name: string,
+    birthday: string,
+  ): Promise<UserDto | undefined> => {
+    try {
+      removeCookie("sessionId");
+
+      const { data } = await userApi.userControllerSignUp({ email, password, name, birthday });
+
+      if (data) {
+        setCookie("sessionId", data.token);
+        return await authorize(data.token);
+      }
+    } catch (err) {
+      throwMessage(err, "Failed to sign up");
     }
   };
 
   const authorize = async (token: string): Promise<UserDto | undefined> => {
-    const { data, error } = await $api.POST("/user/auth", {
-      body: {
-        token: token,
-      },
-    });
+    try {
+      const { data } = await userApi.userControllerAuthorize({ token });
 
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    if (data) {
-      const newUser = {
-        ...data,
-        birthday: new Date(data.birthday),
-      };
-
-      setUser(newUser);
-
-      return newUser;
+      if (data) {
+        setUser(data);
+        return data;
+      }
+    } catch (err) {
+      throwMessage(err, "Failed to authorize");
     }
   };
 
   return (
-    <UserContext.Provider value={{ signIn, authorize, user }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ signIn, signUp, authorize, user }}>
+      {children}
+    </UserContext.Provider>
   );
 };
 

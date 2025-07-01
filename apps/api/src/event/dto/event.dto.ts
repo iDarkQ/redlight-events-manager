@@ -1,5 +1,8 @@
-import { IsString, IsDate, IsNumber, IsArray, IsEnum } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsDate, IsNumber, IsArray, IsEnum, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
+import { ApiProperty } from "@nestjs/swagger";
+import { ParticipantDto } from "src/user/dto/participant.dto";
+import { EventStatus } from "@prisma/client";
 
 export class EventDto {
     /**
@@ -53,15 +56,22 @@ export class EventDto {
     @IsNumber()
     maxParticipants: number;
 
-
     /**
      * List of participant objects
      * @example [{ "id": "user1", "name": "Alice" }, { "id": "user2", "name": "Bob" }]
      */
+    @ApiProperty({
+        type: ParticipantDto,
+        isArray: true,
+        example: [
+            { id: "user1", name: "Alice" },
+            { id: "user2", name: "Bob" },
+        ],
+    })
+    @ValidateNested({ each: true })
     @IsArray()
     @Type(() => ParticipantDto)
     participants: ParticipantDto[];
-
 
     /**
      * ID of the event creator
@@ -74,8 +84,9 @@ export class EventDto {
      * Status of the event
      * @example "PLANNED"
      */
-    @IsEnum(["PLANNED", "COMPLETED", "CANCELLED"])
-    status: "PLANNED" | "COMPLETED" | "CANCELLED";
+    @ApiProperty({ enum: EventStatus, enumName: "EventStatus", example: EventStatus.PLANNED })
+    @IsEnum(EventStatus)
+    status: EventStatus;
 
     /**
      * Longitude of the event location
@@ -97,20 +108,4 @@ export class EventDto {
      */
     @IsString()
     location: string;
-}
-
-export class ParticipantDto {
-    /**
-     * Unique identifier of the participant
-     * @example "user1"
-     */
-    @IsString()
-    id: string;
-
-    /**
-     * Name of the participant
-     * @example "Alice"
-     */
-    @IsString()
-    name: string;
 }

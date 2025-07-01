@@ -17,12 +17,12 @@ import {
     Put,
 } from "@nestjs/common";
 import { EventService } from "./event.service";
-import { CreateEventRequestDto } from "./dto/create-event.dto";
 import { AuthGuard } from "src/auth/auth.guard";
-import { ApiOkResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOkResponse } from "@nestjs/swagger";
 import { LeaveEventDto } from "src/event/dto/leave-event.dto";
 import { UpdateEventDto } from "src/event/dto/update-event.dto";
-import { EventDto } from "@redlight-events-manager/constants/event.dto";
+import { EventDto } from "src/event/dto/event.dto";
+import { CreateEventRequestDto } from "src/event/dto/create-event-request.dto";
 
 @Controller("event")
 export class EventController {
@@ -30,45 +30,55 @@ export class EventController {
 
     @Post()
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     async create(@Body() createEventDto: CreateEventRequestDto, @Request() req): Promise<EventDto> {
         return await this.eventService.create({ ...createEventDto, creatorId: req.user.id });
     }
 
     @Get()
+    @ApiOkResponse({ description: "Returns all events", type: EventDto, isArray: true })
     async findAll() {
         return await this.eventService.findAll();
     }
 
     @Get(":id")
+    @ApiBearerAuth()
     findOne(@Param("id") id: string) {
         return this.eventService.findOne(id);
     }
 
     @Put(":id")
-    async update(@Param("id") id: string, @Request() req, @Body() updateEventDto: UpdateEventDto) {
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
+    async update(
+        @Param("id") id: string,
+        @Request() req,
+        @Body() updateEventDto: UpdateEventDto,
+    ): Promise<EventDto> {
         const user = req.user;
         const event = await this.eventService.findOne(id);
         if (!event) {
             throw new NotFoundException("Event does not exist");
         }
 
-        if (user.role !== "ADMIN") {
+        if (user.role !== "ADMIN" && event.creatorId !== user.id) {
             throw new ForbiddenException("Only admins can edit events from other users");
         }
 
-        await this.eventService.update(id, updateEventDto);
+        return await this.eventService.update(id, updateEventDto);
     }
 
     @Patch("join/:id")
     @UseGuards(AuthGuard)
-    async join(@Param("id") id: string, @Request() req) {
+    @ApiBearerAuth()
+    async join(@Param("id") id: string, @Request() req): Promise<EventDto> {
         const user = req.user;
         const event = await this.eventService.findOne(id);
         if (!event) {
             throw new NotFoundException("Event does not exist");
         }
 
-        if (event.maxParticipants >= event.participants.length) {
+        if (event.participants.length >= event.maxParticipants) {
             throw new ConflictException("Participant limit reached");
         }
 
@@ -76,16 +86,25 @@ export class EventController {
             throw new BadRequestException("Already joined");
         }
 
-        await this.eventService.joinEvent(id, user.id);
+        return await this.eventService.joinEvent(id, user.id);
     }
 
     @Patch("leave/:id")
     @UseGuards(AuthGuard)
-    async leave(@Param("id") id: string, @Query() query: LeaveEventDto, @Request() req) {
+    @ApiBearerAuth()
+    async leave(
+        @Param("id") id: string,
+        @Query() query: LeaveEventDto,
+        @Request() req,
+    ): Promise<EventDto> {
         const user = req.user;
         const event = await this.eventService.findOne(id);
         if (!event) {
             throw new NotFoundException("Event does not exist");
+        }
+
+        if (event.status !== "COMPLETED") {
+            throw new ConflictException("Event is already completed");
         }
 
         if (query.userId && user.role !== "ADMIN") {
@@ -102,7 +121,7 @@ export class EventController {
             throw new BadRequestException("Not part of event");
         }
 
-        await this.eventService.leaveEvent(id, userId);
+        return await this.eventService.leaveEvent(id, userId);
     }
 
     @Delete(":id")

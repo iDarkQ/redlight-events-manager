@@ -6,12 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:api": "openapi-generator-cli generate -g typescript-axios -i ./src/lib/api/api.json -o ./src/lib/api"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
     "@mapbox/mapbox-sdk": "^0.16.1",
-    "@redlight-events-manager/constants": "*",
+    "@openapitools/openapi-generator-cli": "^2.21.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "mapbox-gl": "^3.13.0",

@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { CreateEventDto } from "./dto/create-event.dto";
 import { UpdateEventDto } from "./dto/update-event.dto";
 import { PrismaService } from "src/prisma.service";
-import { EventDto } from "@redlight-events-manager/constants/event.dto";
+import { EventDto } from "src/event/dto/event.dto";
+import { CreateEventDto } from "src/event/dto/create-event.dto";
 
 @Injectable()
 export class EventService {
@@ -10,7 +10,14 @@ export class EventService {
 
     async create(createEventDto: CreateEventDto): Promise<EventDto> {
         return await this.prisma.event.create({
-            data: createEventDto,
+            data: {
+                ...createEventDto,
+                participants: {
+                    connect: {
+                        id: createEventDto.creatorId,
+                    },
+                },
+            },
             include: { participants: { select: { id: true, name: true } } },
         });
     }
@@ -29,7 +36,11 @@ export class EventService {
     }
 
     async update(id: string, updateEventDto: UpdateEventDto) {
-        return await this.prisma.event.update({ where: { id }, data: updateEventDto });
+        return await this.prisma.event.update({
+            where: { id },
+            data: updateEventDto,
+            include: { participants: { select: { id: true, name: true } } },
+        });
     }
 
     async remove(id: string) {
