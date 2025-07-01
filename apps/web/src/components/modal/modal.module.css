@@ -21,8 +21,8 @@
     position: relative;
     background-color: #fefefe;
     border: 1px solid #888;
-    width: 100%;
-    max-width: 500px;
+    /* width: 100%; */
+    width: 500px;
     margin: 2rem;
     padding: 1rem;
 }

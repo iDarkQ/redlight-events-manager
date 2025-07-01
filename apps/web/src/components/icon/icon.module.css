@@ -1,0 +1,7 @@
+.animation {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.animation:hover {
+    transform: scale(1.1);
+}

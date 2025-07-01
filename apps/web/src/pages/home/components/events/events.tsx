@@ -3,29 +3,39 @@ import { styles } from ".";
 import { Button } from "~/components/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useNavigate } from "react-router";
-import { Routes } from "~/utils/routes";
+import { routeCreateEvent, routeViewEvent } from "~/utils/routes";
+import { defaultEvent, useEvent } from "~/providers/event";
 
 export const Events = () => {
   const navigate = useNavigate();
+  const { events, setSelectedEvent } = useEvent();
+
+  const createEvent = () => {
+    setSelectedEvent(defaultEvent);
+    navigate(routeCreateEvent());
+  };
 
   return (
     <div className={styles.wrapper}>
       <section className={styles.section}>
         <div className={styles.planned}>
           <h3>Planned Events</h3>
-          <Button color="red">
+          <Button onClick={createEvent} color="red">
             Create Event <AiOutlinePlus />
           </Button>
         </div>
         <div className={styles.events}>
-          <EventCard onClick={() => {
-            navigate(Routes.EVENT);
-          }} className={styles.card} />
-          <EventCard className={styles.card} />
-          <EventCard className={styles.card} />
-          <EventCard className={styles.card} />
-          <EventCard className={styles.card} />
-          <EventCard className={styles.card} />
+          {events.map((event, index) => (
+            <EventCard
+              key={index}
+              event={event}
+              onClick={() => {
+                setSelectedEvent(event);
+                navigate(routeViewEvent(event.id));
+              }}
+              className={styles.card}
+            />
+          ))}
         </div>
         <Button>Load More...</Button>
       </section>

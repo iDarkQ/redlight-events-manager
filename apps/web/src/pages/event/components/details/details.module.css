@@ -35,6 +35,9 @@
 .markdown {
     flex: 1;
     overflow: auto;
+    gap: 1rem;
+    display:flex;
+    flex-direction: column;
 }
 
 .preview {
@@ -49,4 +52,33 @@
 
 .subTitle {
     flex: 1;
+}
+
+/* ...existing code... */
+
+.participantsSection {
+    margin-bottom: 1.5rem;
+}
+
+.participantsList {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.participant {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar {
+    width: var(--icon-large);
+    height: var(--icon-large);
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eee;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    transition: transform 0.15s;
+    background: #fafafa;
 }

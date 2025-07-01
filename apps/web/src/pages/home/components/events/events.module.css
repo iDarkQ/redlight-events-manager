@@ -11,14 +11,13 @@
 }
 
 .events {
-    display: flex;
+    display: grid;
     gap: 1rem;
-
-    flex-wrap: wrap;
+    grid-template-columns: repeat(2, minmax(0, 1fr));;
 }
 
 .card {
-    flex: 1 1 calc(33.3333% - 16px);
+
     /* Max 4 per row */
 }
 

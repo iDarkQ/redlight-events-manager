@@ -1,5 +1,5 @@
-import { Events } from "~/pages/home/components/events";
-import { Hero } from "~/pages/home/components/hero";
+import { Events } from "./components/events";
+import { Hero } from "./components/hero";
 
 export const Home = () => (
   <main>
