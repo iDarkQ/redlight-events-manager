@@ -11,6 +11,7 @@ import {
 import { useCookies } from "react-cookie";
 import { Configuration, EventApi, EventDto } from "~/lib/api";
 import { useMessage } from "~/providers/message";
+import showdown from "showdown";
 
 interface EventContextProps {
   selectedEvent: EventDto | null;
@@ -21,6 +22,8 @@ interface EventContextProps {
   joinEvent: () => Promise<void>;
   leaveEvent: () => Promise<void>;
   deleteEvent: () => Promise<void>;
+  getGoogleCalendarLink: () => string;
+  uploadBanner: (file: File) => Promise<string | undefined>;
 }
 
 interface EventProviderProps {
@@ -43,6 +46,9 @@ export const defaultEvent: EventDto = {
   longitude: 0,
   latitude: 0,
   location: "Unset",
+  banner: null,
+  deleted: false,
+  deletedAt: null,
 };
 
 export const EventProvider = ({ children }: EventProviderProps) => {
@@ -148,8 +154,39 @@ export const EventProvider = ({ children }: EventProviderProps) => {
         ),
       );
     } catch (err) {
-      throwMessage(err, "Failed to join event");
+      throwMessage(err, "Failed to leave event");
     }
+  };
+
+  const uploadBanner = async (file: File): Promise<string | undefined> => {
+    try {
+      if (!selectedEvent) return;
+      const { data } = await eventApi.eventControllerUploadEventPhoto(file);
+
+      setSelectedEvent((prev) => (prev ? { ...prev, banner: data.fileUrl ?? null } : prev));
+
+      return data.fileUrl;
+    } catch (err) {
+      throwMessage(err, "Failed to upload banner");
+    }
+  };
+
+  const getGoogleCalendarLink = (): string => {
+    if (!selectedEvent) return "";
+
+    const start = dayjs(selectedEvent.date).utc().format("YYYYMMDDTHHmmss") + "Z";
+    const end = dayjs(selectedEvent.date).utc().format("YYYYMMDDTHHmmss") + "Z";
+
+    const converter = new showdown.Converter();
+    const htmlDetails = converter.makeHtml(selectedEvent.description);
+
+    const params = new URLSearchParams({
+      text: `(Redlight Event) ${selectedEvent.title}`,
+      dates: `${start}/${end}`,
+      details: htmlDetails,
+    });
+
+    return `https://calendar.google.com/calendar/u/0/r/eventedit?${params.toString()}`;
   };
 
   useEffect(() => {
@@ -167,6 +204,8 @@ export const EventProvider = ({ children }: EventProviderProps) => {
         createEvent,
         updateEvent,
         deleteEvent,
+        getGoogleCalendarLink,
+        uploadBanner,
       }}
     >
       {children}
