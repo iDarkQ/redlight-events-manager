@@ -1,4 +1,7 @@
 .animation {
+    display:flex;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 

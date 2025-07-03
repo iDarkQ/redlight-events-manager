@@ -30,7 +30,7 @@ model User {
   email    String   @unique
   password String
   birthday DateTime
-  profile  String
+  profile  String?
   role     UserRole
   events   Event[]
 }
@@ -49,4 +49,7 @@ model Event {
   latitude        Float
   longitude       Float
   location        String
+  deleted         Boolean
+  deletedAt       DateTime?
+  banner          String?
 }

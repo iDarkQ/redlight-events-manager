@@ -7,6 +7,8 @@ All URIs are relative to *http://localhost*
 |[**userControllerAuthorize**](#usercontrollerauthorize) | **POST** /user/auth | |
 |[**userControllerSignIn**](#usercontrollersignin) | **POST** /user/signIn | |
 |[**userControllerSignUp**](#usercontrollersignup) | **POST** /user/signUp | |
+|[**userControllerUpdate**](#usercontrollerupdate) | **PATCH** /user/profile | |
+|[**userControllerUploadProfilePhoto**](#usercontrolleruploadprofilephoto) | **POST** /user/profile/picture | |
 
 # **userControllerAuthorize**
 > UserDto userControllerAuthorize(authorizeUserDto)
@@ -163,6 +165,107 @@ No authorization required
 |-------------|-------------|------------------|
 |**200** | JWT Token |  -  |
 |**409** | User already exists |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **userControllerUpdate**
+> UserDto userControllerUpdate(updateProfileDto)
+
+
+### Example
+
+```typescript
+import {
+    UserApi,
+    Configuration,
+    UpdateProfileDto
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new UserApi(configuration);
+
+let updateProfileDto: UpdateProfileDto; //
+
+const { status, data } = await apiInstance.userControllerUpdate(
+    updateProfileDto
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **updateProfileDto** | **UpdateProfileDto**|  | |
+
+
+### Return type
+
+**UserDto**
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Returns user object |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **userControllerUploadProfilePhoto**
+> UploadBannerResponse userControllerUploadProfilePhoto()
+
+
+### Example
+
+```typescript
+import {
+    UserApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new UserApi(configuration);
+
+let photo: File; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.userControllerUploadProfilePhoto(
+    photo
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **photo** | [**File**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**UploadBannerResponse**
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successfully uploaded file |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

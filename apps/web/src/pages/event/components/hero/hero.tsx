@@ -1,11 +1,11 @@
-import { Map } from "./map";
 import { HeroActions, HeroInformation, HeroTitle, styles } from ".";
 import { EventProps } from "~/pages/event/event";
+import { HeroBackground } from "~/pages/event/components/hero/hero-background";
 
 export const Hero = ({ state }: EventProps) => (
   <section className={styles.wrapper}>
-    {/* Background Map */}
-    <Map />
+    {/* Background */}
+    <HeroBackground />
     {/* Foreground Content */}
     <div className={styles.details}>
       <HeroTitle />

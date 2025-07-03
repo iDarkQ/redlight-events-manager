@@ -5,14 +5,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**title** | **string** |  | [optional] [default to undefined]
-**description** | **string** |  | [optional] [default to undefined]
-**date** | **string** |  | [optional] [default to undefined]
-**type** | **string** |  | [optional] [default to undefined]
-**maxParticipants** | **number** |  | [optional] [default to undefined]
-**latitude** | **number** |  | [optional] [default to undefined]
-**longitude** | **number** |  | [optional] [default to undefined]
-**location** | **string** |  | [optional] [default to undefined]
+**status** | [**EventStatus**](EventStatus.md) | Status of the event | [optional] [default to undefined]
+**title** | **string** | Title of the event | [optional] [default to undefined]
+**description** | **string** | Description of the event | [optional] [default to undefined]
+**date** | **string** | Date of the event | [optional] [default to undefined]
+**type** | **string** | Type of the event | [optional] [default to undefined]
+**maxParticipants** | **number** | Maximum number of participants | [optional] [default to undefined]
+**longitude** | **number** | Longitude of the event location | [optional] [default to undefined]
+**latitude** | **number** | Latitude of the event location | [optional] [default to undefined]
+**location** | **string** | Name of the event location | [optional] [default to undefined]
+**banner** | **string** | Link to the event banner | [optional] [default to undefined]
 
 ## Example
 
@@ -20,14 +22,16 @@ Name | Type | Description | Notes
 import { UpdateEventDto } from './api';
 
 const instance: UpdateEventDto = {
+    status,
     title,
     description,
     date,
     type,
     maxParticipants,
-    latitude,
     longitude,
+    latitude,
     location,
+    banner,
 };
 ```
 

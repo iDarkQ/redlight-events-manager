@@ -19,6 +19,7 @@ const eventFormSchema = z.object({
     latitude: z.coerce.number({ invalid_type_error: "Please enter a valid latitude" }).min(-90).max(90),
     longitude: z.coerce.number({ invalid_type_error: "Please enter a valid longitude" }).min(-180).max(180),
     location: z.string(),
+    banner: z.string().nullable(),
 });
 
 export type EventFormData = z.infer<typeof eventFormSchema>;
@@ -34,6 +35,7 @@ const mapEventDtoToFormData = (event?: Partial<EventDto>): Partial<EventFormData
         latitude: event.latitude,
         longitude: event.longitude,
         location: event.location,
+        banner: event.banner,
     };
 }
 

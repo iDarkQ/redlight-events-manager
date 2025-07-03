@@ -5,8 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** | Unique identifier of the participant | [default to undefined]
-**name** | **string** | Name of the participant | [default to undefined]
+**id** | **string** | Unique identifier of the user | [default to undefined]
+**name** | **string** | Name of the user | [default to undefined]
+**profile** | **string** | Profile description or URL of the user | [default to undefined]
 
 ## Example
 
@@ -16,6 +17,7 @@ import { ParticipantDto } from './api';
 const instance: ParticipantDto = {
     id,
     name,
+    profile,
 };
 ```
 

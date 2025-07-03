@@ -8,6 +8,7 @@ import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding";
 import { useEvent } from "~/providers/event";
 import { EventDto } from "~/lib/api";
 import { Dropdown } from "~/components/dropdown";
+import { Upload } from "~/components/upload";
 
 interface FieldConfig {
   name: keyof EventFormData;
@@ -30,7 +31,7 @@ export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => 
     onFinish,
   );
 
-  const { events } = useEvent();
+  const { events, uploadBanner, setSelectedEvent } = useEvent();
   const typeSuggestions = Array.from(new Set(events.map((e) => e.type).filter(Boolean)));
 
   const eventFields: FieldConfig[] = [
@@ -82,6 +83,7 @@ export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => 
 
   const latitude = watch("latitude");
   const longitude = watch("longitude");
+  const banner = watch("banner");
 
   const renderField = ({
     name,
@@ -112,18 +114,22 @@ export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => 
     }
 
     if (field === "input") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const inputProps: any = {
+        id: name,
+        placeholder,
+        type,
+        step: type === "number" ? "any" : undefined,
+        suggestions,
+        ...register(name),
+      };
+      if (type !== "file") {
+        inputProps.value = fieldValue ?? "";
+      }
       return (
         <div key={name}>
           <label htmlFor={name}>{label}</label>
-          <Input
-            id={name}
-            placeholder={placeholder}
-            type={type}
-            step={type === "number" ? "any" : undefined}
-            suggestions={suggestions}
-            {...register(name)}
-            value={fieldValue ?? ""}
-          />
+          <Input {...inputProps} />
           {errors[name] && <span>{(errors[name] as { message?: string })?.message}</span>}
         </div>
       );
@@ -131,7 +137,7 @@ export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => 
   };
 
   const fetchLocationName = async (longitude: number, latitude: number): Promise<string> => {
-    const mapboxClient = mbx({ accessToken: import.meta.env.VITE_MAPBOX_SECRET });
+    const mapboxClient = mbx({ accessToken: import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN });
     const geocodingClient = mbxGeocoding(mapboxClient);
     const geoCode = await geocodingClient
       .reverseGeocode({
@@ -146,6 +152,26 @@ export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => 
     <>
       <form className={styles.form} onSubmit={handleSubmit} noValidate>
         {eventFields.map(renderField)}
+
+        <div>
+          <label>Banner Picture</label>
+
+          <Upload
+            value={banner ?? undefined}
+            placeholder="No banner uploaded"
+            onChange={async (file) => {
+              if (!file) {
+                setValue("banner", null);
+                setSelectedEvent((prev) => (prev ? { ...prev, banner: null } : prev));
+                return;
+              }
+
+              const fileName = await uploadBanner(file);
+              if (!fileName) return;
+              setValue("banner", fileName);
+            }}
+          />
+        </div>
 
         <div>
           <label>Location</label>

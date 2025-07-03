@@ -11,6 +11,7 @@ All URIs are relative to *http://localhost*
 |[**eventControllerLeave**](#eventcontrollerleave) | **PATCH** /event/leave/{id} | |
 |[**eventControllerRemove**](#eventcontrollerremove) | **DELETE** /event/{id} | |
 |[**eventControllerUpdate**](#eventcontrollerupdate) | **PUT** /event/{id} | |
+|[**eventControllerUploadEventPhoto**](#eventcontrolleruploadeventphoto) | **POST** /event/photo | |
 
 # **eventControllerCreate**
 > EventDto eventControllerCreate(createEventRequestDto)
@@ -141,7 +142,7 @@ const { status, data } = await apiInstance.eventControllerFindOne(
 
 ### Authorization
 
-[bearer](../README.md#bearer)
+No authorization required
 
 ### HTTP request headers
 
@@ -294,7 +295,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[bearer](../README.md#bearer)
 
 ### HTTP request headers
 
@@ -360,6 +361,56 @@ const { status, data } = await apiInstance.eventControllerUpdate(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **eventControllerUploadEventPhoto**
+> UploadBannerResponse eventControllerUploadEventPhoto()
+
+
+### Example
+
+```typescript
+import {
+    EventApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new EventApi(configuration);
+
+let photo: File; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.eventControllerUploadEventPhoto(
+    photo
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **photo** | [**File**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**UploadBannerResponse**
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successfully uploaded file |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

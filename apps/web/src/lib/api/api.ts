@@ -43,54 +43,68 @@ export interface AuthorizeUserDto {
  */
 export interface CreateEventRequestDto {
     /**
-     * 
+     * Status of the event
+     * @type {EventStatus}
+     * @memberof CreateEventRequestDto
+     */
+    'status': EventStatus;
+    /**
+     * Title of the event
      * @type {string}
      * @memberof CreateEventRequestDto
      */
     'title': string;
     /**
-     * 
+     * Description of the event
      * @type {string}
      * @memberof CreateEventRequestDto
      */
     'description': string;
     /**
-     * 
+     * Date of the event
      * @type {string}
      * @memberof CreateEventRequestDto
      */
     'date': string;
     /**
-     * 
+     * Type of the event
      * @type {string}
      * @memberof CreateEventRequestDto
      */
     'type': string;
     /**
-     * 
+     * Maximum number of participants
      * @type {number}
      * @memberof CreateEventRequestDto
      */
     'maxParticipants': number;
     /**
-     * 
-     * @type {number}
-     * @memberof CreateEventRequestDto
-     */
-    'latitude': number;
-    /**
-     * 
+     * Longitude of the event location
      * @type {number}
      * @memberof CreateEventRequestDto
      */
     'longitude': number;
     /**
-     * 
+     * Latitude of the event location
+     * @type {number}
+     * @memberof CreateEventRequestDto
+     */
+    'latitude': number;
+    /**
+     * Name of the event location
      * @type {string}
      * @memberof CreateEventRequestDto
      */
     'location': string;
+    /**
+     * Link to the event banner
+     * @type {string}
+     * @memberof CreateEventRequestDto
+     */
+    'banner': string | null;
 }
+
+
 /**
  * 
  * @export
@@ -206,6 +220,24 @@ export interface EventDto {
      * @memberof EventDto
      */
     'location': string;
+    /**
+     * Is event soft deleted
+     * @type {boolean}
+     * @memberof EventDto
+     */
+    'deleted': boolean;
+    /**
+     * Deletion date
+     * @type {string}
+     * @memberof EventDto
+     */
+    'deletedAt': string | null;
+    /**
+     * Link to the event banner
+     * @type {string}
+     * @memberof EventDto
+     */
+    'banner': string | null;
 }
 
 
@@ -263,17 +295,23 @@ export interface LoginUserDto {
  */
 export interface ParticipantDto {
     /**
-     * Unique identifier of the participant
+     * Unique identifier of the user
      * @type {string}
      * @memberof ParticipantDto
      */
     'id': string;
     /**
-     * Name of the participant
+     * Name of the user
      * @type {string}
      * @memberof ParticipantDto
      */
     'name': string;
+    /**
+     * Profile description or URL of the user
+     * @type {string}
+     * @memberof ParticipantDto
+     */
+    'profile': string | null;
 }
 /**
  * 
@@ -282,53 +320,99 @@ export interface ParticipantDto {
  */
 export interface UpdateEventDto {
     /**
-     * 
+     * Status of the event
+     * @type {EventStatus}
+     * @memberof UpdateEventDto
+     */
+    'status'?: EventStatus;
+    /**
+     * Title of the event
      * @type {string}
      * @memberof UpdateEventDto
      */
     'title'?: string;
     /**
-     * 
+     * Description of the event
      * @type {string}
      * @memberof UpdateEventDto
      */
     'description'?: string;
     /**
-     * 
+     * Date of the event
      * @type {string}
      * @memberof UpdateEventDto
      */
     'date'?: string;
     /**
-     * 
+     * Type of the event
      * @type {string}
      * @memberof UpdateEventDto
      */
     'type'?: string;
     /**
-     * 
+     * Maximum number of participants
      * @type {number}
      * @memberof UpdateEventDto
      */
     'maxParticipants'?: number;
     /**
-     * 
-     * @type {number}
-     * @memberof UpdateEventDto
-     */
-    'latitude'?: number;
-    /**
-     * 
+     * Longitude of the event location
      * @type {number}
      * @memberof UpdateEventDto
      */
     'longitude'?: number;
     /**
-     * 
+     * Latitude of the event location
+     * @type {number}
+     * @memberof UpdateEventDto
+     */
+    'latitude'?: number;
+    /**
+     * Name of the event location
      * @type {string}
      * @memberof UpdateEventDto
      */
     'location'?: string;
+    /**
+     * Link to the event banner
+     * @type {string}
+     * @memberof UpdateEventDto
+     */
+    'banner'?: string | null;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface UpdateProfileDto
+ */
+export interface UpdateProfileDto {
+    /**
+     * Birthday of the user
+     * @type {string}
+     * @memberof UpdateProfileDto
+     */
+    'birthday': string;
+    /**
+     * Profile description or URL of the user
+     * @type {string}
+     * @memberof UpdateProfileDto
+     */
+    'profile': string | null;
+}
+/**
+ * 
+ * @export
+ * @interface UploadBannerResponse
+ */
+export interface UploadBannerResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof UploadBannerResponse
+     */
+    'fileUrl'?: string;
 }
 /**
  * 
@@ -365,7 +449,7 @@ export interface UserDto {
      * @type {string}
      * @memberof UserDto
      */
-    'profile': string;
+    'profile': string | null;
     /**
      * Birthday of the user
      * @type {string}
@@ -469,10 +553,6 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -586,6 +666,10 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -634,6 +718,48 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(updateEventDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {File} [photo] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventControllerUploadEventPhoto: async (photo?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/event/photo`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+            if (photo !== undefined) { 
+                localVarFormParams.append('photo', photo as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -735,6 +861,18 @@ export const EventApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['EventApi.eventControllerUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {File} [photo] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventControllerUploadEventPhoto(photo?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UploadBannerResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventControllerUploadEventPhoto(photo, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventControllerUploadEventPhoto']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -808,6 +946,15 @@ export const EventApiFactory = function (configuration?: Configuration, basePath
          */
         eventControllerUpdate(id: string, updateEventDto: UpdateEventDto, options?: RawAxiosRequestConfig): AxiosPromise<EventDto> {
             return localVarFp.eventControllerUpdate(id, updateEventDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {File} [photo] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventControllerUploadEventPhoto(photo?: File, options?: RawAxiosRequestConfig): AxiosPromise<UploadBannerResponse> {
+            return localVarFp.eventControllerUploadEventPhoto(photo, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -895,6 +1042,17 @@ export class EventApi extends BaseAPI {
      */
     public eventControllerUpdate(id: string, updateEventDto: UpdateEventDto, options?: RawAxiosRequestConfig) {
         return EventApiFp(this.configuration).eventControllerUpdate(id, updateEventDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {File} [photo] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventControllerUploadEventPhoto(photo?: File, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventControllerUploadEventPhoto(photo, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1011,6 +1169,87 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {UpdateProfileDto} updateProfileDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerUpdate: async (updateProfileDto: UpdateProfileDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateProfileDto' is not null or undefined
+            assertParamExists('userControllerUpdate', 'updateProfileDto', updateProfileDto)
+            const localVarPath = `/user/profile`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {File} [photo] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerUploadProfilePhoto: async (photo?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/profile/picture`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+            if (photo !== undefined) { 
+                localVarFormParams.append('photo', photo as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1057,6 +1296,30 @@ export const UserApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerSignUp']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {UpdateProfileDto} updateProfileDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerUpdate(updateProfileDto: UpdateProfileDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerUpdate(updateProfileDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {File} [photo] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerUploadProfilePhoto(photo?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UploadBannerResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerUploadProfilePhoto(photo, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerUploadProfilePhoto']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -1093,6 +1356,24 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          */
         userControllerSignUp(createUserDto: CreateUserDto, options?: RawAxiosRequestConfig): AxiosPromise<JwtTokenResponse> {
             return localVarFp.userControllerSignUp(createUserDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UpdateProfileDto} updateProfileDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerUpdate(updateProfileDto: UpdateProfileDto, options?: RawAxiosRequestConfig): AxiosPromise<UserDto> {
+            return localVarFp.userControllerUpdate(updateProfileDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {File} [photo] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerUploadProfilePhoto(photo?: File, options?: RawAxiosRequestConfig): AxiosPromise<UploadBannerResponse> {
+            return localVarFp.userControllerUploadProfilePhoto(photo, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1135,6 +1416,28 @@ export class UserApi extends BaseAPI {
      */
     public userControllerSignUp(createUserDto: CreateUserDto, options?: RawAxiosRequestConfig) {
         return UserApiFp(this.configuration).userControllerSignUp(createUserDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UpdateProfileDto} updateProfileDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerUpdate(updateProfileDto: UpdateProfileDto, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).userControllerUpdate(updateProfileDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {File} [photo] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerUploadProfilePhoto(photo?: File, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).userControllerUploadProfilePhoto(photo, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -18,6 +18,9 @@ Name | Type | Description | Notes
 **longitude** | **number** | Longitude of the event location | [default to undefined]
 **latitude** | **number** | Latitude of the event location | [default to undefined]
 **location** | **string** | Name of the event location | [default to undefined]
+**deleted** | **boolean** | Is event soft deleted | [default to undefined]
+**deletedAt** | **string** | Deletion date | [default to undefined]
+**banner** | **string** | Link to the event banner | [default to undefined]
 
 ## Example
 
@@ -38,6 +41,9 @@ const instance: EventDto = {
     longitude,
     latitude,
     location,
+    deleted,
+    deletedAt,
+    banner,
 };
 ```
 

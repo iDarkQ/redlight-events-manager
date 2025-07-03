@@ -1,17 +1,4 @@
-import { IsString } from "class-validator";
+import { PickType } from "@nestjs/swagger";
+import { UserDto } from "src/user/dto/user.dto";
 
-export class ParticipantDto {
-    /**
-     * Unique identifier of the participant
-     * @example "user1"
-     */
-    @IsString()
-    id: string;
-
-    /**
-     * Name of the participant
-     * @example "Alice"
-     */
-    @IsString()
-    name: string;
-}
+export class ParticipantDto extends PickType(UserDto, ["id", "name", "profile"] as const) {}
