@@ -5,8 +5,7 @@ import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
 import { EventProps } from "~/pages/event";
 import clsx from "clsx";
 import { useEvent } from "~/providers/event";
-import { Tooltip } from "~/components/tooltip";
-import { Icon } from "~/components/icon";
+import { AvatarUser } from "~/components/avatar";
 
 export const Details = ({ state }: EventProps) => {
   const { selectedEvent, setSelectedEvent } = useEvent();
@@ -20,7 +19,7 @@ export const Details = ({ state }: EventProps) => {
   };
 
   useEffect(() => {
-    if(!selectedEvent) return;
+    if (!selectedEvent) return;
     if (state === "view") return;
     if (saveTimeout.current) clearTimeout(saveTimeout.current);
     saveTimeout.current = setTimeout(() => {
@@ -31,7 +30,7 @@ export const Details = ({ state }: EventProps) => {
     };
   }, [value, state]);
 
-    if (!selectedEvent) return;
+  if (!selectedEvent) return;
 
   return (
     <div className={styles.wrapper}>
@@ -41,21 +40,7 @@ export const Details = ({ state }: EventProps) => {
             <h2>Participants</h2>
             <div className={styles.participantsList}>
               {selectedEvent.participants.map((participant, idx) => (
-                <Tooltip key={idx} title={participant.name}>
-                  <Icon>
-                    <div
-                      key={participant.id}
-                      className={styles.participant}
-                      title={participant.name}
-                    >
-                      <img
-                        src={`https://i.pravatar.cc/48?img=${(idx % 70) + 1}`}
-                        alt={participant.name}
-                        className={styles.avatar}
-                      />
-                    </div>
-                  </Icon>
-                </Tooltip>
+                <AvatarUser key={idx} name={participant.name} profile={participant.profile} />
               ))}
             </div>
           </div>
