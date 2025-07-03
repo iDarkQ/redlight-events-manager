@@ -13,7 +13,7 @@ interface ImportMetaEnv {
     VITE_DEBUG: string;
     VITE_LOCAL_BACKEND_URL: string;
     VITE_BACKEND_URL: string;
-    VITE_MAPBOX_SECRET: string;
+    VITE_MAPBOX_PUBLIC_TOKEN: string;
 }
 
 interface ImportMeta {

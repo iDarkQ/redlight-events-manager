@@ -28,7 +28,7 @@ export const MapLocationPicker = ({
   }, []);
 
   useEffect(() => {
-    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_SECRET;
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN;
     if (!mapContainer.current) return;
 
     const container = mapContainer.current;

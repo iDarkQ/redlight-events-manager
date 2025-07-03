@@ -16,7 +16,7 @@ export const MapModel = React.memo(({ center }: MapModelProps) => {
   const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_SECRET;
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN;
 
     mapRef.current = new mapboxgl.Map({
       style: "mapbox://styles/mapbox/standard",
