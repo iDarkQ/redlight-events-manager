@@ -1,9 +1,12 @@
+import { FilterProvider } from "~/providers/filter";
 import { Events } from "./components/events";
 import { Hero } from "./components/hero";
 
 export const Home = () => (
-  <main>
-    <Hero />
-    <Events />
-  </main>
+  <FilterProvider>
+    <main>
+      <Hero />
+      <Events />
+    </main>
+  </FilterProvider>
 );
