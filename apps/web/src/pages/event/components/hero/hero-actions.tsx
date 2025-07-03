@@ -1,5 +1,5 @@
 import { Button } from "~/components/button";
-import { HeroEditForm, styles } from ".";
+import { styles } from ".";
 import { EventProps } from "~/pages/event/event";
 import { Modal } from "~/components/modal";
 import { useState } from "react";
@@ -16,9 +16,17 @@ import { RxAvatar } from "react-icons/rx";
 import { TbCancel } from "react-icons/tb";
 import { useMessage } from "~/providers/message";
 import { EventDto } from "~/lib/api";
+import { SiGooglecalendar } from "react-icons/si";
+import dayjs from "dayjs";
+import utcFormat from "dayjs/plugin/utc";
+import { Link } from "~/components/link";
+import { HeroEditForm } from "./form";
+
+dayjs.extend(utcFormat);
 
 export const HeroActions = ({ state }: EventProps) => {
   const [open, setOpen] = useState(false);
+  const [joinModalState, setJoinModalState] = useState(false);
   const {
     selectedEvent,
     setSelectedEvent,
@@ -27,12 +35,14 @@ export const HeroActions = ({ state }: EventProps) => {
     joinEvent,
     leaveEvent,
     deleteEvent,
+    getGoogleCalendarLink,
   } = useEvent();
   const { user } = useUser();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
 
   const onFinish = async (data: EventDto) => {
+    console.log({ data });
     setSelectedEvent((prev) => (prev ? { ...prev, ...data } : data));
     setOpen(false);
   };
@@ -59,6 +69,7 @@ export const HeroActions = ({ state }: EventProps) => {
     await joinEvent();
 
     showMessage("You joined this event", "info");
+    setJoinModalState(true);
   };
 
   const onLeave = async () => {
@@ -96,7 +107,8 @@ export const HeroActions = ({ state }: EventProps) => {
   };
 
   const alreadyJoined = !!user && selectedEvent?.participants.some((p) => p.id === user.id);
-  const isCreator = !!user && selectedEvent?.creatorId === user.id;
+  const isCreator =
+    !!user && (selectedEvent?.creatorId === user.id || selectedEvent?.id === "default");
   const canEdit = !!user && (user.role === "ADMIN" || isCreator);
 
   const getJoinLeaveButtons = () => {
@@ -126,7 +138,7 @@ export const HeroActions = ({ state }: EventProps) => {
 
     return (
       <>
-        {selectedEvent && selectedEvent.maxParticipants < selectedEvent.participants.length ? (
+        {selectedEvent && selectedEvent.maxParticipants > selectedEvent.participants.length ? (
           <Button onClick={onJoin} color="red" className={styles.action}>
             Join
           </Button>
@@ -139,11 +151,45 @@ export const HeroActions = ({ state }: EventProps) => {
     );
   };
 
+  const addToCalendar = () => {
+    if (!selectedEvent) return;
+    const link = getGoogleCalendarLink();
+
+    return (
+      <Link link={link}>
+        <Button color="red" className={styles.action}>
+          Add To Google Calendar <SiGooglecalendar />
+        </Button>
+      </Link>
+    );
+  };
+
+  console.log({ selectedEvent });
+
   return (
     <>
-      <Modal title="Edit Event" open={open} onClose={() => setOpen(false)}>
-        <HeroEditForm defaultValues={selectedEvent ?? undefined} onFinish={onFinish} />
-      </Modal>
+      {isCreator && canEdit && (
+        <Modal title="Edit Event" open={open} onClose={() => setOpen(false)}>
+          <HeroEditForm defaultValues={selectedEvent ?? undefined} onFinish={onFinish} />
+        </Modal>
+      )}
+
+      {user && alreadyJoined && (
+        <Modal
+          title="🎉Congratulations🎉"
+          open={joinModalState}
+          onClose={() => setJoinModalState(false)}
+        >
+          <div>
+            <p>
+              You have successfully marked your spot in this event!
+              <br />
+              If you'd like, you can add it to your Google Calendar to receive reminders.
+            </p>
+            <div style={{ marginTop: 16 }}>{addToCalendar()}</div>
+          </div>
+        </Modal>
+      )}
       {state === "view" ? (
         !user ? (
           <Button onClick={handleLogin} color="red" className={styles.action}>
@@ -151,22 +197,24 @@ export const HeroActions = ({ state }: EventProps) => {
             <RxAvatar />
           </Button>
         ) : isCreator ? (
-          <div className={styles.creator}>
-            <Button disabled className={clsx(styles.action, styles.creatorButton)}>
-              You are the host
-            </Button>
-            {canEdit && (
-              <Button
-                onClick={turnOnEditMode}
-                color="white"
-                className={clsx(styles.action, styles.editButton)}
-              >
-                <CiSettings />
+          <>
+            <div className={styles.creator}>
+              <Button disabled className={clsx(styles.action, styles.creatorButton)}>
+                You are the host
               </Button>
-            )}
-          </div>
+              {canEdit && (
+                <Button
+                  onClick={turnOnEditMode}
+                  color="white"
+                  className={clsx(styles.action, styles.editButton)}
+                >
+                  <CiSettings />
+                </Button>
+              )}
+            </div>
+          </>
         ) : (
-          getJoinLeaveButtons()
+          <>{getJoinLeaveButtons()}</>
         )
       ) : (
         <div className={styles.group}>
