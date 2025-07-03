@@ -1,0 +1,34 @@
+.participant {
+    position: relative;
+    display: inline-block;
+
+
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eee;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    transition: transform 0.15s;
+    background: #fafafa;
+    overflow: hidden;
+}
+
+.small {
+    width: var(--icon-small);
+    height: var(--icon-small);
+}
+
+.medium {
+    width: var(--icon-medium);
+    height: var(--icon-medium);
+}
+
+.large {
+    width: var(--icon-large);
+    height: var(--icon-large);
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
