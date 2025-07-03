@@ -6,7 +6,7 @@ import { LoadingIndicator } from "~/components/loading-indicator";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   children?: ReactNode;
-  color?: "red" | "white";
+  color?: "red" | "white" | "brightRed";
   loading?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void | Promise<void>;
 }

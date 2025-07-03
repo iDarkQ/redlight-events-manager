@@ -17,6 +17,11 @@
     color: #ffffff;
 }
 
+.brightRed {
+    background-color: var(--color-background-secondary);
+    color: #000;
+}
+
 .white {
     background-color: #fff;
     color: #000;
