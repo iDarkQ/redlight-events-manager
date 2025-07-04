@@ -15,24 +15,6 @@ section {
     max-width: 1440px;
 }
 
-@media (max-width: var(--breakpoint-laptopL)) {
-    section {
-        width: 80%;
-    }
-}
-
-@media (max-width: var(--breakpoint-laptop)) {
-    section {
-        width: 85%;
-    }
-}
-
-@media (max-width: var(--breakpoint-tablet)) {
-    section {
-        width: 90%;
-    }
-}
-
 html {
     scroll-behavior: smooth;
 }
@@ -82,6 +64,7 @@ button {
     color: #000000;
     line-height: 1.2em;
     letter-spacing: 0.01em;
+    text-align: start;
 }
 
 label {
@@ -156,4 +139,83 @@ body {
 
 ::file-selector-button {
     display: none;
+}
+
+
+@media (max-width: 1440px) {
+    section {
+        width: 80%;
+    }
+
+    h1 {
+        font-size: 3.75rem;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    h4 {
+        font-size: 1.25rem;
+    }
+
+    h5 {
+        font-size: 1.25rem
+    }
+}
+
+@media (max-width: 1024px) {
+    section {
+        width: 85%;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    h2 {
+        font-size: 2.25rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+
+    h4 {
+        font-size: 1rem;
+    }
+
+    h5 {
+        font-size: 1rem
+    }
+}
+
+@media (max-width: 768px) {
+    section {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 2.25rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1rem
+    }
+
+    h4 {
+        font-size: 1rem;
+    }
+
+    h5 {
+        font-size: 1rem;
+    }
 }
