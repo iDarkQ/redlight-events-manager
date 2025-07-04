@@ -12,12 +12,13 @@ import { useState } from "react";
 import { Modal } from "~/components/modal";
 import { Form } from "~/components/layout/navbar/form";
 import { AvatarUser } from "~/components/avatar";
+import { NavbarMenuBurger } from "~/components/layout/navbar";
 
 export const LayoutNavbar = () => {
   const typewriter = useTypewriter(
     ["football", "ping pong", "lacrosse", "cheese rolling"],
-    400,
-    100,
+    150,
+    50,
     1000,
   );
   const { user, updateUser } = useUser();
