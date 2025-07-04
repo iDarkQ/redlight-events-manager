@@ -37,7 +37,7 @@ export class EventController {
         private readonly userService: UserService,
         private readonly fileService: FileService,
         private readonly mailService: MailService,
-    ) { }
+    ) {}
 
     @Post()
     @UseGuards(AuthGuard)
