@@ -12,15 +12,17 @@ interface ModalProps {
 }
 
 export const Modal = ({ children, title = "Modal", open, onClose }: ModalProps) => (
-  <div className={clsx(styles.modal, !open && styles.closed)} onClick={onClose}>
-    <div className={styles.content} onClick={(e) => e.stopPropagation()}>
-      <div className={styles.header}>
-        <h3>{title}</h3>
-        <IconButton onClick={onClose}>
-          <IoMdClose className={styles.icon} />
-        </IconButton>
+  <div className={clsx(styles.wrapper, !open && styles.closed)} onClick={onClose}>
+    <div className={styles.modal}>
+      <div className={styles.content} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.header}>
+          <h3>{title}</h3>
+          <IconButton onClick={onClose}>
+            <IoMdClose className={styles.icon} />
+          </IconButton>
+        </div>
+        {children}
       </div>
-      {children}
     </div>
   </div>
 );

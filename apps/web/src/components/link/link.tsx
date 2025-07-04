@@ -6,15 +6,22 @@ interface LinkProps {
   isExternalLink?: boolean;
   children: ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
-export const Link = ({ children, link, isExternalLink = false, className }: LinkProps) => {
+export const Link = ({ children, link, onClick, isExternalLink = false, className }: LinkProps) => {
   return isExternalLink ? (
-    <a href={link} className={className && className} target="_blank" rel="noopener noreferrer">
+    <a
+      href={link}
+      className={className && className}
+      onClick={onClick}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {children}
     </a>
   ) : (
-    <ReactRouterLink to={link} className={className && className}>
+    <ReactRouterLink to={link} className={className && className} onClick={onClick}>
       {children}
     </ReactRouterLink>
   );

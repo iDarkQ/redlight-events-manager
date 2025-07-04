@@ -12,17 +12,19 @@ import { useState } from "react";
 import { Modal } from "~/components/modal";
 import { Form } from "~/components/layout/navbar/form";
 import { AvatarUser } from "~/components/avatar";
+import { NavbarMenuBurger } from "~/components/layout/navbar";
 
 export const LayoutNavbar = () => {
   const typewriter = useTypewriter(
     ["football", "ping pong", "lacrosse", "cheese rolling"],
-    400,
-    100,
+    150,
+    50,
     1000,
   );
   const { user, updateUser } = useUser();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <>
@@ -40,18 +42,25 @@ export const LayoutNavbar = () => {
         </Modal>
       )}
       <header className={styles.header}>
-        <nav className={styles.navbar}>
-          <a className={styles.logo}>
-            <Logo />
-            <span>
-              <span className={styles.code}>{`<${typewriter}`}</span>
-              <span className={styles.cursor} />
-              <span className={styles.code}>{">"}</span>
-            </span>
-          </a>
+        <nav className={clsx(styles.navbar, expanded && styles.fullscreen)}>
+          <div className={clsx(styles.main, expanded ? styles.expanded : undefined)}>
+            <a className={styles.logo}>
+              <Logo className={styles.logoImage} />
+              <span>
+                <span className={styles.code}>{`<${typewriter}`}</span>
+                <span className={styles.cursor} />
+                <span className={styles.code}>{">"}</span>
+              </span>
+            </a>
+            <NavbarMenuBurger
+              open={expanded}
+              onClick={() => setExpanded((prev) => !prev)}
+              className={clsx(styles.menu)}
+            />
+          </div>
           <div className={styles.buttons}>
             <nav>
-              <Link link={Routes.HOME}>
+              <Link link={Routes.HOME} onClick={() => setExpanded(false)}>
                 <p
                   className={clsx(styles.link, {
                     [styles.selected]: location.pathname === Routes.HOME,
@@ -63,7 +72,7 @@ export const LayoutNavbar = () => {
             </nav>
 
             <nav>
-              <Link link="/about">
+              <Link link="/about" onClick={() => setExpanded(false)}>
                 <p
                   className={clsx(styles.link, {
                     [styles.selected]: location.pathname === "/about",
@@ -76,7 +85,7 @@ export const LayoutNavbar = () => {
 
             {!user ? (
               <nav>
-                <Link link={Routes.LOGIN}>
+                <Link link={Routes.LOGIN} onClick={() => setExpanded(false)}>
                   <p
                     className={clsx(styles.link, {
                       [styles.selected]: location.pathname === Routes.LOGIN,

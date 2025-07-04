@@ -13,7 +13,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         const message =
             exception instanceof HttpException ? exception.getResponse() : "Internal server error";
 
-        this.logger.error("Exception caught", exception instanceof Error ? exception.stack : "");
+        this.logger.error("Exception caught", exception instanceof Error ? exception : "");
 
         response.status(status).json({
             statusCode: status,
