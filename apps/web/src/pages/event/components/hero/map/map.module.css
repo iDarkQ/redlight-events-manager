@@ -3,8 +3,14 @@
     inset: 0;
     z-index: 0;
     width: 100%;
-    height: calc(60vh + var(--navbar-height));
+    height: 80vh;
     pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+    .map {
+        height: 100vh;
+    }
 }
 
 .dimmed {
