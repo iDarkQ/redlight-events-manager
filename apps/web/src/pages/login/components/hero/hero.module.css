@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: start;
     gap: 1rem;
-    padding: 4rem;
+    padding-block: 4rem;
 
 
     height: calc(100vh - var(--footer-height) - var(--navbar-height));
