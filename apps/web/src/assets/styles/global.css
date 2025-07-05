@@ -39,9 +39,15 @@ html {
     --footer-height: 112px;
     --navbar-height: 100px;
 
-    --icon-small: 16px;
-    --icon-medium: 32px;
-    --icon-large: 64px;
+    --padding-sm: 0.25rem;
+    --padding-md: 0.5rem;
+    --padding-lg: 1rem;
+    --padding-xl: 2rem;
+    --padding-xxl: 4rem;
+
+    --icon-sm: 16px;
+    --icon-md: 32px;
+    --icon-lg: 64px;
 }
 
 * {

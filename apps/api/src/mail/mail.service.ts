@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { Recipient, EmailParams, MailerSend, Sender } from "mailersend";
-import { EventDto } from "src/event/dto/event.dto";
-import { UserDto } from "src/user/dto/user.dto";
-import { baseUrl } from "src/utils/url";
+import { EventDto } from "~/event/dto/event.dto";
+import { UserDto } from "~/user/dto/user.dto";
+import { baseUrl } from "~/utils/url";
 
 @Injectable()
 export class MailService {
@@ -11,7 +11,7 @@ export class MailService {
             apiKey: process.env.MAILERSEND_SECRET ?? "",
         });
 
-        const sentFrom = new Sender("events@test-86org8e86v0gew13.mlsender.net", "Redlight Team");
+        const sentFrom = new Sender(process.env.MAILERSEND_SENDER_EMAIL ?? "", "Redlight Team");
 
         for (const user of users) {
             const recipient = [new Recipient(user.email, user.name)];
@@ -32,7 +32,7 @@ export class MailService {
                 .setTo(recipient)
                 .setReplyTo(sentFrom)
                 .setSubject("New Event At Redlight")
-                .setTemplateId("z3m5jgrq16zldpyo")
+                .setTemplateId(process.env.MAILERSEND_TEMPLATED_ID ?? "")
                 .setPersonalization(personalization);
 
             await mailerSend.email.send(emailParams);

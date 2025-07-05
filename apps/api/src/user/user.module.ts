@@ -1,16 +1,16 @@
 import { Module } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { UserController } from "./user.controller";
-import { PrismaService } from "src/prisma.service";
+import { PrismaService } from "~/prisma.service";
 import { JwtModule } from "@nestjs/jwt";
-import { FileService } from "src/file/file.service";
+import { FileService } from "~/file/file.service";
 
 @Module({
     imports: [
         JwtModule.register({
             global: true,
             secret: process.env.JWT_SECRET,
-            signOptions: { expiresIn: "60s" },
+            signOptions: { expiresIn: "7d" },
         }),
     ],
     controllers: [UserController],

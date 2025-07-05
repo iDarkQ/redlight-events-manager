@@ -9,6 +9,7 @@ import { MessageProvider } from "~/providers/message";
 import { UserProvider } from "~/providers/user";
 import { EventProvider } from "~/providers/event";
 import ScrollToTop from "~/hooks/scroll-to-top";
+// import { ProtectedRoute } from "~/components/protected-route";
 
 export const App = () => (
   <CookiesProvider>
@@ -22,9 +23,12 @@ export const App = () => (
                   <Route index element={<Home />} />
                   <Route path="login" element={<Login />} />
                   <Route path="event">
-                    <Route path="create" element={<Event state="create" />} />
                     <Route path="view/:id" element={<Event state="view" />} />
-                    <Route path="edit/:id" element={<Event state="edit" />} />
+
+                    {/* <Route element={<ProtectedRoute />}> */}
+                      <Route path="create" element={<Event state="create" />} />
+                      <Route path="edit/:id" element={<Event state="edit" />} />
+                    {/* </Route> */}
                   </Route>
                 </Routes>
               </ScrollToTop>

@@ -1,8 +1,8 @@
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { UpdateEventDto } from "./dto/update-event.dto";
-import { PrismaService } from "src/prisma.service";
-import { EventDto } from "src/event/dto/event.dto";
-import { CreateEventDto } from "src/event/dto/create-event.dto";
+import { PrismaService } from "~/prisma.service";
+import { EventDto } from "~/event/dto/event.dto";
+import { CreateEventDto } from "~/event/dto/create-event.dto";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { join } from "path";
 import { promises as fs } from "fs";
@@ -78,14 +78,6 @@ export class EventService {
             },
             include: { participants: { select: { id: true, name: true, profile: true } } },
         });
-    }
-
-    async setPhoto(eventId: string, filename: string): Promise<EventDto> {
-        const event = await this.findOne(eventId);
-        if (!event) throw new NotFoundException("Event not found");
-
-        event.banner = `/uploads/banner/${filename}`;
-        return await this.update(eventId, event);
     }
 
     @Cron(CronExpression.EVERY_12_HOURS)

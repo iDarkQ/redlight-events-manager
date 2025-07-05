@@ -19,7 +19,7 @@
 
 .option {
     cursor: pointer;
-    padding: 0.5rem 1rem;
+    padding: var(--padding-md) var(--padding-lg);
     color: #000;
 }
 
@@ -42,8 +42,8 @@
     justify-content: space-between;
     box-sizing: border-box;
     width: 100%;
-    padding: 0.5rem 1rem;
-    margin-top: 0.25rem;
+    padding: var(--padding-md) var(--padding-lg);
+    margin-top: var(--padding-sm);
     border-bottom: 1px solid #454545;
     background-color: #fff;
 }

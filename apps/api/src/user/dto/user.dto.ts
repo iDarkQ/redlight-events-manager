@@ -4,7 +4,7 @@ import { Type } from "class-transformer";
 export class UserDto {
     /**
      * Unique identifier of the user
-     * @example "ckv9p34s50000svef8bl7w2gb"
+     * @example "cmcoyn1ld000008l4c8icbq3s"
      */
     @IsString()
     id: string;
@@ -32,7 +32,7 @@ export class UserDto {
 
     /**
      * Profile description or URL of the user
-     * @example "https://example.com/profile/johndoe"
+     * @example "static/uploads/permanent/event-123-123.png"
      */
     @IsString()
     @IsOptional()

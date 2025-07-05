@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 import metadata from "./metadata";
 import { NestExpressApplication } from "@nestjs/platform-express";
-import { AllExceptionsFilter } from "src/utils/all-exceptions-filter";
+import { AllExceptionsFilter } from "~/utils/all-exceptions-filter";
 import { join } from "path";
 
 const bootstrap = async () => {
@@ -20,7 +20,6 @@ const bootstrap = async () => {
         .setTitle("Redlight Events Manager")
         .setDescription("The API used for handling sport events at redlight")
         .setVersion("1.0")
-        .addTag("download")
         .addBearerAuth()
         .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);

@@ -5,9 +5,9 @@
 .section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--padding-lg);
     overflow: auto;
-    padding-block: 4rem;
+    padding-block: var(--padding-xxl);
 }
 
 .section * {
@@ -17,7 +17,7 @@
 .description {
     display: flex;
     flex-direction: row;
-    gap: 0.5rem;
+    gap: var(--padding-md);
     max-height: 60vh;
 }
 
@@ -30,16 +30,16 @@
     height: 100%;
     border: none;
     resize: none;
-    padding: 0.5rem;
+    padding: var(--padding-md);
 }
 
 .markdown {
     flex: 1;
     overflow: auto;
-    gap: 1rem;
+    gap: var(--padding-lg);
     display: flex;
     flex-direction: column;
-    padding-block: 0.5rem;
+    padding-block: var(--padding-md);
 }
 
 .preview {
@@ -64,9 +64,10 @@
 
 .participantsList {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--padding-md);
     align-items: center;
     flex-wrap: wrap;
+    padding-left: var(--padding-sm)
 }
 
 .avatar {
@@ -75,6 +76,6 @@
 }
 
 .manage {
-    width: var(--icon-medium);
-    height: var(--icon-medium);
+    width: var(--icon-md);
+    height: var(--icon-md);
 }

@@ -3,8 +3,9 @@ import { styles } from ".";
 import clsx from "clsx";
 import { FaLocationDot } from "react-icons/fa6";
 import { EventDto } from "~/lib/api";
-import { eventCardDateFormat } from "~/utils/date";
+import { EVENT_CARD_DATE_FORMAT } from "~/utils/date";
 import { baseUrl } from "~/utils/url";
+import dayjs from "dayjs";
 
 interface EventCardProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
@@ -24,7 +25,7 @@ export const EventCard = ({ event, className, ...props }: EventCardProps) => (
       <span className={styles.view}>View Event</span>
     </div>
     <div className={styles.container}>
-      <p>{eventCardDateFormat(event.date)}</p>
+      <p>{dayjs(event.date).format(EVENT_CARD_DATE_FORMAT)}</p>
       <h4>
         <b>{event.title}</b>
       </h4>

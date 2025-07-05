@@ -1,0 +1,20 @@
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-md);
+}
+
+.required:after {
+    content: "*";
+    color: #000;
+    margin-left: var(--padding-sm);
+}
+
+.underline {
+    color: var(--color-primary);
+}
+
+.title {
+    color: #000;
+    padding-bottom: var(--padding-lg);
+}

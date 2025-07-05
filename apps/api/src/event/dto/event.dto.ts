@@ -10,7 +10,7 @@ import {
 } from "class-validator";
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
-import { ParticipantDto } from "src/user/dto/participant.dto";
+import { ParticipantDto } from "~/user/dto/participant.dto";
 import { EventStatus } from "@prisma/client";
 
 export class EventDto {
@@ -44,7 +44,7 @@ export class EventDto {
     createdAt: Date;
 
     /**
-     * Date of the event
+     * Date when event happens
      * @example "2024-07-01T18:00:00.000Z"
      */
     @IsDate()
@@ -53,7 +53,7 @@ export class EventDto {
 
     /**
      * Type of the event
-     * @example "MEETING"
+     * @example "Football"
      */
     @IsString()
     type: string;
@@ -84,7 +84,7 @@ export class EventDto {
 
     /**
      * ID of the event creator
-     * @example "user1"
+     * @example "ckv9p34s50000svef8bl7w2gb"
      */
     @IsString()
     creatorId: string;
@@ -136,7 +136,7 @@ export class EventDto {
 
     /**
      * Link to the event banner
-     * @example /uploads/banners/ckv9p34s50000svef8bl7w2gb.png
+     * @example /static/uploads/permanent/banners/event-123-123.png
      */
     @IsString()
     @IsOptional()

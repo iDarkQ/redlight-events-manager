@@ -12,6 +12,7 @@ import { useCookies } from "react-cookie";
 import { Configuration, EventApi, EventDto } from "~/lib/api";
 import { useMessage } from "~/providers/message";
 import showdown from "showdown";
+import { GOOGLE_CALENDAR_FORMAT } from "~/utils/date";
 
 interface EventContextProps {
   selectedEvent: EventDto | null;
@@ -174,8 +175,8 @@ export const EventProvider = ({ children }: EventProviderProps) => {
   const getGoogleCalendarLink = (): string => {
     if (!selectedEvent) return "";
 
-    const start = dayjs(selectedEvent.date).utc().format("YYYYMMDDTHHmmss") + "Z";
-    const end = dayjs(selectedEvent.date).utc().format("YYYYMMDDTHHmmss") + "Z";
+    const start = dayjs(selectedEvent.date).utc().format(GOOGLE_CALENDAR_FORMAT) + "Z";
+    const end = dayjs(selectedEvent.date).utc().format(GOOGLE_CALENDAR_FORMAT) + "Z";
 
     const converter = new showdown.Converter();
     const htmlDetails = converter.makeHtml(selectedEvent.description);
