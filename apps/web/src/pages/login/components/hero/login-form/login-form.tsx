@@ -1,8 +1,7 @@
-import { FormTitle } from "~/pages/login/components/hero/hero-title"
 import { Input } from "~/components/input"
 import { Button } from "~/components/button"
 import { IconButton } from "~/components/icon-button"
-import { styles, useLoginForm } from "."
+import { styles, useLoginForm, LoginFormTitle } from "."
 
 interface FieldConfig {
   name: "email" | "password" | "nickname" | "birthday"
@@ -10,7 +9,7 @@ interface FieldConfig {
   type: string
 }
 
-export const HeroForm = () => {
+export const LoginForm = () => {
   const { signingUp, isSubmitting, handleSubmit, onSubmit, errors, toggleMode, register } =
     useLoginForm();
 
@@ -47,7 +46,7 @@ export const HeroForm = () => {
 
   return (
     <>
-      <FormTitle signingUp={signingUp} />
+      <LoginFormTitle signingUp={signingUp} />
 
       <form
         className={styles.inputs}

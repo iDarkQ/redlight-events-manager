@@ -22,7 +22,7 @@
 
     /* width: 100%; */
     width: 100%;
-    padding: 1rem;
+    padding: var(--padding-lg);
     background-color: #fefefe;
     border: 1px solid #888;
 }
@@ -36,13 +36,13 @@
 .icon {
     aspect-ratio: 1/1;
     width: auto;
-    height: var(--icon-medium);
+    height: var(--icon-md);
 }
 
 .modal {
     /* width: 520px; */
     width: 100%;
-    padding: 1rem;
+    padding: var(--padding-lg);
     box-sizing: border-box;
     position: relative;
     top: 100px;

@@ -60,8 +60,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     const handleSuggestionClick = (suggestion: string) => {
-      setValue(suggestion);
-      setShowDropdown(false);
+            setValue(suggestion);
+      // setShowDropdown(false);
       onChange?.({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ...({} as any),
@@ -69,10 +69,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       });
 
       (inputRef.current ?? (ref as React.RefObject<HTMLInputElement>)?.current)?.focus();
+      setValue(suggestion);
     };
 
     return (
-      <div style={{ position: "relative", width: "100%" }} className={rootClassName && rootClassName}>
+      <div
+        style={{ position: "relative", width: "100%" }}
+        className={rootClassName && rootClassName}
+      >
         <input
           ref={ref ?? inputRef}
           className={clsx(styles.input, className && className)}
@@ -91,33 +95,36 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {suffix && <div className={styles.suffix}>{suffix}</div>}
         {suggestions && showDropdown && (
           <ul
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              right: 0,
-              background: "#fff",
-              border: "1px solid #eee",
-              borderTop: "none",
-              zIndex: 10,
-              margin: 0,
-              padding: 0,
-              listStyle: "none",
-              maxHeight: 180,
-              overflowY: "auto",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-            }}
+            // style={{
+            //   position: "absolute",
+            //   top: "100%",
+            //   left: 0,
+            //   right: 0,
+            //   background: "#fff",
+            //   border: "1px solid #eee",
+            //   borderTop: "none",
+            //   zIndex: 10,
+            //   margin: 0,
+            //   padding: 0,
+            //   listStyle: "none",
+            //   maxHeight: 180,
+            //   overflowY: "auto",
+            //   boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            // }}
+
+            className={styles.suggestions}
           >
             {filtered.map((s, i) => (
               <li
                 key={s + i}
-                style={{
-                  padding: "0.5rem 1rem",
-                  cursor: "pointer",
-                  borderBottom: i === filtered.length - 1 ? "none" : "1px solid #f0f0f0",
-                  background: "#fff",
-                }}
-                onMouseDown={() => handleSuggestionClick(s)}
+                // style={{
+                //   padding: "var(--padding-md) var(--padding-lg)",
+                //   cursor: "pointer",
+                //   borderBottom: i === filtered.length - 1 ? "none" : "1px solid #f0f0f0",
+                //   background: "#fff",
+                // }}
+                className={styles.option}
+                onClick={() => handleSuggestionClick(s)}
               >
                 {s}
               </li>

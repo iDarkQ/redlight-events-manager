@@ -1,0 +1,39 @@
+
+
+/* ActionsManage */
+
+.group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-sm);
+}
+
+.manageButtons {
+    display: inline-flex;
+    gap: var(--padding-sm);
+    width: 100%;
+}
+
+/* ActionsUserView*/
+
+.action {
+    width: 100%;
+    flex: 0;
+    white-space: nowrap;
+}
+
+.edit {
+    flex: 1;
+}
+
+.creator {
+    display: inline-flex;
+}
+
+.creatorButton {
+    flex: 1;
+}
+
+.editButton {
+    flex: 0;
+}

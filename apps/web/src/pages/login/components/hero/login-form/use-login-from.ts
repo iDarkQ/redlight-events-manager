@@ -9,8 +9,8 @@ import { useMessage } from "~/providers/message";
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
-    password: z.string().min(3, { message: "Password must be at least 8 characters" }),
-    nickname: z.string().optional(),
+    password: z.string().min(6, { message: "Password must be at least 6 characters" }).max(100, { message: "Password must be at most 100 characters" }),
+    nickname: z.string().min(2, { message: "Name must be at least 2 characters" }).min(50, { message: "Name must be at most 50 characters" }).optional(),
     birthday: z.string().optional(),
 });
 
@@ -26,7 +26,7 @@ export const useLoginForm = () => {
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         setSubmitting(true);
         if (signingUp) {
-            if(!data.nickname || !data.birthday) return;
+            if (!data.nickname || !data.birthday) return;
             const user = await signUp(data.email, data.password, data.nickname, data.birthday);
             if (user) {
                 showMessage(`Welcome ${user.name}!`, "success")
@@ -57,7 +57,7 @@ export const useLoginForm = () => {
         resolver: zodResolver(
             signingUp
                 ? formSchema.extend({
-                    nickname: z.string().min(3, { message: "Nickname must be at least 3 characters" }),
+                    nickname: z.string().min(2, { message: "Name must be at least 2 characters" }).min(50, { message: "Name must be at most 50 characters" }),
                     birthday: z.string().refine((val) => val, { message: "Birthday is required" }),
                 })
                 : formSchema.pick({ email: true, password: true }),

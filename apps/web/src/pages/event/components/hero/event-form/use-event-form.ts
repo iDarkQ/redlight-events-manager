@@ -5,6 +5,7 @@ import { z } from "zod";
 import { EventDto } from "~/lib/api";
 import { EventStatus } from "~/lib/api";
 import dayjs from "dayjs";
+import { INPUT_DATETIME_FORMAT } from "~/utils/date";
 
 export const eventStatuses = Object.values(EventStatus) as [EventStatus, ...EventStatus[]];
 
@@ -29,7 +30,7 @@ const mapEventDtoToFormData = (event?: Partial<EventDto>): Partial<EventFormData
     return {
         title: event.title,
         status: event.status,
-        date: dayjs(event.date).format("YYYY-MM-DDTHH:mm"), // ToISOString adds Z in the end /shrug
+        date: dayjs(event.date).format(INPUT_DATETIME_FORMAT), // ToISOString adds Z in the end /shrug
         type: event.type,
         maxParticipants: event.maxParticipants,
         latitude: event.latitude,
@@ -39,7 +40,7 @@ const mapEventDtoToFormData = (event?: Partial<EventDto>): Partial<EventFormData
     };
 }
 
-export const useHeroEditForm = (
+export const useEventForm = (
     defaultValues?: Partial<EventDto>,
     onFinish?: (data: EventDto) => Promise<void>
 ) => {

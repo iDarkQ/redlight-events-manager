@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
-import { EventFormData, useHeroEditForm, styles, eventStatuses } from "..";
+import { EventFormData, useEventForm, eventStatuses } from ".";
 import { MapLocationPicker } from "../map";
 import mbx from "@mapbox/mapbox-sdk";
 import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding";
@@ -9,6 +9,7 @@ import { useEvent } from "~/providers/event";
 import { EventDto } from "~/lib/api";
 import { Dropdown } from "~/components/dropdown";
 import { Upload } from "~/components/upload";
+import { styles } from ".";
 
 interface FieldConfig {
   name: keyof EventFormData;
@@ -20,13 +21,13 @@ interface FieldConfig {
   options?: string[];
 }
 
-export interface HeroEditFormProps {
+export interface EventFormProps {
   defaultValues?: Partial<EventDto>;
   onFinish?: (data: EventDto) => Promise<void>;
 }
 
-export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => {
-  const { isSubmitting, register, handleSubmit, errors, setValue, watch } = useHeroEditForm(
+export const EventForm = ({ defaultValues, onFinish }: EventFormProps) => {
+  const { isSubmitting, register, handleSubmit, errors, setValue, watch } = useEventForm(
     defaultValues,
     onFinish,
   );
@@ -129,7 +130,12 @@ export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => 
       return (
         <div key={name}>
           <label htmlFor={name}>{label}</label>
-          <Input {...inputProps} />
+          <Input
+            {...inputProps}
+            onChange={(e) => {
+              setValue(name, e.target.value);
+            }}
+          />
           {errors[name] && <span>{(errors[name] as { message?: string })?.message}</span>}
         </div>
       );
@@ -177,13 +183,16 @@ export const HeroEditForm = ({ defaultValues, onFinish }: HeroEditFormProps) => 
           <label>Location</label>
           <MapLocationPicker
             initialCenter={
-              latitude !== undefined && longitude !== undefined
+              latitude !== 0 && longitude !== 0
                 ? [longitude, latitude]
-                : defaultValues?.latitude && defaultValues?.longitude
+                : defaultValues?.latitude &&
+                    defaultValues?.latitude !== 0 &&
+                    defaultValues?.longitude &&
+                    defaultValues?.longitude !== 0
                   ? [defaultValues.longitude, defaultValues.latitude]
-                  : [0, 0]
+                  : undefined
             }
-            initialZoom={latitude && longitude ? 14 : 2}
+            initialZoom={17}
             onLocationSelect={async ({ lng, lat }) => {
               setValue("location", await fetchLocationName(lng, lat));
               setValue("latitude", lat, { shouldValidate: true });

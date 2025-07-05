@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { UpdateProfileDto } from "~/lib/api";
 import dayjs from "dayjs";
+import { INPUT_DATE_FORMAT } from "~/utils/date";
 
 const userFormSchema = z.object({
     birthday: z.string().refine((val) => val && !isNaN(Date.parse(val)), {
@@ -17,12 +18,12 @@ export type UserFormData = z.infer<typeof userFormSchema>;
 const mapUserDtoToFormData = (user?: UpdateProfileDto): UserFormData | undefined => {
     if (!user) return;
     return {
-        birthday: dayjs(user.birthday).format("YYYY-MM-DD"), // ToISOString adds Z in the end /shrug
+        birthday: dayjs(user.birthday).format(INPUT_DATE_FORMAT), // ToISOString adds Z in the end /shrug
         profile: user.profile,
     };
 }
 
-export const useForm = (
+export const useProfileForm = (
     defaultValues?: UpdateProfileDto,
     onFinish?: (data: UpdateProfileDto) => Promise<void>
 ) => {

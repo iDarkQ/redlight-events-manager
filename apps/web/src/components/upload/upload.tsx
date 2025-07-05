@@ -17,12 +17,15 @@ export const Upload = ({ placeholder, value, onChange }: UploadProps) => {
   return (
     <div className={styles.upload}>
       <div className={styles.file} onClick={() => inputRef.current?.click()}>
-        <span className={styles.value}>{value ?? placeholder ?? ""}</span>
+        <span className={styles.value}>{!value || value === "" ? placeholder : value}</span>
         <Tooltip title="Clear">
-          <IconButton type="button" onClick={(e) => {
-            e.stopPropagation();
-            onChange?.()
-          }}>
+          <IconButton
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onChange?.();
+            }}
+          >
             <GrClear className={styles.icon} />
           </IconButton>
         </Tooltip>
@@ -37,7 +40,6 @@ export const Upload = ({ placeholder, value, onChange }: UploadProps) => {
         onChange={(event) => {
           const file = event.target.files && event.target.files[0];
           if (file) {
-            console.log({ file });
             onChange?.(file);
           }
         }}

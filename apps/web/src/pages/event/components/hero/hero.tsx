@@ -1,6 +1,7 @@
-import { HeroActions, HeroInformation, HeroTitle, styles } from ".";
-import { EventProps } from "~/pages/event/event";
+import { HeroInformation, HeroTitle, styles } from ".";
 import { HeroBackground } from "~/pages/event/components/hero/hero-background";
+import { Actions } from "~/pages/event/components/hero/actions";
+import { EventProps } from "~/pages/event";
 
 export const Hero = ({ state }: EventProps) => (
   <section className={styles.wrapper}>
@@ -11,7 +12,7 @@ export const Hero = ({ state }: EventProps) => (
       <HeroTitle />
       <div className={styles.sub}>
         <HeroInformation />
-        <HeroActions state={state}/>
+        <Actions state={state} />
       </div>
     </div>
   </section>

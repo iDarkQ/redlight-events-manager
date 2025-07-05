@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
-import { UserFormData, useForm, styles } from ".";
+import { UserFormData, useProfileForm, styles } from ".";
 import { UpdateProfileDto } from "~/lib/api";
 import { Upload } from "~/components/upload";
 import { useUser } from "~/providers/user";
@@ -14,15 +14,13 @@ interface FieldConfig {
   suggestions?: string[];
 }
 
-export interface FormProps {
+export interface ProfileFormProps {
   defaultValues?: UpdateProfileDto;
   onFinish?: (data: UpdateProfileDto) => Promise<void>;
 }
 
-export const Form = ({ defaultValues, onFinish }: FormProps) => {
-  console.log({ defaultValues });
-
-  const { isSubmitting, register, handleSubmit, errors, setValue, watch } = useForm(
+export const ProfileForm = ({ defaultValues, onFinish }: ProfileFormProps) => {
+  const { isSubmitting, register, handleSubmit, errors, setValue, watch } = useProfileForm(
     defaultValues,
     onFinish,
   );

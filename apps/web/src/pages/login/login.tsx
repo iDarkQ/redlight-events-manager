@@ -1,4 +1,4 @@
-import { Hero } from "~/pages/login/components/hero";
+import { Hero } from "./components/hero";
 
 export const Login = () => (
   <main>

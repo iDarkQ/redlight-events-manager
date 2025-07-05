@@ -1,78 +1,32 @@
-import { useEffect, useRef, useState } from "react";
-import { styles } from ".";
-import ReactMarkdown from "react-markdown";
-import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
+import { useState, useCallback } from "react";
+import { DetailsMarkdownEditor, DetailsMarkdownPreview, DetailsParticipantsList, styles, useDetailsDebouncedSave } from ".";
 import { EventProps } from "~/pages/event";
-import clsx from "clsx";
 import { useEvent } from "~/providers/event";
-import { AvatarUser } from "~/components/avatar";
 
 export const Details = ({ state }: EventProps) => {
   const { selectedEvent, setSelectedEvent } = useEvent();
+  const [description, setDescription] = useState(selectedEvent!.description);
 
-  const [value, setValue] = useState(selectedEvent!.description);
-
-  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
-
-  const save = (desc: string) => {
+  const handleSave = useCallback((desc: string) => {
     setSelectedEvent((prev) => (prev ? { ...prev, description: desc } : prev));
-  };
+  }, [setSelectedEvent]);
 
-  useEffect(() => {
-    if (!selectedEvent) return;
-    if (state === "view") return;
-    if (saveTimeout.current) clearTimeout(saveTimeout.current);
-    saveTimeout.current = setTimeout(() => {
-      save(value);
-    }, 500);
-    return () => {
-      if (saveTimeout.current) clearTimeout(saveTimeout.current);
-    };
-  }, [value, state]);
+  useDetailsDebouncedSave(description, handleSave, 500);
 
-  if (!selectedEvent) return;
+  if (!selectedEvent) {
+    return null;
+  }
 
   return (
     <div className={styles.wrapper}>
       <section className={styles.section}>
-        {selectedEvent?.participants && selectedEvent.participants.length > 0 && (
-          <div className={styles.participantsSection}>
-            <h2>Participants</h2>
-            <div className={styles.participantsList}>
-              {selectedEvent.participants.map((participant, idx) => (
-                <AvatarUser key={idx} name={participant.name} profile={participant.profile} />
-              ))}
-            </div>
-          </div>
-        )}
-
+        <DetailsParticipantsList participants={selectedEvent.participants} />
         <h2>Description</h2>
-        {state !== "view" && (
-          <div className={styles.header}>
-            <h3 className={styles.subTitle}>Editor</h3>
-            <h3 className={styles.subTitle}>Preview</h3>
-          </div>
+        {state === "view" ? (
+          <DetailsMarkdownPreview value={description} />
+        ) : (
+          <DetailsMarkdownEditor value={description} onChange={setDescription} />
         )}
-        <ScrollSync>
-          <div className={clsx(styles.description, state === "view" && styles.fullscreen)}>
-            {state !== "view" && (
-              <div className={styles.preview}>
-                <ScrollSyncPane>
-                  <textarea
-                    className={styles.editor}
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                  />
-                </ScrollSyncPane>
-              </div>
-            )}
-            <ScrollSyncPane>
-              <div className={styles.markdown}>
-                <ReactMarkdown>{value}</ReactMarkdown>
-              </div>
-            </ScrollSyncPane>
-          </div>
-        </ScrollSync>
       </section>
     </div>
   );

@@ -1,10 +1,28 @@
+/* Hero */
+
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding-block: 4rem;
+    gap: var(--padding-lg);
+    padding-block: var(--padding-xxl);
     height: calc(80vh - var(--navbar-height));
 }
+
+.details {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.sub {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-md);
+}
+
+/* HeroBackground */
 
 .background {
     position: absolute;
@@ -13,17 +31,6 @@
     width: 100%;
     height: calc(80vh);
     pointer-events: none;
-}
-
-@media (max-width: 1024px) {
-
-    .wrapper {
-        height: calc(100vh - var(--navbar-height));
-    }
-
-    .background {
-        height: 100vh;
-    }
 }
 
 .dimmed {
@@ -39,21 +46,16 @@
     object-fit: cover;
 }
 
-.details {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: space-between;
-}
+/* Heroinformation */
+
 
 .information {
     display: flex;
     margin: 0;
     list-style-type: none;
     width: 100%;
-    padding: 1rem;
-    gap: 1rem;
+    padding: var(--padding-lg);
+    gap: var(--padding-lg);
     justify-content: space-evenly;
     background-color: rgba(69, 69, 69, 0.35);
     -webkit-backdrop-filter: blur(20px);
@@ -83,77 +85,24 @@
     color: white;
 }
 
+/* HeroJoinModal */
+
 .action {
     width: 100%;
     flex: 0;
     white-space: nowrap;
 }
 
-.sub {
+.modal {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--padding-md);
 }
 
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-}
-
-.creator {
-    display: inline-flex;
-}
-
-.creatorButton {
-    flex: 1;
-}
-
-.editButton {
-    flex: 0;
-}
-
-.location {
-    display: block;
-    text-align: center;
-    width: 100%;
-    /* Fill parent width */
-    min-width: 0;
-    /* Allow shrinking */
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-.tooltip {
-    width: 100%;
-    min-width: 0;
-    display: block;
-}
-
-.manageButtons {
-    display: inline-flex;
-    gap: 0.25rem;
-    width: 100%;
-}
-
-.group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.edit {
-    flex: 1;
-}
-
-.lName {
-    color: white;
-}
+/* HeroTitle */
 
 .icon {
-    font-size: var(--icon-medium);
+    font-size: var(--icon-md);
     color: #fff;
 
     animation: colorChange 1s infinite
@@ -173,10 +122,26 @@
     }
 }
 
+.location {
+    color: white;
+}
+
 .iconButton {
     display: flex;
     justify-content: center;
     align-items: center;
     width: min-content;
     height: min-content;
+}
+
+
+@media (max-width: 1024px) {
+
+    .wrapper {
+        height: calc(100vh - var(--navbar-height));
+    }
+
+    .background {
+        height: 100vh;
+    }
 }

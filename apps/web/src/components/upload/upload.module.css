@@ -5,7 +5,7 @@
 }
 
 .icon {
-    font-size: var(--icon-small);
+    font-size: var(--icon-sm);
 }
 
 .file {
@@ -17,8 +17,8 @@
     justify-content: space-between;
 
     width: 100%;
-    padding: 0.5rem 1rem;
-    gap: 0.5rem;
+    padding: var(--padding-md) var(--padding-lg);
+    gap: var(--padding-md);
     border-bottom: 1px solid #454545;
     background-color: #fff;
     cursor: pointer;

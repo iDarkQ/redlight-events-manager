@@ -17,10 +17,10 @@
     pointer-events: auto;
     background-color: var(--popup-background);
     color: #fff;
-    padding: 0.5rem;
+    padding: var(--padding-md);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--padding-md);
     animation: slide-down 0.25s ease;
     /* Add this for smooth movement */
     transition: margin 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);

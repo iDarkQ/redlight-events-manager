@@ -1,0 +1,14 @@
+.footer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: var(--footer-height);
+    padding: var(--padding-xl) 3rem;
+    background-color: #000000;
+}
+
+.icon {
+    width: var(--icon-md);
+    height: var(--icon-md);
+}

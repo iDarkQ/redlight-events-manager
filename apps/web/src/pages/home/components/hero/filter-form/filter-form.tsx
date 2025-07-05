@@ -2,16 +2,8 @@ import React, { useCallback, useRef } from "react";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { Dropdown } from "~/components/dropdown";
-import {
-  FilterFormData,
-  useFilterForm,
-} from "~/pages/home/components/hero/filter-form/use-filter-form";
 import { useEvent } from "~/providers/event";
-import { styles } from ".";
-import {
-  FilterFormMap,
-  FilterFormMapRef,
-} from "~/pages/home/components/hero/filter-form/filter-form-map";
+import { styles, FilterFormData, useFilterForm, FilterFormMap, FilterFormMapRef } from ".";
 import { Filter } from "~/providers/filter";
 
 interface FieldConfig {
@@ -128,10 +120,7 @@ export const FilterForm = ({ defaultValues, onFinish, onReset }: HeroEditFormPro
 
         <div>
           <span>Area Of Search</span>
-          <FilterFormMap
-            ref={mapRef}
-            updateArea={updateArea}
-          />
+          <FilterFormMap ref={mapRef} updateArea={updateArea} />
         </div>
 
         <div className={styles.actions}>

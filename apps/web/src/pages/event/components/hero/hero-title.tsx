@@ -39,7 +39,7 @@ export const HeroTitle = () => {
           {selectedEvent?.title} {addToCalendar()}
         </strong>
       </h1>
-      <h4 className={styles.lName}>{selectedEvent?.location}</h4>
+      <h4 className={styles.location}>{selectedEvent?.location}</h4>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import dayjs from "dayjs";
 import { Filter } from "~/providers/filter";
+import { INPUT_DATETIME_FORMAT } from "~/utils/date";
 
 const filterFormSchema = z.object({
     type: z.string(),
@@ -24,8 +25,8 @@ const mapFilterToFormData = (filter?: Partial<Filter>): Partial<FilterFormData> 
     if (!filter) return {};
     return {
         type: filter.type,
-        dateFrom: dayjs(filter.dateFrom).format("YYYY-MM-DDTHH:mm"), // ToISOString adds Z in the end /shrug
-        dateTo: dayjs(filter.dateTo).format("YYYY-MM-DDTHH:mm"), // ToISOString adds Z in the end /shrug
+        dateFrom: dayjs(filter.dateFrom).format(INPUT_DATETIME_FORMAT), // ToISOString adds Z in the end /shrug
+        dateTo: dayjs(filter.dateTo).format(INPUT_DATETIME_FORMAT), // ToISOString adds Z in the end /shrug
     };
 }
 

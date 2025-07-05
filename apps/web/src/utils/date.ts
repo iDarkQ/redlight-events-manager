@@ -6,6 +6,7 @@ dayjs.extend(advancedFormat);
 dayjs.extend(localizedFormat);
 
 export const DATE_FORMAT = "DD/MM/YYYY HH:mm"
-export const eventCardDateFormat = (date: string) => {
-    return dayjs(date).format("dddd Do MMMM | hh:mm a")
-} 
+export const INPUT_DATE_FORMAT = "YYYY-MM-DD"
+export const INPUT_DATETIME_FORMAT = "YYYY-MM-DDTHH:mm"
+export const GOOGLE_CALENDAR_FORMAT = "YYYYMMDDTHHmmss"
+export const EVENT_CARD_DATE_FORMAT = "dddd Do MMMM | hh:mm a";

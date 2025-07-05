@@ -1,13 +1,13 @@
 import clsx from "clsx";
 import { styles } from ".";
 
-interface NavbarMenuBurger {
+interface MenuBurgerProps {
   open?: boolean;
   className?: string;
   onClick?: () => void;
 }
 
-export const NavbarMenuBurger = ({open, className, onClick}: NavbarMenuBurger) => (
+export const MenuBurger = ({open, className, onClick}: MenuBurgerProps) => (
   <button
     onClick={onClick}
     className={clsx(styles.burger, open && styles.active, className && className)}
