@@ -3,8 +3,8 @@ import { ApiBody, ApiConsumes, ApiOkResponse } from "@nestjs/swagger";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
-import { BadRequestException } from "@nestjs/common";
-import { UploadBannerResponse } from "src/event/dto/upload-banner-response.dto";
+import { UploadBannerResponse } from "~/event/dto/upload-banner-response.dto";
+import fs from "fs";
 
 export function ImageUpload(fieldName: string, uploadType) {
     return applyDecorators(
@@ -23,19 +23,18 @@ export function ImageUpload(fieldName: string, uploadType) {
         UseInterceptors(
             FileInterceptor(fieldName, {
                 storage: diskStorage({
-                    destination: `./static/uploads/tmp/${uploadType}`,
+                    destination: (req, file, cb) => {
+                        const uploadPath = `./static/uploads/tmp/${uploadType}`;
+                        // Recursively make folders if they don't exist
+                        fs.mkdirSync(uploadPath, { recursive: true });
+                        cb(null, uploadPath);
+                    },
                     filename: (_, file, cb) => {
                         const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
                         const fileExt = extname(file.originalname);
                         cb(null, `${uploadType}-${uniqueSuffix}${fileExt}`);
                     },
                 }),
-                fileFilter: (_req, file, cb) => {
-                    if (!file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
-                        return cb(new BadRequestException("Only image files are allowed!"), false);
-                    }
-                    cb(null, true);
-                },
                 limits: { fileSize: 5 * 1024 * 1024 },
             }),
         ),

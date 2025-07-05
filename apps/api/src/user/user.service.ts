@@ -5,25 +5,25 @@ import {
     UnauthorizedException,
 } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { PrismaService } from "src/prisma.service";
+import { PrismaService } from "~/prisma.service";
 import * as argon2 from "argon2";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { LoginUserDto } from "src/user/dto/login-user.dto";
-import { AuthorizeUserDto } from "src/user/dto/authorization-user.dto";
-import { JwtTokenResponse } from "src/user/dto/jwt-token-response.dto";
-import { UserDto } from "src/user/dto/user.dto";
-import { UpdateProfileDto } from "src/user/dto/update-profile.dto";
+import { LoginUserDto } from "~/user/dto/login-user.dto";
+import { UserDto } from "~/user/dto/user.dto";
+import { UpdateProfileDto } from "~/user/dto/update-profile.dto";
+import { JwtTokenDto } from "~/user/dto/jwt-token.dto";
 
 @Injectable()
 export class UserService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async signUp(createUserDto: CreateUserDto): Promise<JwtTokenResponse> {
+    async signUp(createUserDto: CreateUserDto): Promise<JwtTokenDto> {
         const existingUser = await this.prisma.user.findFirst({
             where: {
                 OR: [{ name: createUserDto.name }, { email: createUserDto.email }],
             },
         });
+
         if (existingUser) {
             if (existingUser.email === createUserDto.email) {
                 throw new ConflictException("User with this email already exists");
@@ -61,7 +61,7 @@ export class UserService {
         return { token };
     }
 
-    async signIn(loginUserDto: LoginUserDto): Promise<JwtTokenResponse> {
+    async signIn(loginUserDto: LoginUserDto): Promise<JwtTokenDto> {
         const user = await this.prisma.user.findUnique({
             where: { email: loginUserDto.email },
         });
@@ -72,7 +72,7 @@ export class UserService {
         const isValid = await argon2.verify(user.password, loginUserDto.password);
 
         if (!isValid) {
-            throw new UnauthorizedException("Wrong Password");
+            throw new UnauthorizedException("Provided password was wrong");
         }
 
         const token = jwt.sign(
@@ -86,7 +86,7 @@ export class UserService {
         return { token };
     }
 
-    async authorize(authorizeUserDto: AuthorizeUserDto): Promise<UserDto> {
+    async authorize(authorizeUserDto: JwtTokenDto): Promise<UserDto> {
         const decoded = jwt.verify(
             authorizeUserDto.token,
             process.env.JWT_SECRET as string,
@@ -100,14 +100,10 @@ export class UserService {
         });
 
         if (!user) {
-            throw new NotFoundException("User does not exists");
+            throw new NotFoundException("This user does not exists");
         }
 
         return user;
-    }
-
-    async fetchAll() {
-        return await this.prisma.user.findMany();
     }
 
     async update(id: string, updateProfileDto: UpdateProfileDto) {
@@ -115,5 +111,9 @@ export class UserService {
             where: { id },
             data: updateProfileDto,
         });
+    }
+
+    async fetchAll() {
+        return await this.prisma.user.findMany();
     }
 }

@@ -10,50 +10,52 @@ import {
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { LoginUserDto } from "src/user/dto/login-user.dto";
-import { AuthorizeUserDto } from "src/user/dto/authorization-user.dto";
+import { LoginUserDto } from "~/user/dto/login-user.dto";
 import {
+    ApiBadRequestResponse,
     ApiBearerAuth,
     ApiConflictResponse,
+    ApiCreatedResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { JwtTokenResponse } from "src/user/dto/jwt-token-response.dto";
-import { UserDto } from "src/user/dto/user.dto";
-import { UpdateProfileDto } from "src/user/dto/update-profile.dto";
-import { AuthGuard } from "src/auth/auth.guard";
-import { UploadBannerResponse } from "src/event/dto/upload-banner-response.dto";
-import { ImageUpload } from "src/common/decorators/image-upload.decorator";
-import { FileService } from "src/file/file.service";
+import { UserDto } from "~/user/dto/user.dto";
+import { UpdateProfileDto } from "~/user/dto/update-profile.dto";
+import { AuthGuard } from "~/auth/auth.guard";
+import { UploadBannerResponse } from "~/event/dto/upload-banner-response.dto";
+import { ImageUpload } from "~/common/decorators/image-upload.decorator";
+import { FileService } from "~/file/file.service";
+import { JwtTokenDto } from "~/user/dto/jwt-token.dto";
 
 @Controller("user")
 export class UserController {
     constructor(
         private readonly userService: UserService,
         private readonly fileService: FileService,
-    ) { }
+    ) {}
 
     @Post("signUp")
-    @ApiOkResponse({ type: JwtTokenResponse, description: "JWT Token" })
-    @ApiConflictResponse({ description: "User already exists" })
-    async signUp(@Body() createUserDto: CreateUserDto): Promise<JwtTokenResponse | null> {
+    @ApiCreatedResponse({ type: JwtTokenDto, description: "JWT Token" })
+    @ApiConflictResponse({
+        description: "User with this email, username, or credentials already exists",
+    })
+    async signUp(@Body() createUserDto: CreateUserDto): Promise<JwtTokenDto> {
         return await this.userService.signUp(createUserDto);
     }
 
     @Post("signIn")
-    @ApiOkResponse({ type: JwtTokenResponse, description: "JWT Token" })
-    @ApiUnauthorizedResponse({ description: "Wrong Password" })
+    @ApiOkResponse({ type: JwtTokenDto, description: "JWT Token" })
+    @ApiUnauthorizedResponse({ description: "Provided password was wrong" })
     @ApiNotFoundResponse({ description: "User with this email does not exist" })
-    async signIn(@Body() loginUserDto: LoginUserDto): Promise<JwtTokenResponse | null> {
+    async signIn(@Body() loginUserDto: LoginUserDto): Promise<JwtTokenDto | null> {
         return await this.userService.signIn(loginUserDto);
     }
 
     @Post("auth")
     @ApiOkResponse({ type: UserDto, description: "Returns user object" })
-    @ApiNotFoundResponse({ description: "User does not exists" })
-    @ApiUnauthorizedResponse({ description: "Could not authorize your session" })
-    async authorize(@Body() authorizeUserDto: AuthorizeUserDto) {
+    @ApiNotFoundResponse({ description: "This user does not exists" })
+    async authorize(@Body() authorizeUserDto: JwtTokenDto) {
         return await this.userService.authorize(authorizeUserDto);
     }
 
@@ -77,6 +79,8 @@ export class UserController {
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
     @ImageUpload("photo", "profiles")
+    @ApiOkResponse({ type: UploadBannerResponse, description: "Upload successful" })
+    @ApiBadRequestResponse({ description: "File upload failed" })
     async uploadProfilePhoto(
         @UploadedFile() file: Express.Multer.File,
     ): Promise<UploadBannerResponse> {

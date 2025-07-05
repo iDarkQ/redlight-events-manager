@@ -17,7 +17,10 @@
         "noImplicitAny": false,
         "strictBindCallApply": false,
         "noFallthroughCasesInSwitch": false,
-        "moduleResolution": "bundler"
+        "moduleResolution": "bundler",
+        "paths": {
+            "~/*": ["src/*"]
+        }
     },
     "include": ["src"],
     "exclude": ["node_modules", "dist"]
