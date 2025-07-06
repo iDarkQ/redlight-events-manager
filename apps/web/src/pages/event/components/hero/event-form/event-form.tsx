@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { EventFormData, useEventForm, eventStatuses } from ".";
@@ -28,10 +28,16 @@ export interface EventFormProps {
 }
 
 export const EventForm = ({ defaultValues, onFinish }: EventFormProps) => {
-  const { isSubmitting, register, handleSubmit, errors, setValue, watch } = useEventForm(
+  const { isSubmitting, register, handleSubmit, errors, setValue, watch, reset } = useEventForm(
     defaultValues,
     onFinish,
   );
+
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
 
   const [uploading, setUploading] = useState(false);
 

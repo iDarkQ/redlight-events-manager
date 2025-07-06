@@ -33,7 +33,7 @@ export const HeroTitle = () => {
   };
 
   return (
-    <div>
+    <div className={styles.heading}>
       <h1>
         <strong>
           {selectedEvent?.title} {addToCalendar()}

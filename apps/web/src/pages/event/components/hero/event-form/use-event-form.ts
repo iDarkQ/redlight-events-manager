@@ -52,6 +52,7 @@ export const useEventForm = (
         formState: { errors },
         setValue,
         watch,
+        reset,
     } = useForm<EventFormData>({
         resolver: zodResolver(eventFormSchema),
         defaultValues: mapEventDtoToFormData(defaultValues),
@@ -72,5 +73,5 @@ export const useEventForm = (
         setSubmitting(false);
     });
 
-    return { isSubmitting, register, handleSubmit, errors, onSubmit: handleSubmit, setValue, watch };
+    return { isSubmitting, register, handleSubmit, errors, reset, onSubmit: handleSubmit, setValue, watch };
 };

@@ -12,7 +12,7 @@ export const HeroJoinModal = () => {
     const link = getGoogleCalendarLink();
 
     return (
-      <Link link={link}>
+      <Link isExternalLink={true} link={link}>
         <Button color="red" className={styles.action}>
           Add To Google Calendar <SiGooglecalendar />
         </Button>
