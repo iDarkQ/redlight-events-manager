@@ -16,6 +16,6 @@ export const FilterFormMap = forwardRef<FilterFormMapRef, FilterFormMapProps>(
   ({ updateArea }: FilterFormMapProps, ref) => {
     const { mapContainerRef } = useFilterFormMap({ updateArea }, ref);
 
-    return <div ref={mapContainerRef} id="map" className={styles.map}></div>;
+    return <div ref={mapContainerRef} className={styles.map}></div>;
   },
 );
