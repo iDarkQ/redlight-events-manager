@@ -4,3 +4,13 @@
     gap: var(--padding-lg);
     width: 100%;
 }
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.button {
+    flex: 1;
+}

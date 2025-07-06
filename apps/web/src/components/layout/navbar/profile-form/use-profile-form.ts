@@ -4,12 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { UpdateProfileDto } from "~/lib/api";
 import dayjs from "dayjs";
-import { INPUT_DATE_FORMAT } from "~/utils/date";
+import { INPUT_DATE_FORMAT, pastDateSchema } from "~/utils/date";
 
 const userFormSchema = z.object({
-    birthday: z.string().refine((val) => val && !isNaN(Date.parse(val)), {
-        message: "A valid date is required",
-    }),
+    birthday: pastDateSchema,
     profile: z.string().nullable(),
 });
 
