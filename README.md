@@ -6,7 +6,7 @@ This is a sports event management platform built as a **Turborepo** project with
 
 ## Preview of the website:
 
-[![Watch the video](ttps://raw.githubusercontent.com/iDarkQ/redlight-events-manager/main/docs/preview.png)](https://raw.githubusercontent.com/iDarkQ/redlight-events-manager/main/docs/preview.mp4)
+[![Watch the video](https://raw.githubusercontent.com/iDarkQ/redlight-events-manager/main/docs/preview.png)](https://raw.githubusercontent.com/iDarkQ/redlight-events-manager/main/docs/preview.mp4)
 
 ---
 
