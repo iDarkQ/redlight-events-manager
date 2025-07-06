@@ -15,7 +15,6 @@
     "@mapbox/mapbox-sdk": "^0.16.1",
     "@openapitools/openapi-generator-cli": "^2.21.0",
     "@turf/turf": "^7.2.0",
-    "calendar-link": "^2.11.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "mapbox-gl": "^3.13.0",

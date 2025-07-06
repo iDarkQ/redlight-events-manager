@@ -6,6 +6,7 @@ import { defaultEvent, useEvent } from "~/providers/event";
 import { routeCreateEvent, routeViewEvent } from "~/utils/routes";
 import { EventDto } from "~/lib/api";
 import { EventCard } from "~/components/event-card";
+import { useUser } from "~/providers/user";
 
 interface EventsPlannedProps {
   events: EventDto[];
@@ -13,6 +14,7 @@ interface EventsPlannedProps {
 
 export const EventsPlanned = ({ events }: EventsPlannedProps) => {
   const { setSelectedEvent } = useEvent();
+  const { user } = useUser();
   const navigate = useNavigate();
 
   const handleCreateEvent = () => {
@@ -29,9 +31,11 @@ export const EventsPlanned = ({ events }: EventsPlannedProps) => {
     <>
       <div className={styles.planned}>
         <h3>Planned Events</h3>
-        <Button onClick={handleCreateEvent} color="red">
-          Create Event <AiOutlinePlus />
-        </Button>
+        {user && (
+          <Button onClick={handleCreateEvent} color="red">
+            Create Event <AiOutlinePlus />
+          </Button>
+        )}
       </div>
       {events.length === 0 && <EventsEmpty />}
       <div className={styles.events}>

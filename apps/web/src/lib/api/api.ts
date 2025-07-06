@@ -26,15 +26,15 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
- * @interface AuthorizeUserDto
+ * @interface BanUserDto
  */
-export interface AuthorizeUserDto {
+export interface BanUserDto {
     /**
-     * 
-     * @type {string}
-     * @memberof AuthorizeUserDto
+     * Determins whether user is banned
+     * @type {boolean}
+     * @memberof BanUserDto
      */
-    'token': string;
+    'banned': boolean;
 }
 /**
  * 
@@ -61,7 +61,7 @@ export interface CreateEventRequestDto {
      */
     'description': string;
     /**
-     * Date of the event
+     * Date when event happens
      * @type {string}
      * @memberof CreateEventRequestDto
      */
@@ -112,25 +112,25 @@ export interface CreateEventRequestDto {
  */
 export interface CreateUserDto {
     /**
-     * 
+     * User\'s full name.
      * @type {string}
      * @memberof CreateUserDto
      */
     'name': string;
     /**
-     * 
+     * User\'s email address.
      * @type {string}
      * @memberof CreateUserDto
      */
     'email': string;
     /**
-     * 
+     * User\'s account password. Must be between 6 and 100 characters.
      * @type {string}
      * @memberof CreateUserDto
      */
     'password': string;
     /**
-     * 
+     * User\'s date of birth. ISO 8601 date format.
      * @type {string}
      * @memberof CreateUserDto
      */
@@ -179,7 +179,7 @@ export interface EventDto {
      */
     'createdAt': string;
     /**
-     * Date of the event
+     * Date when event happens
      * @type {string}
      * @memberof EventDto
      */
@@ -259,13 +259,13 @@ export type EventStatus = typeof EventStatus[keyof typeof EventStatus];
 /**
  * 
  * @export
- * @interface JwtTokenResponse
+ * @interface JwtTokenDto
  */
-export interface JwtTokenResponse {
+export interface JwtTokenDto {
     /**
-     * 
+     * A unique token for user authentication
      * @type {string}
-     * @memberof JwtTokenResponse
+     * @memberof JwtTokenDto
      */
     'token': string;
 }
@@ -276,13 +276,13 @@ export interface JwtTokenResponse {
  */
 export interface LoginUserDto {
     /**
-     * 
+     * User\'s email address.
      * @type {string}
      * @memberof LoginUserDto
      */
     'email': string;
     /**
-     * 
+     * User\'s account password. Must be between 6 and 100 characters.
      * @type {string}
      * @memberof LoginUserDto
      */
@@ -294,6 +294,12 @@ export interface LoginUserDto {
  * @interface ParticipantDto
  */
 export interface ParticipantDto {
+    /**
+     * Role of the user
+     * @type {UserRole}
+     * @memberof ParticipantDto
+     */
+    'role': UserRole;
     /**
      * Unique identifier of the user
      * @type {string}
@@ -312,7 +318,15 @@ export interface ParticipantDto {
      * @memberof ParticipantDto
      */
     'profile': string | null;
+    /**
+     * Determins whether user is banned
+     * @type {boolean}
+     * @memberof ParticipantDto
+     */
+    'banned': boolean;
 }
+
+
 /**
  * 
  * @export
@@ -338,7 +352,7 @@ export interface UpdateEventDto {
      */
     'description'?: string;
     /**
-     * Date of the event
+     * Date when event happens
      * @type {string}
      * @memberof UpdateEventDto
      */
@@ -404,11 +418,26 @@ export interface UpdateProfileDto {
 /**
  * 
  * @export
+ * @interface UpdateRoleDto
+ */
+export interface UpdateRoleDto {
+    /**
+     * Role of the user
+     * @type {UserRole}
+     * @memberof UpdateRoleDto
+     */
+    'role': UserRole;
+}
+
+
+/**
+ * 
+ * @export
  * @interface UploadBannerResponse
  */
 export interface UploadBannerResponse {
     /**
-     * 
+     * A link for event banner
      * @type {string}
      * @memberof UploadBannerResponse
      */
@@ -420,6 +449,12 @@ export interface UploadBannerResponse {
  * @interface UserDto
  */
 export interface UserDto {
+    /**
+     * Role of the user
+     * @type {UserRole}
+     * @memberof UserDto
+     */
+    'role': UserRole;
     /**
      * Unique identifier of the user
      * @type {string}
@@ -439,11 +474,11 @@ export interface UserDto {
      */
     'email': string;
     /**
-     * Role of the user
-     * @type {string}
+     * Determins whether user is banned
+     * @type {boolean}
      * @memberof UserDto
      */
-    'role': string;
+    'banned': boolean;
     /**
      * Profile description or URL of the user
      * @type {string}
@@ -457,6 +492,22 @@ export interface UserDto {
      */
     'birthday': string;
 }
+
+
+/**
+ * Role of the user
+ * @export
+ * @enum {string}
+ */
+
+export const UserRole = {
+    Admin: 'ADMIN',
+    Participant: 'PARTICIPANT'
+} as const;
+
+export type UserRole = typeof UserRole[keyof typeof UserRole];
+
+
 
 /**
  * EventApi - axios parameter creator
@@ -605,7 +656,7 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} id 
-         * @param {string} [userId] 
+         * @param {string} [userId] Unique identifier of the user
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -805,7 +856,7 @@ export const EventApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eventControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async eventControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EventDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.eventControllerFindOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['EventApi.eventControllerFindOne']?.[localVarOperationServerIndex]?.url;
@@ -826,7 +877,7 @@ export const EventApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
-         * @param {string} [userId] 
+         * @param {string} [userId] Unique identifier of the user
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -906,7 +957,7 @@ export const EventApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eventControllerFindOne(id: string, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        eventControllerFindOne(id: string, options?: RawAxiosRequestConfig): AxiosPromise<EventDto> {
             return localVarFp.eventControllerFindOne(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -921,7 +972,7 @@ export const EventApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @param {string} id 
-         * @param {string} [userId] 
+         * @param {string} [userId] Unique identifier of the user
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1012,7 +1063,7 @@ export class EventApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
-     * @param {string} [userId] 
+     * @param {string} [userId] Unique identifier of the user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EventApi
@@ -1066,13 +1117,13 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @param {AuthorizeUserDto} authorizeUserDto 
+         * @param {JwtTokenDto} jwtTokenDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerAuthorize: async (authorizeUserDto: AuthorizeUserDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'authorizeUserDto' is not null or undefined
-            assertParamExists('userControllerAuthorize', 'authorizeUserDto', authorizeUserDto)
+        userControllerAuthorize: async (jwtTokenDto: JwtTokenDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'jwtTokenDto' is not null or undefined
+            assertParamExists('userControllerAuthorize', 'jwtTokenDto', jwtTokenDto)
             const localVarPath = `/user/auth`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1092,7 +1143,83 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(authorizeUserDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(jwtTokenDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {BanUserDto} banUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerBanUser: async (id: string, banUserDto: BanUserDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('userControllerBanUser', 'id', id)
+            // verify required parameter 'banUserDto' is not null or undefined
+            assertParamExists('userControllerBanUser', 'banUserDto', banUserDto)
+            const localVarPath = `/user/ban/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(banUserDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerFetchAll: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1210,6 +1337,49 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} id 
+         * @param {UpdateRoleDto} updateRoleDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerUpdateRole: async (id: string, updateRoleDto: UpdateRoleDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('userControllerUpdateRole', 'id', id)
+            // verify required parameter 'updateRoleDto' is not null or undefined
+            assertParamExists('userControllerUpdateRole', 'updateRoleDto', updateRoleDto)
+            const localVarPath = `/user/role/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateRoleDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {File} [photo] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1262,14 +1432,38 @@ export const UserApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {AuthorizeUserDto} authorizeUserDto 
+         * @param {JwtTokenDto} jwtTokenDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerAuthorize(authorizeUserDto: AuthorizeUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerAuthorize(authorizeUserDto, options);
+        async userControllerAuthorize(jwtTokenDto: JwtTokenDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerAuthorize(jwtTokenDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerAuthorize']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {BanUserDto} banUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerBanUser(id: string, banUserDto: BanUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerBanUser(id, banUserDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerBanUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerFetchAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ParticipantDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerFetchAll(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerFetchAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1278,7 +1472,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerSignIn(loginUserDto: LoginUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtTokenResponse>> {
+        async userControllerSignIn(loginUserDto: LoginUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtTokenDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerSignIn(loginUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerSignIn']?.[localVarOperationServerIndex]?.url;
@@ -1290,7 +1484,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerSignUp(createUserDto: CreateUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtTokenResponse>> {
+        async userControllerSignUp(createUserDto: CreateUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtTokenDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerSignUp(createUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerSignUp']?.[localVarOperationServerIndex]?.url;
@@ -1306,6 +1500,19 @@ export const UserApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerUpdate(updateProfileDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {UpdateRoleDto} updateRoleDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerUpdateRole(id: string, updateRoleDto: UpdateRoleDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerUpdateRole(id, updateRoleDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerUpdateRole']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1332,12 +1539,30 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @param {AuthorizeUserDto} authorizeUserDto 
+         * @param {JwtTokenDto} jwtTokenDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerAuthorize(authorizeUserDto: AuthorizeUserDto, options?: RawAxiosRequestConfig): AxiosPromise<UserDto> {
-            return localVarFp.userControllerAuthorize(authorizeUserDto, options).then((request) => request(axios, basePath));
+        userControllerAuthorize(jwtTokenDto: JwtTokenDto, options?: RawAxiosRequestConfig): AxiosPromise<UserDto> {
+            return localVarFp.userControllerAuthorize(jwtTokenDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {BanUserDto} banUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerBanUser(id: string, banUserDto: BanUserDto, options?: RawAxiosRequestConfig): AxiosPromise<UserDto> {
+            return localVarFp.userControllerBanUser(id, banUserDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerFetchAll(options?: RawAxiosRequestConfig): AxiosPromise<Array<ParticipantDto>> {
+            return localVarFp.userControllerFetchAll(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1345,7 +1570,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerSignIn(loginUserDto: LoginUserDto, options?: RawAxiosRequestConfig): AxiosPromise<JwtTokenResponse> {
+        userControllerSignIn(loginUserDto: LoginUserDto, options?: RawAxiosRequestConfig): AxiosPromise<JwtTokenDto> {
             return localVarFp.userControllerSignIn(loginUserDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1354,7 +1579,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerSignUp(createUserDto: CreateUserDto, options?: RawAxiosRequestConfig): AxiosPromise<JwtTokenResponse> {
+        userControllerSignUp(createUserDto: CreateUserDto, options?: RawAxiosRequestConfig): AxiosPromise<JwtTokenDto> {
             return localVarFp.userControllerSignUp(createUserDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1365,6 +1590,16 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          */
         userControllerUpdate(updateProfileDto: UpdateProfileDto, options?: RawAxiosRequestConfig): AxiosPromise<UserDto> {
             return localVarFp.userControllerUpdate(updateProfileDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {UpdateRoleDto} updateRoleDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerUpdateRole(id: string, updateRoleDto: UpdateRoleDto, options?: RawAxiosRequestConfig): AxiosPromise<UserDto> {
+            return localVarFp.userControllerUpdateRole(id, updateRoleDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1387,13 +1622,35 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
 export class UserApi extends BaseAPI {
     /**
      * 
-     * @param {AuthorizeUserDto} authorizeUserDto 
+     * @param {JwtTokenDto} jwtTokenDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public userControllerAuthorize(authorizeUserDto: AuthorizeUserDto, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).userControllerAuthorize(authorizeUserDto, options).then((request) => request(this.axios, this.basePath));
+    public userControllerAuthorize(jwtTokenDto: JwtTokenDto, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).userControllerAuthorize(jwtTokenDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {BanUserDto} banUserDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerBanUser(id: string, banUserDto: BanUserDto, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).userControllerBanUser(id, banUserDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerFetchAll(options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).userControllerFetchAll(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1427,6 +1684,18 @@ export class UserApi extends BaseAPI {
      */
     public userControllerUpdate(updateProfileDto: UpdateProfileDto, options?: RawAxiosRequestConfig) {
         return UserApiFp(this.configuration).userControllerUpdate(updateProfileDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {UpdateRoleDto} updateRoleDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerUpdateRole(id: string, updateRoleDto: UpdateRoleDto, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).userControllerUpdateRole(id, updateRoleDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

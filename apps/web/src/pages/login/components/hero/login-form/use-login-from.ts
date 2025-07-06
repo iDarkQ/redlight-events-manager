@@ -6,12 +6,13 @@ import { useUser } from "~/providers/user";
 import { useNavigate } from "react-router";
 import { Routes } from "~/utils/routes";
 import { useMessage } from "~/providers/message";
+import { pastDateSchema } from "~/utils/date";
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
     password: z.string().min(6, { message: "Password must be at least 6 characters" }).max(100, { message: "Password must be at most 100 characters" }),
-    nickname: z.string().min(2, { message: "Name must be at least 2 characters" }).min(50, { message: "Name must be at most 50 characters" }).optional(),
-    birthday: z.string().optional(),
+    nickname: z.string().min(2, { message: "Name must be at least 2 characters" }).max(50, { message: "Name must be at most 50 characters" }).optional(),
+    birthday: pastDateSchema.optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -57,8 +58,8 @@ export const useLoginForm = () => {
         resolver: zodResolver(
             signingUp
                 ? formSchema.extend({
-                    nickname: z.string().min(2, { message: "Name must be at least 2 characters" }).min(50, { message: "Name must be at most 50 characters" }),
-                    birthday: z.string().refine((val) => val, { message: "Birthday is required" }),
+                    nickname: z.string().min(2, { message: "Name must be at least 2 characters" }).max(50, { message: "Name must be at most 50 characters" }),
+                    birthday: pastDateSchema,
                 })
                 : formSchema.pick({ email: true, password: true }),
         ),

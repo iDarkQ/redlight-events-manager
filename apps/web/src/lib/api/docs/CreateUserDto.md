@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** |  | [default to undefined]
-**email** | **string** |  | [default to undefined]
-**password** | **string** |  | [default to undefined]
-**birthday** | **string** |  | [default to undefined]
+**name** | **string** | User\&#39;s full name. | [default to undefined]
+**email** | **string** | User\&#39;s email address. | [default to undefined]
+**password** | **string** | User\&#39;s account password. Must be between 6 and 100 characters. | [default to undefined]
+**birthday** | **string** | User\&#39;s date of birth. ISO 8601 date format. | [default to undefined]
 
 ## Example
 

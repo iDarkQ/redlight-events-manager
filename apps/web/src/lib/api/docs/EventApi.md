@@ -60,7 +60,7 @@ const { status, data } = await apiInstance.eventControllerCreate(
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**201** |  |  -  |
+|**201** | Creates and returns new event |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -103,12 +103,12 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Returns all events |  -  |
+|**200** | Returns all existing events |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **eventControllerFindOne**
-> object eventControllerFindOne()
+> EventDto eventControllerFindOne()
 
 
 ### Example
@@ -138,7 +138,7 @@ const { status, data } = await apiInstance.eventControllerFindOne(
 
 ### Return type
 
-**object**
+**EventDto**
 
 ### Authorization
 
@@ -153,7 +153,7 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** |  |  -  |
+|**200** | Returns specific event based on id |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -203,7 +203,10 @@ const { status, data } = await apiInstance.eventControllerJoin(
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** |  |  -  |
+|**200** | User joined selected event |  -  |
+|**400** | Already part of event |  -  |
+|**404** | Event does not exist |  -  |
+|**409** | Event is full |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -223,7 +226,7 @@ const configuration = new Configuration();
 const apiInstance = new EventApi(configuration);
 
 let id: string; // (default to undefined)
-let userId: string; // (optional) (default to undefined)
+let userId: string; //Unique identifier of the user (optional) (default to undefined)
 
 const { status, data } = await apiInstance.eventControllerLeave(
     id,
@@ -236,7 +239,7 @@ const { status, data } = await apiInstance.eventControllerLeave(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **id** | [**string**] |  | defaults to undefined|
-| **userId** | [**string**] |  | (optional) defaults to undefined|
+| **userId** | [**string**] | Unique identifier of the user | (optional) defaults to undefined|
 
 
 ### Return type
@@ -256,7 +259,11 @@ const { status, data } = await apiInstance.eventControllerLeave(
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** |  |  -  |
+|**200** | User left selected event |  -  |
+|**400** | Creator cannot leave its own event or Not part of event |  -  |
+|**403** | Only admins can remove other users from an event |  -  |
+|**404** | Event does not exist |  -  |
+|**409** | Event is already completed |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -306,7 +313,9 @@ void (empty response body)
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Successfully deleted record |  -  |
+|**200** | Successfully deleted event |  -  |
+|**401** | You don\&#39;t own this event |  -  |
+|**404** | Event does not exist |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -360,7 +369,9 @@ const { status, data } = await apiInstance.eventControllerUpdate(
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** |  |  -  |
+|**200** | Updates event by id |  -  |
+|**403** | Only admins can edit events from other users |  -  |
+|**404** | Event does not exist |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -411,6 +422,7 @@ const { status, data } = await apiInstance.eventControllerUploadEventPhoto(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Successfully uploaded file |  -  |
+|**400** | File upload failed |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

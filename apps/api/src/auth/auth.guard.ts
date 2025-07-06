@@ -1,4 +1,10 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import {
+    CanActivate,
+    ExecutionContext,
+    ForbiddenException,
+    Injectable,
+    UnauthorizedException,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
 import { PrismaService } from "~/prisma.service";
@@ -22,6 +28,10 @@ export class AuthGuard implements CanActivate {
             });
 
             const user = await this.prisma.user.findFirstOrThrow({ where: { id: payload.uId } });
+
+            if (user.banned) {
+                throw new ForbiddenException("This user is banned");
+            }
 
             request["user"] = user;
         } catch {

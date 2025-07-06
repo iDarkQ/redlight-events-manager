@@ -8,12 +8,17 @@ interface AvatarProps {
   title: string;
   children: ReactNode;
   size?: "small" | "medium" | "large";
+  onClick?: () => void;
+  className?: string;
 }
 
-export const Avatar = ({ title, children, size = "medium" }: AvatarProps) => (
-  <Tooltip title={title}>
-    <Icon>
-      <div className={clsx(styles.participant, styles[size])} title={title}>
+export const Avatar = ({ title, children, onClick, className, size = "medium" }: AvatarProps) => (
+  <Tooltip title={title} className={className}>
+    <Icon onClick={onClick}>
+      <div
+        className={clsx(styles.participant, onClick && styles.clickable, styles[size])}
+        title={title}
+      >
         {children}
       </div>
     </Icon>

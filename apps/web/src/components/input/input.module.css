@@ -63,9 +63,8 @@
 }
 
 .option {
-    color: #000000;
     position: relative;
-    padding: 0.375rem 0.5rem;
+    padding: var(--padding-md) var(--padding-lg);
     margin: 0;
     color: #000000;
     border-bottom: 1px solid #454545;

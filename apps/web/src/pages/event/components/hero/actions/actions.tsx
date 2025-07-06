@@ -38,7 +38,7 @@ export const Actions = ({ state }: EventProps) => {
   return (
     <>
       {/* Edit Event Modal */}
-      {isCreator && canEdit && (
+      {canEdit && (
         <Modal title="Edit Event" open={isEditModalOpen} onClose={() => setEditModalOpen(false)}>
           <EventForm defaultValues={selectedEvent} onFinish={onFinish} />
         </Modal>
@@ -61,8 +61,10 @@ export const Actions = ({ state }: EventProps) => {
           <ActionsJoinLeaveButton
             event={selectedEvent}
             alreadyJoined={alreadyJoined}
+            canEdit={canEdit}
             onJoin={onJoin}
             onLeave={onLeave}
+            turnOnEditMode={turnOnEditMode}
           />
         ) : (
           <ActionsUserView

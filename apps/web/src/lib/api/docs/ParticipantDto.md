@@ -5,9 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**role** | [**UserRole**](UserRole.md) | Role of the user | [default to undefined]
 **id** | **string** | Unique identifier of the user | [default to undefined]
 **name** | **string** | Name of the user | [default to undefined]
 **profile** | **string** | Profile description or URL of the user | [default to undefined]
+**banned** | **boolean** | Determins whether user is banned | [default to undefined]
 
 ## Example
 
@@ -15,9 +17,11 @@ Name | Type | Description | Notes
 import { ParticipantDto } from './api';
 
 const instance: ParticipantDto = {
+    role,
     id,
     name,
     profile,
+    banned,
 };
 ```
 

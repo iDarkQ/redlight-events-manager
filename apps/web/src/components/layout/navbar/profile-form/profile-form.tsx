@@ -5,6 +5,7 @@ import { UserFormData, useProfileForm, styles } from ".";
 import { UpdateProfileDto } from "~/lib/api";
 import { Upload } from "~/components/upload";
 import { useUser } from "~/providers/user";
+import { ErrorMessage } from "~/components/error-message";
 
 interface FieldConfig {
   name: keyof UserFormData;
@@ -17,9 +18,10 @@ interface FieldConfig {
 export interface ProfileFormProps {
   defaultValues?: UpdateProfileDto;
   onFinish?: (data: UpdateProfileDto) => Promise<void>;
+  onLogout?: () => void;
 }
 
-export const ProfileForm = ({ defaultValues, onFinish }: ProfileFormProps) => {
+export const ProfileForm = ({ defaultValues, onFinish, onLogout }: ProfileFormProps) => {
   const { isSubmitting, register, handleSubmit, errors, setValue, watch } = useProfileForm(
     defaultValues,
     onFinish,
@@ -58,7 +60,9 @@ export const ProfileForm = ({ defaultValues, onFinish }: ProfileFormProps) => {
       <div key={name}>
         <label htmlFor={name}>{label}</label>
         <Input {...inputProps} />
-        {errors[name] && <span>{(errors[name] as { message?: string })?.message}</span>}
+        {errors[name] && (
+          <ErrorMessage>{(errors[name] as { message?: string })?.message}</ErrorMessage>
+        )}
       </div>
     );
   };
@@ -92,9 +96,14 @@ export const ProfileForm = ({ defaultValues, onFinish }: ProfileFormProps) => {
           />
         </div>
 
-        <Button disabled={uploading} loading={isSubmitting} type="submit">
-          Finish
-        </Button>
+        <div className={styles.buttons}>
+          <Button onClick={onLogout} className={styles.button} disabled={uploading} loading={isSubmitting} type="button" color="brightRed">
+            Logout
+          </Button>
+          <Button className={styles.button} disabled={uploading} loading={isSubmitting} type="submit">
+            Save
+          </Button>
+        </div>
       </form>
     </>
   );

@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**fileUrl** | **string** |  | [optional] [default to undefined]
+**fileUrl** | **string** | A link for event banner | [optional] [default to undefined]
 
 ## Example
 

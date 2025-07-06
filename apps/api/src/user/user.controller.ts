@@ -7,6 +7,10 @@ import {
     Request,
     BadRequestException,
     UploadedFile,
+    Get,
+    Param,
+    ConflictException,
+    NotFoundException,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -27,6 +31,10 @@ import { UploadBannerResponse } from "~/event/dto/upload-banner-response.dto";
 import { ImageUpload } from "~/common/decorators/image-upload.decorator";
 import { FileService } from "~/file/file.service";
 import { JwtTokenDto } from "~/user/dto/jwt-token.dto";
+import { UpdateRoleDto } from "~/user/dto/update-role.dto";
+import { BanUserDto } from "~/user/dto/ban-user.dto";
+import { AdminAuthGuard } from "~/auth/admin-auth.guard";
+import { ParticipantDto } from "~/user/dto/participant.dto";
 
 @Controller("user")
 export class UserController {
@@ -59,12 +67,67 @@ export class UserController {
         return await this.userService.authorize(authorizeUserDto);
     }
 
+    @Get()
+    @UseGuards(AdminAuthGuard)
+    @ApiBearerAuth()
+    @ApiOkResponse({
+        type: ParticipantDto,
+        description: "Returns all existing users",
+        isArray: true,
+    })
+    @ApiUnauthorizedResponse({ description: "You are not an admin" })
+    async fetchAll() {
+        return await this.userService.fetchAllAsParticipants();
+    }
+
+    @Patch("role/:id")
+    @UseGuards(AdminAuthGuard)
+    @ApiBearerAuth()
+    @ApiOkResponse({ type: UserDto, description: "Returns the updated user" })
+    @ApiUnauthorizedResponse({ description: "You are not an admin" })
+    @ApiNotFoundResponse({ description: "This user does not exist" })
+    @ApiConflictResponse({ description: "You can't change role of the default admin" })
+    async updateRole(@Param("id") id: string, @Body() updateRoleDto: UpdateRoleDto) {
+        const targetUser = await this.userService.fetchOne(id);
+
+        if (!targetUser) {
+            throw new NotFoundException("This user does not exist");
+        }
+
+        if (targetUser.email === process.env.DEFAULT_ADMIN) {
+            throw new ConflictException("You can't change role of the default admin");
+        }
+
+        return await this.userService.update(id, updateRoleDto);
+    }
+
+    @Patch("ban/:id")
+    @UseGuards(AdminAuthGuard)
+    @ApiBearerAuth()
+    @ApiOkResponse({ type: UserDto, description: "Returns the updated user" })
+    @ApiUnauthorizedResponse({ description: "You need to be admin to do it" })
+    async banUser(@Param("id") id: string, @Body() banUser: BanUserDto) {
+        const targetUser = await this.userService.fetchOne(id);
+
+        if (!targetUser) {
+            throw new NotFoundException("This user does not exist");
+        }
+
+        if (targetUser.email === process.env.DEFAULT_ADMIN) {
+            throw new ConflictException("You can't ban default admin");
+        }
+
+        return await this.userService.update(id, banUser);
+    }
+
     @Patch("profile")
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
     @ApiOkResponse({ type: UserDto, description: "Returns user object" })
     async update(@Body() updateProfileDto: UpdateProfileDto, @Request() req) {
-        if (updateProfileDto.profile) {
+        const user = req.user;
+
+        if (updateProfileDto.profile && user.profile !== updateProfileDto.profile) {
             const permanentPath = await this.fileService.moveTempToPermanent(
                 "profiles",
                 updateProfileDto.profile,

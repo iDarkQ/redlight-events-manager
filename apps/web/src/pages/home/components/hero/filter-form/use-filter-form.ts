@@ -7,22 +7,19 @@ import { Filter } from "~/providers/filter";
 import { INPUT_DATETIME_FORMAT } from "~/utils/date";
 
 const filterFormSchema = z.object({
-    type: z.string(),
-    dateFrom: z.string().refine(
-        (val) => val === "" || (!isNaN(Date.parse(val))),
-        { message: "A valid date is required" }
-    ),
-    dateTo: z.string().refine(
-        (val) => val === "" || (!isNaN(Date.parse(val))),
-        { message: "A valid date is required" }
-    ),
-    geomtry: z.number().array().array().array()
+    type: z.string().optional(),
+    dateFrom: z.string()
+        .optional(),
+    dateTo: z.string()
+        .optional(),
+    geomtry: z.number().array().array().array().optional()
 });
 
 export type FilterFormData = z.infer<typeof filterFormSchema>;
 
 const mapFilterToFormData = (filter?: Partial<Filter>): Partial<FilterFormData> => {
     if (!filter) return {};
+
     return {
         type: filter.type,
         dateFrom: dayjs(filter.dateFrom).format(INPUT_DATETIME_FORMAT), // ToISOString adds Z in the end /shrug
