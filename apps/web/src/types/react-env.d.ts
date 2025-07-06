@@ -4,6 +4,7 @@ declare module '*.module.css' {
 }
 
 declare module "*.png";
+declare module "*.md";
 
 declare module "*.svg?react" {
     import React from "react";

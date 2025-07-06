@@ -22,10 +22,10 @@ export const HeroModal = ({ participant, onClose, open }: HeroModalProps) => {
       </div>
 
       <div className={styles.buttons}>
-        <Button className={styles.button} color="brightRed" onClick={handleUpdateUserBan}>
+        <Button className={styles.button} color="red" onClick={handleUpdateUserBan}>
           {participant.banned ? "Unban" : "Ban"}
         </Button>
-        <Button className={styles.button} color="brightRed" onClick={handleUpdateUserRole}>
+        <Button className={styles.button} color="red" onClick={handleUpdateUserRole}>
           {participant.role === "ADMIN" ? "Devoke To User" : "Promote To Admin"}
         </Button>
       </div>

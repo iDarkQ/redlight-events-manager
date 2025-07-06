@@ -8,7 +8,11 @@ import clsx from "clsx";
 import { useState } from "react";
 import { MenuBurger } from "./menu-burger";
 
-export const Navbar = () => {
+interface NavbarProps {
+  className?: string;
+}
+
+export const Navbar = ({ className }: NavbarProps) => {
   const { user } = useUser();
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -16,7 +20,7 @@ export const Navbar = () => {
   return (
     <>
       <NavbarModal open={open} setOpen={setOpen} />
-      <header className={styles.header}>
+      <header className={clsx(styles.header, className)}>
         <nav className={clsx(styles.navbar, expanded && styles.fullscreen)}>
           <div className={clsx(styles.main, expanded ? styles.expanded : undefined)}>
             <NavbarTypewriter />

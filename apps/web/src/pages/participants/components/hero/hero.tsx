@@ -9,24 +9,26 @@ export const Hero = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <section className={styles.section}>
-      <HeroHeader />
-      <div className={styles.list}>
-        {participant && (
-          <HeroModal participant={participant} onClose={() => setOpen(false)} open={open} />
-        )}
-        {participants.map((p) => (
-          <AvatarUser
-            name={p.name}
-            profile={p.profile}
-            className={styles.avatar}
-            onClick={() => {
-              setSelctedParticipant(p.id);
-              setOpen(true);
-            }}
-          />
-        ))}
-      </div>
-    </section>
+    <div className={styles.wrapper}>
+      <section className={styles.section}>
+        <HeroHeader />
+        <div className={styles.list}>
+          {participant && (
+            <HeroModal participant={participant} onClose={() => setOpen(false)} open={open} />
+          )}
+          {participants.map((p) => (
+            <AvatarUser
+              name={p.name}
+              profile={p.profile}
+              className={styles.avatar}
+              onClick={() => {
+                setSelctedParticipant(p.id);
+                setOpen(true);
+              }}
+            />
+          ))}
+        </div>
+      </section>
+    </div>
   );
 };

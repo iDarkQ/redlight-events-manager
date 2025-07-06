@@ -1,3 +1,7 @@
+.wrapper {
+    background-color: var(--color-background-secondary);
+}
+
 .section {
     display: flex;
     flex-direction: column;
@@ -40,11 +44,12 @@
 
 .title {
     text-align: center;
+    color: #000
 }
 
 .description {
     text-align: center;
-    color: white;
+    color: #000;
 }
 
 .header {

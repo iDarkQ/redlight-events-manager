@@ -2,7 +2,6 @@ import { Routes, Route, BrowserRouter } from "react-router";
 import { CookiesProvider } from "react-cookie";
 import { Home } from "~/pages/home";
 import "~/assets/styles/global.css";
-import { Layout } from "~/components/layout";
 import { Login } from "~/pages/login";
 import { Event } from "~/pages/event";
 import { MessageProvider } from "~/providers/message";
@@ -11,6 +10,7 @@ import { EventProvider } from "~/providers/event";
 import ScrollToTop from "~/hooks/scroll-to-top";
 import { NotFound } from "~/pages/not-found";
 import { Participants } from "~/pages/participants";
+import { About } from "~/pages/about";
 // import { ProtectedRoute } from "~/components/protected-route";
 
 export const App = () => (
@@ -19,11 +19,11 @@ export const App = () => (
       <UserProvider>
         <EventProvider>
           <BrowserRouter>
-            <Layout>
               <ScrollToTop>
                 <Routes>
                   <Route index element={<Home />} />
                   <Route path="login" element={<Login />} />
+                  <Route path="about" element={<About />} />
                   <Route path="event">
                     <Route index element={<NotFound />} />
                     <Route path="view/:id" element={<Event state="view" />} />
@@ -37,7 +37,6 @@ export const App = () => (
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </ScrollToTop>
-            </Layout>
           </BrowserRouter>
         </EventProvider>
       </UserProvider>
