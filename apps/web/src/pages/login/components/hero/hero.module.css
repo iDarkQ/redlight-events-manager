@@ -6,7 +6,7 @@
     gap: var(--padding-lg);
     padding-block: var(--padding-xxl);
 
-    height: calc(100vh - var(--footer-height) - var(--navbar-height));
+    min-height: calc(100vh - var(--footer-height) - var(--navbar-height));
 }
 
 .form {
