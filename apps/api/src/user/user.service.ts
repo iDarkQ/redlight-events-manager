@@ -102,6 +102,10 @@ export class UserService {
         if (!user) {
             throw new NotFoundException("This user does not exists");
         }
+        if (user.banned) {
+            throw new ForbiddenException("This user is banned");
+        }
+
 
         return user;
     }

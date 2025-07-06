@@ -1,5 +1,8 @@
-import { IsString, IsEmail, IsDate, IsOptional } from "class-validator";
+import { IsString, IsEmail, IsDate, IsOptional, IsEnum, IsBoolean } from "class-validator";
 import { Type } from "class-transformer";
+import { IsPastDate } from "~/common/decorators/is-past-date.decorator";
+import { ApiProperty } from "@nestjs/swagger";
+import { UserRole } from "@prisma/client";
 
 export class UserDto {
     /**
@@ -24,11 +27,19 @@ export class UserDto {
     email: string;
 
     /**
-     * Role of the user
-     * @example "admin"
+     * Determins whether user is banned
+     * @example TRUE
      */
-    @IsString()
-    role: string;
+    @IsBoolean()
+    banned: boolean;
+
+    /**
+     * Role of the user
+     * @example "PARTICIPANT"
+     */
+    @ApiProperty({ enum: UserRole, enumName: "UserRole", example: UserRole.PARTICIPANT })
+    @IsEnum(UserRole)
+    role: UserRole;
 
     /**
      * Profile description or URL of the user
@@ -44,5 +55,6 @@ export class UserDto {
      */
     @Type(() => Date)
     @IsDate()
+    @IsPastDate()
     birthday: Date;
 }
