@@ -121,11 +121,18 @@ export class UserService {
         return await this.prisma.user.update({
             where: { id },
             data: data,
+            omit: {
+                password: true,
+            },
         });
     }
 
     async fetchAll() {
-        return await this.prisma.user.findMany();
+        return await this.prisma.user.findMany({
+            omit: {
+                password: true,
+            },
+        });
     }
 
     async fetchAllAsParticipants() {
@@ -133,6 +140,11 @@ export class UserService {
     }
 
     async fetchOne(id: string) {
-        return await this.prisma.user.findFirst({ where: { id } });
+        return await this.prisma.user.findFirst({
+            where: { id },
+            omit: {
+                password: true,
+            },
+        });
     }
 }
