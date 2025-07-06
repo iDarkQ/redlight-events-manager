@@ -15,10 +15,14 @@ export const HeroSearchBar = () => {
       <Modal title="Filter Events" open={open} onClose={() => setOpen(false)}>
         <FilterForm
           defaultValues={filter}
-          onFinish={async (data) => 
-            setFilter(data)}
-          onReset={async () => 
-            setFilter(defaultFilter)}
+          onFinish={async (data) => {
+            setFilter(data);
+            setOpen(false);
+          }}
+          onReset={async () => {
+            setFilter(defaultFilter);
+            setOpen(false);
+          }}
         />
       </Modal>
       <Input
