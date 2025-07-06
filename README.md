@@ -2,6 +2,8 @@
 
 This is a sports event management platform built as a **Turborepo** project with a **React (Vite)** frontend and a **NestJS** backend. It serves as a step towards my internship at [redlight.dev](https://redlight.dev/). The platform is designed specifically for **Redlight employees** to create, manage, and participate in sports events, with features like user roles, event registration, and event search.
 
+[Github Repo](https://github.com/iDarkQ/redlight-events-manager)
+
 ## Preview of the website:
 
 [![Watch the video](https://raw.githubusercontent.com/iDarkQ/redlight-events-manager/main/docs/preview.png)](https://raw.githubusercontent.com/iDarkQ/redlight-events-manager/main/docs/video.mp4)
@@ -106,7 +108,7 @@ At the root of your Turborepo:
 
 ```bash
 git clone https://github.com/iDarkQ/redlight-events-manager.git
-cd redlight-events-manager
+cd redlight-events-manager-main
 yarn install
 ```
 
