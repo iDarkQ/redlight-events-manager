@@ -1,6 +1,13 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { Configuration, UpdateProfileDto, UserApi, UserDto } from "~/lib/api";
+import {
+  Configuration,
+  ParticipantDto,
+  UpdateProfileDto,
+  UserApi,
+  UserDto,
+  UserRole,
+} from "~/lib/api";
 import { useMessage } from "~/providers/message";
 
 interface UserContextProps {
@@ -13,8 +20,14 @@ interface UserContextProps {
   signIn: (email: string, password: string) => Promise<UserDto | undefined>;
   authorize: (token: string) => Promise<UserDto | undefined>;
   user: UserDto | null;
+  participants: ParticipantDto[];
+  fetched: boolean;
   setUser: React.Dispatch<React.SetStateAction<UserDto | null>>;
   updateUser: (profileDto: UpdateProfileDto) => Promise<void>;
+  updateUserBan: (id: string, ban: boolean) => Promise<void>;
+  updateUserRole: (id: string, role: UserRole) => Promise<void>;
+  fetchParticipants: () => Promise<void>;
+  logout: () => void;
   uploadProfilePicture: (file: File) => Promise<string | undefined>;
 }
 
@@ -27,8 +40,10 @@ const UserContext = createContext<UserContextProps | undefined>(undefined);
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [cookie, setCookie, removeCookie] = useCookies(["sessionId"]);
   const { throwMessage } = useMessage();
+  const [fetched, setFetched] = useState(false);
 
   const [user, setUser] = useState<UserDto | null>(null);
+  const [participants, setParticipants] = useState<ParticipantDto[]>([]);
 
   const config = new Configuration({
     basePath: import.meta.env.VITE_LOCAL_BACKEND_URL,
@@ -78,10 +93,12 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
       if (data) {
         setUser(data);
+        setFetched(true);
         return data;
       }
     } catch (err) {
       throwMessage(err, "Failed to authorize");
+      setFetched(true);
     }
   };
 
@@ -105,9 +122,94 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     }
   };
 
+  const logout = () => {
+    try {
+      removeCookie("sessionId");
+
+      // HACK: For some reason removing cookie is not enough
+      // And so, I noticed that refreshing the site actually reloads them
+      // Thus, clearing the one I intended to delete
+      window.location.reload();
+
+      setUser(null);
+    } catch (err) {
+      throwMessage(err, "Failed to logout");
+    }
+  };
+
+  const fetchParticipants = async () => {
+    try {
+      const { data } = await userApi.userControllerFetchAll();
+
+      setParticipants(data);
+    } catch (err) {
+      throwMessage(err, "Failed to fetch participants");
+    }
+  };
+
+  const updateUserBan = async (id: string, ban: boolean) => {
+    try {
+      const { data } = await userApi.userControllerBanUser(id, { banned: ban });
+
+      setParticipants((prev) =>
+        prev.map((participant) =>
+          participant.id === data.id
+            ? {
+                ...participant,
+                ...data,
+              }
+            : participant,
+        ),
+      );
+    } catch (err) {
+      throwMessage(err, "Failed to ban participant");
+    }
+  };
+
+  const updateUserRole = async (id: string, role: UserRole) => {
+    try {
+      const { data } = await userApi.userControllerUpdateRole(id, { role });
+
+      setParticipants((prev) =>
+        prev.map((participant) =>
+          participant.id === data.id
+            ? {
+                ...participant,
+                ...data,
+              }
+            : participant,
+        ),
+      );
+    } catch (err) {
+      throwMessage(err, "Failed to ban participant");
+    }
+  };
+
+  useEffect(() => {
+    if (cookie.sessionId) {
+      authorize(cookie.sessionId);
+    } else {
+      setFetched(true);
+    }
+  }, []);
+
   return (
     <UserContext.Provider
-      value={{ signIn, signUp, authorize, updateUser, uploadProfilePicture, user, setUser }}
+      value={{
+        signIn,
+        signUp,
+        authorize,
+        updateUser,
+        updateUserBan,
+        updateUserRole,
+        uploadProfilePicture,
+        fetchParticipants,
+        participants,
+        user,
+        logout,
+        setUser,
+        fetched,
+      }}
     >
       {children}
     </UserContext.Provider>
