@@ -17,6 +17,7 @@ import { GOOGLE_CALENDAR_FORMAT } from "~/utils/date";
 interface EventContextProps {
   selectedEvent: EventDto | null;
   events: EventDto[];
+  fetched: boolean;
   setSelectedEvent: Dispatch<SetStateAction<EventDto | null>>;
   createEvent: () => Promise<EventDto | undefined>;
   updateEvent: () => Promise<void>;
@@ -55,6 +56,7 @@ export const defaultEvent: EventDto = {
 export const EventProvider = ({ children }: EventProviderProps) => {
   const [cookie] = useCookies(["sessionId"]);
   const { throwMessage } = useMessage();
+  const [fetched, setFetched] = useState(false);
 
   const config = new Configuration({
     basePath: import.meta.env.VITE_LOCAL_BACKEND_URL,
@@ -67,9 +69,11 @@ export const EventProvider = ({ children }: EventProviderProps) => {
   const [selectedEvent, setSelectedEvent] = useState<EventDto | null>(null);
 
   const fetchEvents = async () => {
+    setFetched(false);
     try {
       const { data } = await eventApi.eventControllerFindAll();
       setEvents(data);
+      setFetched(true);
     } catch (err) {
       throwMessage(err, "Failed to fetch events");
     }
@@ -207,6 +211,7 @@ export const EventProvider = ({ children }: EventProviderProps) => {
         deleteEvent,
         getGoogleCalendarLink,
         uploadBanner,
+        fetched,
       }}
     >
       {children}
