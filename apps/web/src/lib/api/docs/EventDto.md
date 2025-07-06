@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **title** | **string** | Title of the event | [default to undefined]
 **description** | **string** | Description of the event | [default to undefined]
 **createdAt** | **string** | Date when the event was created | [default to undefined]
-**date** | **string** | Date of the event | [default to undefined]
+**date** | **string** | Date when event happens | [default to undefined]
 **type** | **string** | Type of the event | [default to undefined]
 **maxParticipants** | **number** | Maximum number of participants | [default to undefined]
 **creatorId** | **string** | ID of the event creator | [default to undefined]

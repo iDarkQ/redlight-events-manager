@@ -1,19 +1,19 @@
-# UploadBannerResponse
+# JwtTokenDto
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**fileUrl** | **string** | A link for event banner | [optional] [default to undefined]
+**token** | **string** | A unique token for user authentication | [default to undefined]
 
 ## Example
 
 ```typescript
-import { UploadBannerResponse } from './api';
+import { JwtTokenDto } from './api';
 
-const instance: UploadBannerResponse = {
-    fileUrl,
+const instance: JwtTokenDto = {
+    token,
 };
 ```
 

@@ -1,19 +1,19 @@
-# UploadBannerResponse
+# UpdateRoleDto
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**fileUrl** | **string** | A link for event banner | [optional] [default to undefined]
+**role** | [**UserRole**](UserRole.md) | Role of the user | [default to undefined]
 
 ## Example
 
 ```typescript
-import { UploadBannerResponse } from './api';
+import { UpdateRoleDto } from './api';
 
-const instance: UploadBannerResponse = {
-    fileUrl,
+const instance: UpdateRoleDto = {
+    role,
 };
 ```
 

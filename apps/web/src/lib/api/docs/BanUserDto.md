@@ -1,19 +1,19 @@
-# UploadBannerResponse
+# BanUserDto
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**fileUrl** | **string** | A link for event banner | [optional] [default to undefined]
+**banned** | **boolean** | Determins whether user is banned | [default to undefined]
 
 ## Example
 
 ```typescript
-import { UploadBannerResponse } from './api';
+import { BanUserDto } from './api';
 
-const instance: UploadBannerResponse = {
-    fileUrl,
+const instance: BanUserDto = {
+    banned,
 };
 ```
 

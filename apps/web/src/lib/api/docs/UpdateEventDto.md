@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **status** | [**EventStatus**](EventStatus.md) | Status of the event | [optional] [default to undefined]
 **title** | **string** | Title of the event | [optional] [default to undefined]
 **description** | **string** | Description of the event | [optional] [default to undefined]
-**date** | **string** | Date of the event | [optional] [default to undefined]
+**date** | **string** | Date when event happens | [optional] [default to undefined]
 **type** | **string** | Type of the event | [optional] [default to undefined]
 **maxParticipants** | **number** | Maximum number of participants | [optional] [default to undefined]
 **longitude** | **number** | Longitude of the event location | [optional] [default to undefined]

@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **string** |  | [default to undefined]
-**password** | **string** |  | [default to undefined]
+**email** | **string** | User\&#39;s email address. | [default to undefined]
+**password** | **string** | User\&#39;s account password. Must be between 6 and 100 characters. | [default to undefined]
 
 ## Example
 
