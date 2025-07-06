@@ -8,7 +8,7 @@ interface DetailsMarkdownPreviewProps {
 
 export const DetailsMarkdownPreview = ({ value }: DetailsMarkdownPreviewProps) => (
   <div className={clsx(styles.description, styles.fullscreen)}>
-    <div className={styles.markdown}>
+    <div className={styles.markdownPreview}>
       <ReactMarkdown>{value}</ReactMarkdown>
     </div>
   </div>

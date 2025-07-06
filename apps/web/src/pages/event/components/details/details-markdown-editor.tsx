@@ -9,13 +9,10 @@ interface DetailsMarkdownEditorProps {
 
 export const DetailsMarkdownEditor = ({ value, onChange }: DetailsMarkdownEditorProps) => (
   <>
-    <div className={styles.header}>
-      <h3 className={styles.subTitle}>Editor</h3>
-      <h3 className={styles.subTitle}>Preview</h3>
-    </div>
     <ScrollSync>
       <div className={styles.description}>
         <div className={styles.preview}>
+          <h3 className={styles.subTitle}>Editor</h3>
           <ScrollSyncPane>
             <textarea
               className={styles.editor}
@@ -25,11 +22,14 @@ export const DetailsMarkdownEditor = ({ value, onChange }: DetailsMarkdownEditor
           </ScrollSyncPane>
         </div>
 
-        <ScrollSyncPane>
-          <div className={styles.markdown}>
-            <ReactMarkdown>{value}</ReactMarkdown>
-          </div>
-        </ScrollSyncPane>
+        <div className={styles.preview}>
+          <h3 className={styles.subTitle}>Preview</h3>
+          <ScrollSyncPane>
+            <div className={styles.markdown}>
+              <ReactMarkdown>{value}</ReactMarkdown>
+            </div>
+          </ScrollSyncPane>
+        </div>
       </div>
     </ScrollSync>
   </>

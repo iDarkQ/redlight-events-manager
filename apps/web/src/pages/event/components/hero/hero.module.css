@@ -101,6 +101,13 @@
 
 /* HeroTitle */
 
+.heading {
+    display:flex;
+    flex-direction: column;
+
+    gap: var(--padding-sm);
+}
+
 .icon {
     font-size: var(--icon-md);
     color: #fff;
@@ -136,6 +143,10 @@
 
 
 @media (max-width: 1024px) {
+
+    .icon {
+        font-size: var(--icon-sm);
+    }
 
     .wrapper {
         height: calc(100vh - var(--navbar-height));
