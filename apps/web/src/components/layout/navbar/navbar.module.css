@@ -106,7 +106,9 @@
     height: 34px;
 }
 
-@media (max-width: 480px) { /* 480px copied from redligts wp site */
+@media (max-width: 480px) {
+
+    /* 480px copied from redligts wp site */
     .logoImage {
         width: 108px;
         height: 28px;
@@ -132,8 +134,17 @@
     }
 }
 
-/* Navbar On Size Change */
+/* Navbar Modal */
 
+.heading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: start;
+    gap: var(--padding-md);
+    margin-bottom: var(--padding-lg);
+}
+
+/* Navbar On Size Change */
 
 @media (max-width: 768px) {
 

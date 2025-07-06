@@ -28,8 +28,14 @@ export const Navbar = () => {
           </div>
           <div className={styles.buttons}>
             <NavbarLink link={Routes.HOME} title="Events" onClick={() => setExpanded(false)} />
-            <NavbarLink link="/about" title="About" onClick={() => setExpanded(false)} />
-
+            <NavbarLink link={Routes.ABOUT} title="About" onClick={() => setExpanded(false)} />
+            {(user && user.role) === "ADMIN" && (
+              <NavbarLink
+                link={Routes.PARTICIPANTS}
+                title="Participants"
+                onClick={() => setExpanded(false)}
+              />
+            )}
             {!user ? (
               <NavbarLink link={Routes.LOGIN} title="Login" onClick={() => setExpanded(false)} />
             ) : (
