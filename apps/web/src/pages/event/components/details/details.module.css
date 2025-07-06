@@ -21,6 +21,12 @@
     max-height: 60vh;
 }
 
+@media (max-width: 768px) {
+    .description {
+        flex-direction: column;
+    }
+}
+
 .fullscreen {
     max-height: unset;
 }
@@ -39,6 +45,15 @@
     gap: var(--padding-lg);
     display: flex;
     flex-direction: column;
+    padding: var(--padding-md);
+}
+
+.markdownPreview {
+    flex: 1;
+    overflow: auto;
+    gap: var(--padding-lg);
+    display: flex;
+    flex-direction: column;
     padding-block: var(--padding-md);
 }
 
@@ -50,9 +65,11 @@
     display: inline-flex;
     width: 100%;
     text-align: left;
+    gap: var(--padding-xl);
 }
 
 .subTitle {
+    margin-bottom: var(--padding-sm);
     flex: 1;
 }
 
