@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { EventFormData, useEventForm, eventStatuses } from ".";
@@ -10,6 +10,7 @@ import { EventDto } from "~/lib/api";
 import { Dropdown } from "~/components/dropdown";
 import { Upload } from "~/components/upload";
 import { styles } from ".";
+import { ErrorMessage } from "~/components/error-message";
 
 interface FieldConfig {
   name: keyof EventFormData;
@@ -31,6 +32,8 @@ export const EventForm = ({ defaultValues, onFinish }: EventFormProps) => {
     defaultValues,
     onFinish,
   );
+
+  const [uploading, setUploading] = useState(false);
 
   const { events, uploadBanner, setSelectedEvent } = useEvent();
   const typeSuggestions = Array.from(new Set(events.map((e) => e.type).filter(Boolean)));
@@ -109,7 +112,9 @@ export const EventForm = ({ defaultValues, onFinish }: EventFormProps) => {
             onChange={(value: string) => setValue(name, value, { shouldValidate: true })}
             defaultOption={fieldValueString}
           />
-          {errors[name] && <span>{(errors[name] as { message?: string })?.message}</span>}
+          {errors[name] && (
+            <ErrorMessage>{(errors[name] as { message?: string })?.message}</ErrorMessage>
+          )}
         </div>
       );
     }
@@ -136,7 +141,9 @@ export const EventForm = ({ defaultValues, onFinish }: EventFormProps) => {
               setValue(name, e.target.value);
             }}
           />
-          {errors[name] && <span>{(errors[name] as { message?: string })?.message}</span>}
+          {errors[name] && (
+            <ErrorMessage>{(errors[name] as { message?: string })?.message}</ErrorMessage>
+          )}
         </div>
       );
     }
@@ -172,7 +179,9 @@ export const EventForm = ({ defaultValues, onFinish }: EventFormProps) => {
                 return;
               }
 
+              setUploading(true);
               const fileName = await uploadBanner(file);
+              setUploading(false);
               if (!fileName) return;
               setValue("banner", fileName);
             }}
@@ -204,7 +213,7 @@ export const EventForm = ({ defaultValues, onFinish }: EventFormProps) => {
           )}
         </div>
 
-        <Button loading={isSubmitting} type="submit">
+        <Button disabled={uploading} loading={isSubmitting} type="submit">
           Finish
         </Button>
       </form>
