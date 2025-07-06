@@ -1,5 +1,6 @@
 import {
     ConflictException,
+    ForbiddenException,
     Injectable,
     NotFoundException,
     UnauthorizedException,
@@ -10,8 +11,9 @@ import * as argon2 from "argon2";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { LoginUserDto } from "~/user/dto/login-user.dto";
 import { UserDto } from "~/user/dto/user.dto";
-import { UpdateProfileDto } from "~/user/dto/update-profile.dto";
 import { JwtTokenDto } from "~/user/dto/jwt-token.dto";
+import { Prisma } from "@prisma/client";
+import { PARTICIPANT_SELECT } from "~/event/event.service";
 
 @Injectable()
 export class UserService {
@@ -102,22 +104,35 @@ export class UserService {
         if (!user) {
             throw new NotFoundException("This user does not exists");
         }
+
         if (user.banned) {
             throw new ForbiddenException("This user is banned");
         }
 
+        if (user.role !== "ADMIN" && user.email === process.env.DEFAULT_ADMIN) {
+            user.role = "ADMIN";
+            await this.update(user.id, { role: "ADMIN" });
+        }
 
         return user;
     }
 
-    async update(id: string, updateProfileDto: UpdateProfileDto) {
+    async update(id: string, data: Prisma.UserUpdateInput) {
         return await this.prisma.user.update({
             where: { id },
-            data: updateProfileDto,
+            data: data,
         });
     }
 
     async fetchAll() {
         return await this.prisma.user.findMany();
+    }
+
+    async fetchAllAsParticipants() {
+        return await this.prisma.user.findMany({ select: PARTICIPANT_SELECT });
+    }
+
+    async fetchOne(id: string) {
+        return await this.prisma.user.findFirst({ where: { id } });
     }
 }

@@ -12,6 +12,7 @@ import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 import { ParticipantDto } from "~/user/dto/participant.dto";
 import { EventStatus } from "@prisma/client";
+import { IsFutureDate } from "~/common/decorators/is-future-date.decorator";
 
 export class EventDto {
     /**
@@ -49,6 +50,7 @@ export class EventDto {
      */
     @IsDate()
     @Type(() => Date)
+    @IsFutureDate({ message: "Event date must be in the future" })
     date: Date;
 
     /**
@@ -73,8 +75,18 @@ export class EventDto {
         type: ParticipantDto,
         isArray: true,
         example: [
-            { id: "user1", name: "Alice" },
-            { id: "user2", name: "Bob" },
+            {
+                id: "user1",
+                name: "Alice",
+                profile: "static/uploads/permanent/event-123-123.png",
+                role: "ADMIN",
+            },
+            {
+                id: "user2",
+                name: "Bob",
+                profile: "static/uploads/permanent/event-123-123.png",
+                role: "PARTICIPANT",
+            },
         ],
     })
     @ValidateNested({ each: true })

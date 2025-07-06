@@ -7,6 +7,14 @@ import { Cron, CronExpression } from "@nestjs/schedule";
 import { join } from "path";
 import { promises as fs } from "fs";
 
+export const PARTICIPANT_SELECT = {
+    id: true,
+    name: true,
+    profile: true,
+    role: true,
+    banned: true,
+};
+
 @Injectable()
 export class EventService {
     constructor(private readonly prisma: PrismaService) {}
@@ -22,21 +30,27 @@ export class EventService {
                     },
                 },
             },
-            include: { participants: { select: { id: true, name: true, profile: true } } },
+            include: {
+                participants: { select: PARTICIPANT_SELECT },
+            },
         });
     }
 
     async findAll() {
         return await this.prisma.event.findMany({
             where: { deleted: false },
-            include: { participants: { select: { id: true, name: true, profile: true } } },
+            include: {
+                participants: { select: PARTICIPANT_SELECT },
+            },
         });
     }
 
     async findOne(id: string) {
         return await this.prisma.event.findUnique({
             where: { id },
-            include: { participants: { select: { id: true, name: true, profile: true } } },
+            include: {
+                participants: { select: PARTICIPANT_SELECT },
+            },
         });
     }
 
@@ -44,7 +58,9 @@ export class EventService {
         return await this.prisma.event.update({
             where: { id },
             data: updateEventDto,
-            include: { participants: { select: { id: true, name: true, profile: true } } },
+            include: {
+                participants: { select: PARTICIPANT_SELECT },
+            },
         });
     }
 
@@ -52,7 +68,9 @@ export class EventService {
         return await this.prisma.event.update({
             where: { id },
             data: { deleted: true, deletedAt: new Date() },
-            include: { participants: { select: { id: true, name: true, profile: true } } },
+            include: {
+                participants: { select: PARTICIPANT_SELECT },
+            },
         });
     }
 
@@ -64,7 +82,9 @@ export class EventService {
                     connect: { id: userId },
                 },
             },
-            include: { participants: { select: { id: true, name: true, profile: true } } },
+            include: {
+                participants: { select: PARTICIPANT_SELECT },
+            },
         });
     }
 
@@ -76,7 +96,9 @@ export class EventService {
                     disconnect: { id: userId },
                 },
             },
-            include: { participants: { select: { id: true, name: true, profile: true } } },
+            include: {
+                participants: { select: PARTICIPANT_SELECT },
+            },
         });
     }
 
@@ -94,6 +116,21 @@ export class EventService {
                     await fs.rm(filePath, { recursive: true, force: true });
                 } else {
                     await fs.unlink(filePath);
+                }
+            }
+        } catch (err) {
+            Logger.error(err);
+        }
+    }
+
+    @Cron(CronExpression.EVERY_HOUR)
+    async autoCompleteEvents() {
+        try {
+            const events = await this.findAll();
+
+            for (const event of events) {
+                if (event.date.getUTCDate() <= Date.now() && event.status === "PLANNED") {
+                    await this.update(event.id, { status: "COMPLETED" });
                 }
             }
         } catch (err) {

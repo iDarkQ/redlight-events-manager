@@ -61,6 +61,10 @@ export class EventController {
             createEventDto.banner = permanentPath;
         }
 
+        const type = createEventDto.type.toLowerCase();
+
+        createEventDto.type = String(type).charAt(0).toUpperCase() + String(type).slice(1);
+
         const event = await this.eventService.create({ ...createEventDto, creatorId: req.user.id });
         const users = await this.userService.fetchAll();
 
@@ -105,7 +109,7 @@ export class EventController {
             await this.fileService.deletePermanentFile("banners", event.banner);
         }
 
-        if (updateEventDto.banner) {
+        if (updateEventDto.banner && event.banner !== updateEventDto.banner) {
             const permanentPath = await this.fileService.moveTempToPermanent(
                 "banners",
                 updateEventDto.banner,
