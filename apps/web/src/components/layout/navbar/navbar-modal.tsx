@@ -23,7 +23,10 @@ export const NavbarModal = ({ open, setOpen }: NavbarModalProps) => {
         </div>
 
         <ProfileForm
-          onFinish={async (data) => await updateUser(data)}
+          onFinish={async (data) => {
+            await updateUser(data);
+            showMessage("You successfully saved changes to your profile", "success");
+          }}
           defaultValues={user}
           onLogout={() => {
             logout();
