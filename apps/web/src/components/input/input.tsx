@@ -60,8 +60,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     const handleSuggestionClick = (suggestion: string) => {
-            setValue(suggestion);
-      // setShowDropdown(false);
+      setValue(suggestion);
+      setShowDropdown(false);
       onChange?.({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ...({} as any),
