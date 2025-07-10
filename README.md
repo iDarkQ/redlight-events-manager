@@ -50,6 +50,7 @@ Here are the additional features I implemented to improve the project beyond the
 
 * 🎨 Design fully based on [redlight.dev](https://redlight.dev/) — logos, fonts, and visual style match Redlight’s branding.
 * 👥 Guest access to events without registration.
+* 🔐 Encryption on passwords
 * 📅 Automatic event completion based on date.
 * 🗺️ 3D map background for events without images.
 * 🚫 User banning functionality for admins.
