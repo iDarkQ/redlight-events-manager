@@ -32,7 +32,7 @@ export class MailService {
                 .setTo(recipient)
                 .setReplyTo(sentFrom)
                 .setSubject("New Event At Redlight")
-                .setTemplateId(process.env.MAILERSEND_TEMPLATED_ID ?? "")
+                .setTemplateId(process.env.MAILERSEND_TEMPLATE_ID ?? "")
                 .setPersonalization(personalization);
 
             await mailerSend.email.send(emailParams);
