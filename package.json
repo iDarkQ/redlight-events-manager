@@ -1,5 +1,5 @@
 {
-  "name": "better-bedrock",
+  "name": "redlight-events-manager",
   "private": true,
   "scripts": {
     "build": "turbo build",
