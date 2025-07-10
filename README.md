@@ -4,7 +4,7 @@ This is a sports event management platform built as a **Turborepo** project with
 
 [Github Repo](https://github.com/iDarkQ/redlight-events-manager)
 
-## Preview of the website:
+## Preview of the website **(Click On Thumbnail To Download Video Presenting The Site)**:
 
 [![Watch the video](https://raw.githubusercontent.com/iDarkQ/redlight-events-manager/main/docs/preview.png)](https://raw.githubusercontent.com/iDarkQ/redlight-events-manager/main/docs/preview.mp4)
 
