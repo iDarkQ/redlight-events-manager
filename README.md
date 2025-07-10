@@ -96,8 +96,8 @@ Here’s the technology stack I used for this project:
 ```
 /
 ├─ apps/
-│  ├─ frontend/     ← React + Vite
-│  └─ backend/      ← NestJS + Prisma
+│  ├─ web/     ← React + Vite
+│  └─ api/      ← NestJS + Prisma
 ```
 
 ---
@@ -118,7 +118,7 @@ yarn install
 
 ### 2. Environment Variables
 
-Create a `.env` file in each of `apps/backend` and `apps/frontend`. Fill in the values as follows:
+Create a `.env` file in each of `apps/api` and `apps/web`. Fill in the values as follows:
 
 ---
 
@@ -145,7 +145,7 @@ DEBUG=true
 
 ---
 
-#### **Frontend** (`apps/frontend/.env`)
+#### **Frontend** (`apps/web/.env`)
 
 ```env
 # Mapbox (or other public APIs)
@@ -166,7 +166,7 @@ VITE_DEBUG=true
 1. **Generate the Prisma client** (reflects your schema in code):
 
    ```bash
-   cd apps/backend
+   cd apps/api
    yarn prisma generate
    ```
 
