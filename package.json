@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "preview": "turbo preview",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "generate:api": "npx openapi-typescript ./apps/web/src/lib/api/api.json -o ./apps/web/src/lib/api/schema.ts"
