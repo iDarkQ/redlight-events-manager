@@ -29,7 +29,7 @@ export default defineConfig({
     host: "0.0.0.0",
   },
   preview: {
-    allowedHosts: ["rem.idarkq.com"],
+    allowedHosts: ["rem.idarkq.dev"],
     port: 3001,
   },
 });
