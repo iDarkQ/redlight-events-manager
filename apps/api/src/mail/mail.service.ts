@@ -7,6 +7,10 @@ import { baseUrl } from "~/utils/url";
 @Injectable()
 export class MailService {
     async createEventEmail(users: UserDto[], event: EventDto) {
+        if (process.env.MAILERSEND_SECRET == "" || !process.env.MAILERSEND_SECRET) {
+            return;
+        }
+
         const mailerSend = new MailerSend({
             apiKey: process.env.MAILERSEND_SECRET ?? "",
         });
