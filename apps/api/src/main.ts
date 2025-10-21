@@ -42,7 +42,7 @@ const bootstrap = async () => {
     app.useGlobalFilters(new AllExceptionsFilter());
     app.enableCors();
 
-    await app.listen(process.env.PORT ?? 8084);
+    await app.listen(4001);
 };
 
 bootstrap();

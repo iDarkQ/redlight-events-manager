@@ -14,7 +14,6 @@ export default defineConfig({
       name: "markdown-loader",
       transform(code, id) {
         if (id.slice(-3) === ".md") {
-          // For .md files, get the raw content
           return `export default ${JSON.stringify(code)};`;
         }
       },
@@ -22,7 +21,15 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "~": path.resolve(__dirname, "src"), // Global alias: # refers to the src folder
+      "~": path.resolve(__dirname, "src"),
     },
+  },
+  server: {
+    port: 3001,
+    host: "0.0.0.0",
+  },
+  preview: {
+    allowedHosts: ["rem.idarkq.com"],
+    port: 3001,
   },
 });
